@@ -1,4 +1,4 @@
-package cc.davyy.slime.model;
+package cc.davyy.slime.misc;
 
 import net.minestom.server.MinecraftServer;
 
