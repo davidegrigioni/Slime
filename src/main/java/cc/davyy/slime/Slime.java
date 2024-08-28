@@ -1,5 +1,6 @@
 package cc.davyy.slime;
 
+import cc.davyy.slime.commands.SpawnCommand;
 import cc.davyy.slime.listeners.APCListener;
 import cc.davyy.slime.listeners.PJListener;
 import cc.davyy.slime.misc.CommandHandler;
@@ -28,6 +29,8 @@ public class Slime {
                 .serialize(of(brandName)
                 .build());
         MinecraftServer.setBrandName(legacyComponent);
+
+        MinecraftServer.getCommandManager().register(new SpawnCommand());
 
         final String ip = getConfig().getString("ip");
         final int port = getConfig().getInt("port");
