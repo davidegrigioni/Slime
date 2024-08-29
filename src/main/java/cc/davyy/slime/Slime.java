@@ -1,5 +1,6 @@
 package cc.davyy.slime;
 
+import cc.davyy.slime.commands.HologramCommand;
 import cc.davyy.slime.commands.SpawnCommand;
 import cc.davyy.slime.listeners.APCListener;
 import cc.davyy.slime.listeners.PJListener;
@@ -31,6 +32,7 @@ public class Slime {
         MinecraftServer.setBrandName(legacyComponent);
 
         MinecraftServer.getCommandManager().register(new SpawnCommand());
+        MinecraftServer.getCommandManager().register(new HologramCommand());
 
         final String ip = getConfig().getString("ip");
         final int port = getConfig().getInt("port");
