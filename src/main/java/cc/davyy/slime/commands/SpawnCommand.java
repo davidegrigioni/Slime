@@ -1,5 +1,6 @@
 package cc.davyy.slime.commands;
 
+import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -32,7 +33,8 @@ public class SpawnCommand extends Command {
 
         if (pos != null) {
             player.teleport(pos);
-            player.sendMessage("You got teleported to " + PosUtils.toString(pos));
+            player.sendMessage(Messages.SPAWN_TELEPORT
+                    .asComponent());
         }
 
     }
@@ -56,7 +58,9 @@ public class SpawnCommand extends Command {
             final Pos pos = player.getPosition();
 
             getConfig().set("spawn-pos", PosUtils.toString(pos));
-            player.sendMessage("Set spawn to " + PosUtils.toString(pos));
+            player.sendMessage(Messages.SPAWN_SET
+                    .addPlaceholder("pos", PosUtils.toString(pos))
+                    .asComponent());
         }
 
     }

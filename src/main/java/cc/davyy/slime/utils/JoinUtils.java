@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class JoinUtils {
 
-    private final static ItemStack COMPASS = ItemStack.of(Material.COMPASS);
+    private static final ItemStack COMPASS = ItemStack.of(Material.COMPASS);
 
     private JoinUtils() {}
 

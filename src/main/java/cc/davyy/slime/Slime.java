@@ -4,7 +4,7 @@ import cc.davyy.slime.commands.HologramCommand;
 import cc.davyy.slime.commands.SpawnCommand;
 import cc.davyy.slime.listeners.APCListener;
 import cc.davyy.slime.listeners.PJListener;
-import cc.davyy.slime.misc.CommandHandler;
+import cc.davyy.slime.utils.ConsoleUtils;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.MinecraftServer;
 
@@ -21,8 +21,7 @@ public class Slime {
 
         registerListeners();
 
-        CommandHandler commandHandler = new CommandHandler();
-        commandHandler.setupConsole();
+        ConsoleUtils.setupConsole();
 
         final String brandName = getConfig().getString("brand-name");
         final String legacyComponent = LegacyComponentSerializer

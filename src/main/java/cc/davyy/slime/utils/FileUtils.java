@@ -13,14 +13,18 @@ import java.nio.file.Path;
 
 public final class FileUtils {
 
-    private final static String CONFIG_FOLDER = "configs/";
+    private static final String CONFIG_FOLDER = "configs/";
     private static Yaml config;
+    private static Yaml messages;
 
     private FileUtils() {}
 
     public static void setupConfig() {
         config = SimplixBuilder.fromFile(new File(CONFIG_FOLDER, "config.yml"))
                 .addInputStreamFromResource(CONFIG_FOLDER + "config.yml")
+                .createYaml();
+        messages = SimplixBuilder.fromFile(new File(CONFIG_FOLDER, "messages.yml"))
+                .addInputStreamFromResource(CONFIG_FOLDER + "messages.yml")
                 .createYaml();
     }
 
@@ -36,5 +40,7 @@ public final class FileUtils {
     }
 
     public static Yaml getConfig() { return config; }
+
+    public static Yaml getMessages() { return messages; }
 
 }

@@ -1,4 +1,4 @@
-package cc.davyy.slime.misc;
+package cc.davyy.slime.utils;
 
 import net.minestom.server.MinecraftServer;
 
@@ -7,23 +7,18 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public final class CommandHandler {
+public final class ConsoleUtils {
 
-    private final ScheduledExecutorService worker;
-    private final Scanner CONSOLE_IN = new Scanner(System.in);
-    private final Object consoleLock = new Object();
+    private static final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor(Thread.ofVirtual().name("SlimeConsoleWorker").factory());
+    private static final Scanner CONSOLE_IN = new Scanner(System.in);
+    private static final Object consoleLock = new Object();
 
-    /**
-     * Creates a command handler and sets up the worker
-     */
-    public CommandHandler() {
-        this.worker = Executors.newSingleThreadScheduledExecutor(Thread.ofVirtual().name("CytosisConsoleWorker").factory());
-    }
+    private ConsoleUtils() {}
 
     /**
      * Sets up the console so commands can be executed from there
      */
-    public void setupConsole() {
+    public static void setupConsole() {
         worker.scheduleAtFixedRate(() -> {
             if (CONSOLE_IN.hasNext()) {
                 String command = CONSOLE_IN.nextLine();

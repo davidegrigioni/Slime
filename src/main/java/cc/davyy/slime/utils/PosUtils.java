@@ -40,7 +40,7 @@ public final class PosUtils {
      * @return A string representing the position.
      */
     public static @NotNull String toString(@NotNull Pos pos) {
-        return String.format("%f,%f,%f", pos.x(), pos.y(), pos.z());
+        return String.format("%d,%d,%d", (int) pos.x(), (int) pos.y(), (int) pos.z());
     }
 
     /**

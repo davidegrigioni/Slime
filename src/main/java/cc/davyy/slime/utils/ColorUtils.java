@@ -31,6 +31,14 @@ public final class ColorUtils {
         return this;
     }
 
+    public @NotNull ColorUtils parseMMP(@Subst("test_placeholder") @NotNull String placeholder, @NotNull String value) {
+        this.minimessagePlaceholders.add(
+                Placeholder.component(placeholder, of(value)
+                        .build())
+        );
+        return this;
+    }
+
     public String toString() { return getText(); }
 
     private String getText() { return text; }
