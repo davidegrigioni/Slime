@@ -1,6 +1,7 @@
 package cc.davyy.slime.module;
 
 import cc.davyy.slime.SlimeLoader;
+import cc.davyy.slime.managers.RegionManager;
 import cc.davyy.slime.misc.BrandAnimator;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
@@ -18,6 +19,7 @@ public class SlimeModule extends AbstractModule {
         bind(SlimeLoader.class).toInstance(instance);
 
         bind(BrandAnimator.class).in(Singleton.class);
+        bind(RegionManager.class).in(Singleton.class);
     }
 
 }

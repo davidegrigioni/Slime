@@ -36,9 +36,8 @@ public class SpawnCommand extends Command {
 
         Check.notNull(pos, "Position cannot be null, Check your Config!");
 
-        player.teleport(pos);
-        player.sendMessage(Messages.SPAWN_TELEPORT
-                .asComponent());
+        player.teleport(pos).thenRun(() -> player.sendMessage(Messages.SPAWN_TELEPORT
+                .asComponent()));
     }
 
     private static class SetSpawnCommand extends Command {
@@ -52,7 +51,6 @@ public class SpawnCommand extends Command {
             }));
 
             setDefaultExecutor(this::setSpawn);
-
         }
 
         private void setSpawn(@NotNull CommandSender sender, @NotNull CommandContext context) {

@@ -3,6 +3,8 @@ package cc.davyy.slime;
 import cc.davyy.slime.listeners.APCListener;
 import cc.davyy.slime.listeners.BBListener;
 import cc.davyy.slime.listeners.PJListener;
+import cc.davyy.slime.listeners.RegionListener;
+import cc.davyy.slime.managers.RegionManager;
 import cc.davyy.slime.misc.BrandAnimator;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
@@ -16,11 +18,13 @@ import static cc.davyy.slime.utils.FileUtils.getConfig;
 
 public final class SlimeLoader {
 
+    private RegionManager regionManager;
+
     public void start() {
         final MinecraftServer minecraftServer = MinecraftServer.init();
 
-        setupLuckPerms();
         setupConfig();
+        setupLuckPerms();
 
         registerListeners();
 
@@ -40,6 +44,7 @@ public final class SlimeLoader {
         handler.addListener(new APCListener());
         handler.addListener(new PJListener());
         handler.addListener(new BBListener());
+        handler.addListener(new RegionListener(regionManager));
     }
 
     private void injectGuice() {
@@ -47,6 +52,8 @@ public final class SlimeLoader {
 
         final BrandAnimator animator = injector.getInstance(BrandAnimator.class);
         animator.startAnimation();
+
+        regionManager = injector.getInstance(RegionManager.class);
     }
 
 }
