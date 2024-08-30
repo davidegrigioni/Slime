@@ -19,6 +19,8 @@ dependencies {
     implementation('me.lucko.luckperms:minestom:5.4-SNAPSHOT')
     implementation('org.slf4j:slf4j-simple:2.0.16')
     implementation('ninja.leaping.configurate:configurate-hocon:3.7.1')
+    implementation('com.github.Asintotoo:MinestomACR:2f300f9579')
+    implementation('com.google.inject:guice:7.0.0')
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation('org.junit.jupiter:junit-jupiter')

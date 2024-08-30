@@ -39,6 +39,11 @@ public final class FileUtils {
                 .enable();
     }
 
+    public static void reloadConfig() {
+        config.forceReload();
+        messages.forceReload();
+    }
+
     public static Yaml getConfig() { return config; }
 
     public static Yaml getMessages() { return messages; }

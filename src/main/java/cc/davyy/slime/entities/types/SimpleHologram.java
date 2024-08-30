@@ -8,9 +8,9 @@ import net.minestom.server.entity.metadata.display.TextDisplayMeta;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
-public class HologramEntity extends AbstractHologram {
+public class SimpleHologram extends AbstractHologram {
 
-    public HologramEntity(@NotNull Component text, @NotNull Instance instance, @NotNull Pos spawn) {
+    public SimpleHologram(@NotNull Component text, @NotNull Instance instance, @NotNull Pos spawn) {
         super(text, instance, spawn);
         setupHologram();
     }

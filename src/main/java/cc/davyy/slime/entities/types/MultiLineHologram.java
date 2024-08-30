@@ -23,7 +23,7 @@ public class MultiLineHologram extends AbstractHologram {
     private void setupHolograms() {
         double yOffset = 0;
         for (Component line : lines) {
-            new HologramEntity(line, getInstance(), getPosition().add(0, yOffset, 0));
+            new SimpleHologram(line, getInstance(), getPosition().add(0, yOffset, 0));
             yOffset += lineSpacing;
         }
     }

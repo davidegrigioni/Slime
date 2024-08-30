@@ -16,8 +16,6 @@ public final class HoconConfigurationAdapter extends ConfigurateConfigAdapter im
     }
 
     @Override
-    protected ConfigurationLoader<? extends ConfigurationNode> createLoader(Path path) {
-        return HoconConfigurationLoader.builder().setPath(path).build();
-    }
+    protected ConfigurationLoader<? extends ConfigurationNode> createLoader(Path path) { return HoconConfigurationLoader.builder().setPath(path).build(); }
 
 }

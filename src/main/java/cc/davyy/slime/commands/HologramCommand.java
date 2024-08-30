@@ -1,8 +1,9 @@
 package cc.davyy.slime.commands;
 
 import cc.davyy.slime.entities.types.ClickableHologram;
-import cc.davyy.slime.entities.types.HologramEntity;
+import cc.davyy.slime.entities.types.SimpleHologram;
 import cc.davyy.slime.entities.utils.HologramType;
+import com.asintoto.minestomacr.annotations.AutoRegister;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -12,6 +13,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+@AutoRegister
 public class HologramCommand extends Command {
 
     public HologramCommand() {
@@ -33,7 +35,7 @@ public class HologramCommand extends Command {
         Pos holoPos = new Pos(playerPos.x(), playerPos.y() + 2, playerPos.z());
 
         switch (hologramType) {
-            case SIMPLE -> new HologramEntity(hologramText, player.getInstance(), holoPos);
+            case SIMPLE -> new SimpleHologram(hologramText, player.getInstance(), holoPos);
             case CLICKABLE -> new ClickableHologram(hologramText, player.getInstance(), holoPos, () -> player.sendMessage(Component.text("You clicked the hologram!")));
         }
 

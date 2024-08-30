@@ -15,6 +15,7 @@ import static cc.davyy.slime.utils.FileUtils.getMessages;
 
 public enum Messages implements ComponentLike {
 
+    RELOAD_CONFIG("messages.reload"),
     SPAWN_TELEPORT("messages.spawn-teleport"),
     SPAWN_SET("messages.spawn-set");
 

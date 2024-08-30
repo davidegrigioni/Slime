@@ -1,4 +1,25 @@
-ip: "0.0.0.0"
-port: 25565
-brand-name: "<rainbow>Powered by SLIME</rainbow>"
-spawn-pos: "100,20,100"
+# Server Configuration
+
+# Network settings
+network:
+  ip: "0.0.0.0"
+  port: 25565
+
+# Branding information
+branding:
+  brand-name: "&c&lPowered &bby &aSLIME"
+  animate: false
+  animation-interval: 2
+  animation-styles:
+    - "&c&lWelcome to &r&bSLIME"
+    - "&a&lEnjoy &r&bSLIME"
+    - "&e&lHave a great time with &r&bSLIME"
+    - "&d&lExplore &r&bSLIME"
+
+# Spawn settings
+spawn:
+  position: "100,20,100"
+
+# Protection settings
+protection:
+  disable-build-protection: false
