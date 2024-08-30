@@ -24,8 +24,9 @@ public class BrandAnimator {
     public BrandAnimator() {
         this.brandNameStyles = getConfig().getStringList("animation-styles");
         this.animationInterval = getConfig().getLong("animation-interval");
+        final boolean animateEnabled = getConfig().getBoolean("animate");
 
-        if (getConfig().getBoolean("animate")) {
+        if (animateEnabled) {
             startAnimation();
         }
     }

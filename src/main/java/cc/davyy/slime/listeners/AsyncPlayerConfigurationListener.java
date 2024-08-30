@@ -18,7 +18,7 @@ import java.util.Random;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 
-public class APCListener implements EventListener<AsyncPlayerConfigurationEvent> {
+public class AsyncPlayerConfigurationListener implements EventListener<AsyncPlayerConfigurationEvent> {
 
     @Override
     public @NotNull Class<AsyncPlayerConfigurationEvent> eventType() { return AsyncPlayerConfigurationEvent.class; }

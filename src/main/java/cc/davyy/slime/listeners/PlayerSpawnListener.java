@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.JoinUtils.applyJoinKit;
 
-public class PJListener implements EventListener<PlayerSpawnEvent> {
+public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
 
     @Override
     public @NotNull Class<PlayerSpawnEvent> eventType() { return PlayerSpawnEvent.class; }

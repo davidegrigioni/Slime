@@ -3,6 +3,7 @@ package cc.davyy.slime.commands;
 import cc.davyy.slime.entities.types.ClickableHologram;
 import cc.davyy.slime.entities.types.SimpleHologram;
 import cc.davyy.slime.entities.utils.HologramType;
+import cc.davyy.slime.utils.PosUtils;
 import com.asintoto.minestomacr.annotations.AutoRegister;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
@@ -32,7 +33,7 @@ public class HologramCommand extends Command {
         HologramType hologramType = context.get("hologramType");
 
         Pos playerPos = player.getPosition();
-        Pos holoPos = new Pos(playerPos.x(), playerPos.y() + 2, playerPos.z());
+        Pos holoPos = PosUtils.of(playerPos.x(), playerPos.y() + 2, playerPos.z());
 
         switch (hologramType) {
             case SIMPLE -> new SimpleHologram(hologramText, player.getInstance(), holoPos);

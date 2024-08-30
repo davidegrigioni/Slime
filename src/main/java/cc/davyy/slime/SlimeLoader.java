@@ -1,8 +1,9 @@
 package cc.davyy.slime;
 
-import cc.davyy.slime.listeners.APCListener;
-import cc.davyy.slime.listeners.BBListener;
-import cc.davyy.slime.listeners.PJListener;
+import cc.davyy.slime.commands.RegionCommand;
+import cc.davyy.slime.listeners.AsyncPlayerConfigurationListener;
+import cc.davyy.slime.listeners.BlockBreakListener;
+import cc.davyy.slime.listeners.PlayerSpawnListener;
 import cc.davyy.slime.listeners.RegionListener;
 import cc.davyy.slime.managers.RegionManager;
 import cc.davyy.slime.misc.BrandAnimator;
@@ -23,8 +24,8 @@ public final class SlimeLoader {
     public void start() {
         final MinecraftServer minecraftServer = MinecraftServer.init();
 
-        setupConfig();
         setupLuckPerms();
+        setupConfig();
 
         registerListeners();
 
@@ -34,6 +35,8 @@ public final class SlimeLoader {
 
         MinestomACR.init();
 
+        MinecraftServer.getCommandManager().register(new RegionCommand(regionManager));
+
         final String ip = getConfig().getString("ip");
         final int port = getConfig().getInt("port");
         minecraftServer.start(ip, port);
@@ -41,17 +44,15 @@ public final class SlimeLoader {
 
     private void registerListeners() {
         final var handler = MinecraftServer.getGlobalEventHandler();
-        handler.addListener(new APCListener());
-        handler.addListener(new PJListener());
-        handler.addListener(new BBListener());
+        handler.addListener(new AsyncPlayerConfigurationListener());
+        handler.addListener(new PlayerSpawnListener());
+        handler.addListener(new BlockBreakListener());
         handler.addListener(new RegionListener(regionManager));
     }
 
     private void injectGuice() {
         final Injector injector = Guice.createInjector(new SlimeModule(this));
-
         final BrandAnimator animator = injector.getInstance(BrandAnimator.class);
-        animator.startAnimation();
 
         regionManager = injector.getInstance(RegionManager.class);
     }

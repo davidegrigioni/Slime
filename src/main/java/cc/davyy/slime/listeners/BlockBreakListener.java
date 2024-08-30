@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 
-public class BBListener implements EventListener<PlayerBlockBreakEvent> {
+public class BlockBreakListener implements EventListener<PlayerBlockBreakEvent> {
 
     @Override
     public @NotNull Class<PlayerBlockBreakEvent> eventType() { return PlayerBlockBreakEvent.class; }

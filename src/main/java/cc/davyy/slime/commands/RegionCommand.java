@@ -13,7 +13,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-@AutoRegister
 public class RegionCommand extends Command {
 
     private final RegionManager regionManager;
