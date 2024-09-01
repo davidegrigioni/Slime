@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class ColorUtils {
 
@@ -49,7 +48,7 @@ public final class ColorUtils {
     public static List<Component> txtLore(@NotNull String loreString) {
         return Arrays.stream(loreString.split("\n"))
                 .map(ColorUtils::colorize)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private static Component colorize(@NotNull String message) { return MINIMESSAGE.deserialize(message).decoration(TextDecoration.ITALIC, false); }

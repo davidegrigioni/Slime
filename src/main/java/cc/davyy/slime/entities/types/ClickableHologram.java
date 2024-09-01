@@ -32,9 +32,7 @@ public class ClickableHologram extends AbstractHologram {
      * @param onClickAction The action to run when the text is clicked.
      * @return The text component with the click event applied.
      */
-    private Component getClickableText(@NotNull Component text, @NotNull ClickCallback<Audience> onClickAction) {
-        return text.clickEvent(ClickEvent.callback(onClickAction));
-    }
+    private Component getClickableText(@NotNull Component text, @NotNull ClickCallback<Audience> onClickAction) { return text.clickEvent(ClickEvent.callback(onClickAction)); }
 
     @Override
     public void updateText(@NotNull Component newText) {

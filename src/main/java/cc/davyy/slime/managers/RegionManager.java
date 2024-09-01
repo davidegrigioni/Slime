@@ -91,7 +91,7 @@ public class RegionManager {
         return regions.entrySet().stream()
                 .filter(entry -> entry.getValue().contains(playerPos))
                 .map(Map.Entry::getKey)
-                .findFirst();
+                .findAny();
     }
 
     /**

@@ -29,7 +29,7 @@ public final class FileUtils {
     }
 
     public static void setupLuckPerms() {
-        Path dir = Path.of("luckperms");
+        final Path dir = Path.of("luckperms");
         LuckPermsMinestom.builder(dir)
                 .commandRegistry(CommandRegistry.minestom())
                 .configurationAdapter(plugin -> new MultiConfigurationAdapter(plugin,

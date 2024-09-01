@@ -42,3 +42,8 @@ player-item:
   name: "<red>player settings</red>"
   lore:
     - "test"
+
+# MOTD
+motd:
+  description: "test"
+  players-hidden: true

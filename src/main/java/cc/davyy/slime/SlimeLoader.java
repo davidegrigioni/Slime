@@ -2,6 +2,7 @@ package cc.davyy.slime;
 
 import cc.davyy.slime.commands.RegionCommand;
 import cc.davyy.slime.listeners.AsyncPlayerConfigurationListener;
+import cc.davyy.slime.listeners.MOTDListener;
 import cc.davyy.slime.listeners.PlayerSpawnListener;
 import cc.davyy.slime.listeners.RegionListener;
 import cc.davyy.slime.managers.RegionManager;
@@ -46,6 +47,7 @@ public final class SlimeLoader {
         final var handler = MinecraftServer.getGlobalEventHandler();
         handler.addListener(new AsyncPlayerConfigurationListener());
         handler.addListener(new PlayerSpawnListener());
+        handler.addListener(new MOTDListener());
         new RegionListener(regionManager).init(handler);
     }
 

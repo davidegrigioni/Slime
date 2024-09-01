@@ -17,9 +17,18 @@ import static cc.davyy.slime.utils.ColorUtils.of;
 
 public class ServerGUI {
 
+    private static final int NAVIGATOR_SLOT = 3;
+    private static final int SETTINGS_SLOT = 5;
+    private static final int PLAYER_MANAGEMENT_SLOT = 11;
+
     private final Inventory inventory = new Inventory(InventoryType.CHEST_3_ROW, "Test");
 
-    public void setupGui(@NotNull Player player) {
+    public void open(@NotNull Player player) {
+        setupGui(player);
+        player.openInventory(inventory);
+    }
+
+    private void setupGui(@NotNull Player player) {
         inventory.addInventoryCondition(((players, slot, clickType, result) -> result.setCancel(true)));
 
         setupItems(player);
@@ -27,29 +36,35 @@ public class ServerGUI {
 
     private void setupItems(@NotNull Player player) {
         // Navigation
-        final ItemStack compass = ItemStack.builder(Material.COMPASS)
-                .customName(of(getConfig().getString("compass-item.name"))
-                        .build())
-                .lore(txtLore(getConfig().getString("compass-item.lore")))
-                .build();
-        inventory.setItemStack(3, compass);
+        final String navigatorName = getConfig().getString("compass-item.name");
+        final String navigatorLore = getConfig().getString("compass-item.lore");
+        final ItemStack compass = createItem(Material.COMPASS, navigatorName, navigatorLore);
+        inventory.setItemStack(NAVIGATOR_SLOT, compass);
 
         // Server settings
-        final ItemStack settings = ItemStack.builder(Material.REDSTONE)
-                .customName(of(getConfig().getString("settings-item.name"))
-                        .build())
-                .lore(txtLore(getConfig().getString("settings-item.lore")))
-                .build();
-        inventory.setItemStack(5, settings);
+        final String settingsName = getConfig().getString("settings-item.name");
+        final String settingsLore = getConfig().getString("settings-item.lore");
+        final ItemStack settings = createItem(Material.REDSTONE, settingsName, settingsLore);
+        inventory.setItemStack(SETTINGS_SLOT, settings);
 
         // Player management
+        final String playersManagementName =  getConfig().getString("player-item.name");
+        final String playersManagementLore = getConfig().getString("player-item.lore");
         final ItemStack playerManagement = ItemStack.builder(Material.PLAYER_HEAD)
-                .customName(of(getConfig().getString("player-item.name"))
+                .customName(of(playersManagementName)
                         .build())
-                .lore(txtLore(getConfig().getString("player-item.lore")))
+                .lore(txtLore(playersManagementLore))
                 .set(ItemComponent.PROFILE, new HeadProfile(Objects.requireNonNull(player.getSkin())))
                 .build();
-        inventory.setItemStack(11, playerManagement);
+        inventory.setItemStack(PLAYER_MANAGEMENT_SLOT, playerManagement);
+    }
+
+    private ItemStack createItem(@NotNull Material material, @NotNull String name, @NotNull String lore) {
+        return ItemStack.builder(material)
+                .customName(of((name))
+                        .build())
+                .lore(txtLore((lore)))
+                .build();
     }
 
 }
