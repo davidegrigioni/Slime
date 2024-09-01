@@ -6,6 +6,7 @@ import net.minestom.server.coordinate.Vec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,13 +40,16 @@ class RegionManagerTest {
         regionManager.setPoint1(playerUuid, point1);
         regionManager.setPoint2(playerUuid, point2);
 
-        Region region = regionManager.saveRegion(playerUuid);
-        assertNotNull(region);
+        Optional<Region> optionalRegion = regionManager.saveRegion(playerUuid);
+        assertTrue(optionalRegion.isPresent(), "Region should be saved and present");
+
+        Region region = optionalRegion.get();
         assertEquals(point1, region.getMinPoint());
         assertEquals(point2, region.getMaxPoint());
 
-        Region retrievedRegion = regionManager.getRegion(regionName);
-        assertEquals(region, retrievedRegion);
+        Optional<Region> retrievedRegion = regionManager.getRegion(regionName);
+        assertTrue(retrievedRegion.isPresent(), "Retrieved region should be present");
+        assertEquals(region, retrievedRegion.get());
     }
 
     @Test
@@ -62,8 +66,12 @@ class RegionManagerTest {
         Pos insidePos = new Pos(5, 5, 5);
         Pos outsidePos = new Pos(15, 15, 15);
 
-        assertEquals(regionName, regionManager.isPlayerInRegion(insidePos));
-        assertNull(regionManager.isPlayerInRegion(outsidePos));
+        Optional<String> insideRegionName = regionManager.isPlayerInRegion(insidePos);
+        assertTrue(insideRegionName.isPresent(), "Player should be inside the region");
+        assertEquals(regionName, insideRegionName.get());
+
+        Optional<String> outsideRegionName = regionManager.isPlayerInRegion(outsidePos);
+        assertFalse(outsideRegionName.isPresent(), "Player should not be inside any region");
     }
 
     @Test
@@ -81,9 +89,8 @@ class RegionManagerTest {
         String regionName = "TestRegion";
         regionManager.startRegionSetup(playerUuid, regionName);
 
-        Region region = regionManager.saveRegion(playerUuid);
-
-        assertNull(region);
+        Optional<Region> optionalRegion = regionManager.saveRegion(playerUuid);
+        assertFalse(optionalRegion.isPresent(), "Region should not be saved without points");
     }
 
 }

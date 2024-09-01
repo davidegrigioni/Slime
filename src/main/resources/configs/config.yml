@@ -23,3 +23,19 @@ spawn:
 # Protection settings
 protection:
   disable-build-protection: false
+
+# Items
+compass-item:
+  name: "<red>test</red>"
+  lore:
+    - "test"
+    - "test"
+settings-item:
+  name: "<red>Settings</red>"
+  lore:
+    - "test"
+    - "test"
+player-item:
+  name: "<red>player settings</red>"
+  lore:
+    - "test"

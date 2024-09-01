@@ -6,8 +6,9 @@ import net.kyori.adventure.title.Title;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerMoveEvent;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class RegionListener implements EventListener<PlayerMoveEvent> {
 
@@ -23,11 +24,12 @@ public class RegionListener implements EventListener<PlayerMoveEvent> {
     @Override
     public @NotNull Result run(@NotNull PlayerMoveEvent event) {
         final Player player = event.getPlayer();
-        final String regionName = regionManager.isPlayerInRegion(player.getPosition());
-        final Title title = Title.title(Component.text("You're in"), Component.text(regionName));
+        final Optional<String> regionNameOpt = regionManager.isPlayerInRegion(player.getPosition());
 
-        Check.notNull(regionName, "Region Name cannot be null");
-        player.showTitle(title);
+        regionNameOpt.ifPresentOrElse(regionName -> {
+            final Title title = Title.title(Component.text("You're in"), Component.text(regionName));
+            player.showTitle(title);
+        }, player::clearTitle);
 
         return Result.SUCCESS;
     }

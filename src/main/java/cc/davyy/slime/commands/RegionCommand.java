@@ -2,18 +2,23 @@ package cc.davyy.slime.commands;
 
 import cc.davyy.slime.managers.RegionManager;
 import cc.davyy.slime.model.Region;
-import com.asintoto.minestomacr.annotations.AutoRegister;
 import com.google.inject.Inject;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class RegionCommand extends Command {
+
+    private final ArgumentString regionNameArg = ArgumentType.String("regionName");
+    private final ArgumentInteger pointArg = ArgumentType.Integer("point");
 
     private final RegionManager regionManager;
 
@@ -27,10 +32,8 @@ public class RegionCommand extends Command {
             return player.hasPermission("slime.region");
         }));
 
-        var regionNameArg = ArgumentType.String("regionName");
         addSyntax(this::createRegion, regionNameArg);
 
-        var pointArg = ArgumentType.Integer("point").between(1, 2);
         addSyntax(this::setRegion, pointArg);
 
         var saveArg = ArgumentType.Literal("save");
@@ -42,15 +45,15 @@ public class RegionCommand extends Command {
 
     private void createRegion(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final Player player = (Player) sender;
-        String regionName = context.get("regionName");
+        final String regionName = context.get(regionNameArg);
         regionManager.startRegionSetup(player.getUuid(), regionName);
         player.sendMessage("Region setup started for '" + regionName + "'. Please set the points using /region set 1 and /region set 2.");
     }
 
     private void setRegion(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final Player player = (Player) sender;
-        int pointNumber = context.get("point");
-        Vec playerPosition = player.getPosition().asVec();
+        final int pointNumber = context.get(pointArg);
+        final Vec playerPosition = player.getPosition().asVec();
 
         if (!regionManager.isSettingUpRegion(player.getUuid())) {
             player.sendMessage("You need to start a region setup first using /region create <regionName>.");
@@ -72,17 +75,19 @@ public class RegionCommand extends Command {
 
     private void saveRegion(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final Player player = (Player) sender;
-        String regionName = context.get("regionName");
+        final String regionName = context.get(regionNameArg);
 
         if (!regionManager.isSettingUpRegion(player.getUuid())) {
             player.sendMessage("No region setup in progress. Start one using /region create <regionName>.");
             return;
         }
 
-        Region region = regionManager.saveRegion(player.getUuid());
-        Check.notNull(region, "Failed to save the region. Ensure both points are set.");
+        final Optional<Region> regionOpt = regionManager.saveRegion(player.getUuid());
 
-        player.sendMessage("Region '" + regionName + "' saved successfully between " + region.getMinPoint() + " and " + region.getMaxPoint());
+        regionOpt.ifPresentOrElse(region -> player.sendMessage("Region '" + regionName + "' saved successfully between "
+                + region.getMinPoint() + " and " + region.getMaxPoint()), () -> {
+            throw new IllegalStateException("Failed to save the region. Ensure both points are set.");
+        });
     }
 
     private void cancelSetup(@NotNull CommandSender sender, @NotNull CommandContext context) {

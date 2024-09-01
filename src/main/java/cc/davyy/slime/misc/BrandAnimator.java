@@ -43,10 +43,14 @@ public class BrandAnimator {
             return;
         }
 
-        String brandName = brandNameStyles.get(currentIndex);
+        final String brandName = brandNameStyles.get(currentIndex);
 
-        Component component = ColorUtils.of(brandName).build();
-        String legacyBrandName = LegacyComponentSerializer.legacyAmpersand().serialize(component);
+        final Component component = ColorUtils
+                .of(brandName)
+                .build();
+        final String legacyBrandName = LegacyComponentSerializer
+                .legacyAmpersand()
+                .serialize(component);
 
         MinecraftServer.setBrandName(legacyBrandName);
 

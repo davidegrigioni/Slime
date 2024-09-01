@@ -7,6 +7,7 @@ public class Region {
 
     private final Vec minPoint;
     private final Vec maxPoint;
+    private final RegionOption regionOption;
 
     /**
      * Creates a region defined by two opposite corners.
@@ -26,6 +27,8 @@ public class Region {
                 Math.max(point1.y(), point2.y()),
                 Math.max(point1.z(), point2.z())
         );
+
+        this.regionOption = new RegionOption();
     }
 
     /**
@@ -43,5 +46,7 @@ public class Region {
     public Vec getMinPoint() { return minPoint; }
 
     public Vec getMaxPoint() { return maxPoint; }
+
+    public RegionOption getRegionOption() { return regionOption; }
 
 }

@@ -20,6 +20,7 @@ import static cc.davyy.slime.utils.FileUtils.getConfig;
 public final class SlimeLoader {
 
     private RegionManager regionManager;
+    private BrandAnimator animator;
 
     public void start() {
         final MinecraftServer minecraftServer = MinecraftServer.init();
@@ -46,14 +47,14 @@ public final class SlimeLoader {
         final var handler = MinecraftServer.getGlobalEventHandler();
         handler.addListener(new AsyncPlayerConfigurationListener());
         handler.addListener(new PlayerSpawnListener());
-        handler.addListener(new BlockBreakListener());
+        handler.addListener(new BlockBreakListener(regionManager));
         handler.addListener(new RegionListener(regionManager));
     }
 
     private void injectGuice() {
         final Injector injector = Guice.createInjector(new SlimeModule(this));
-        final BrandAnimator animator = injector.getInstance(BrandAnimator.class);
 
+        animator = injector.getInstance(BrandAnimator.class);
         regionManager = injector.getInstance(RegionManager.class);
     }
 

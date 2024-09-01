@@ -1,7 +1,9 @@
 package cc.davyy.slime.entities.types;
 
 import cc.davyy.slime.entities.base.AbstractHologram;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.metadata.display.TextDisplayMeta;
@@ -10,31 +12,34 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClickableHologram extends AbstractHologram {
 
-    private final Runnable onClickAction;
+    private final ClickCallback<Audience> onClickAction;
 
-    public ClickableHologram(@NotNull Component text, @NotNull Instance instance, @NotNull Pos spawn, @NotNull Runnable onClickAction) {
+    public ClickableHologram(@NotNull Component text, @NotNull Instance instance, @NotNull Pos spawn, @NotNull ClickCallback<Audience> onClickAction) {
         super(text, instance, spawn);
         this.onClickAction = onClickAction;
         setupClickableHologram();
     }
 
     private void setupClickableHologram() {
-        TextDisplayMeta meta = (TextDisplayMeta) getEntityMeta();
-        meta.setText(getClickableText(getText()));
+        final TextDisplayMeta meta = (TextDisplayMeta) getEntityMeta();
+        meta.setText(getClickableText(getText(), onClickAction));
     }
 
-    private Component getClickableText(@NotNull Component text) {
-        return text.clickEvent(ClickEvent.runCommand("/triggerHologramAction"));
+    /**
+     * Customize the text to include a click event defined by the provided callback.
+     *
+     * @param text         The text component to be displayed.
+     * @param onClickAction The action to run when the text is clicked.
+     * @return The text component with the click event applied.
+     */
+    private Component getClickableText(@NotNull Component text, @NotNull ClickCallback<Audience> onClickAction) {
+        return text.clickEvent(ClickEvent.callback(onClickAction));
     }
 
     @Override
     public void updateText(@NotNull Component newText) {
-        TextDisplayMeta meta = (TextDisplayMeta) getEntityMeta();
-        meta.setText(getClickableText(newText));
-    }
-
-    public void handleClick() {
-        onClickAction.run();
+        final TextDisplayMeta meta = (TextDisplayMeta) getEntityMeta();
+        meta.setText(getClickableText(newText, onClickAction));
     }
 
 }
