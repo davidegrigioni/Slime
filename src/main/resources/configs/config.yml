@@ -28,6 +28,7 @@ protection:
     message: "<red>test</red>"
 
 # Items
+server-gui-title: "test"
 compass-item:
   name: "<red>test</red>"
   lore:

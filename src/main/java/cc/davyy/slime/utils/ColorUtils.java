@@ -51,6 +51,8 @@ public final class ColorUtils {
                 .toList();
     }
 
+    public static Component txt(@NotNull String message) { return MINIMESSAGE.deserialize(message); }
+
     private static Component colorize(@NotNull String message) { return MINIMESSAGE.deserialize(message).decoration(TextDecoration.ITALIC, false); }
 
     public String toString() { return getText(); }

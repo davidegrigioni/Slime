@@ -12,12 +12,17 @@ import cc.davyy.slime.utils.ConsoleUtils;
 import com.asintoto.minestomacr.MinestomACR;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 
+import static cc.davyy.slime.utils.ColorUtils.of;
+import static cc.davyy.slime.utils.ColorUtils.txt;
 import static cc.davyy.slime.utils.FileUtils.*;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 
 public final class SlimeLoader {
+
+    private final ComponentLogger componentLogger = ComponentLogger.logger(SlimeLoader.class);
 
     private RegionManager regionManager;
     private BrandAnimator animator;
@@ -37,6 +42,14 @@ public final class SlimeLoader {
         MinestomACR.init();
 
         MinecraftServer.getCommandManager().register(new RegionCommand(regionManager));
+
+        MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
+            final var onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
+            final String kickMessage = getMessages().getString("kick");
+            onlinePlayers.forEach(player -> player.kick(of(kickMessage)
+                    .build()));
+            componentLogger.info(txt("Server Closing..."));
+        });
 
         final String ip = getConfig().getString("ip");
         final int port = getConfig().getInt("port");

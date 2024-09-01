@@ -20,8 +20,10 @@ public class ServerGUI {
     private static final int NAVIGATOR_SLOT = 3;
     private static final int SETTINGS_SLOT = 5;
     private static final int PLAYER_MANAGEMENT_SLOT = 11;
+    private static final String GUI_TITLE = getConfig().getString("server-gui-title");
 
-    private final Inventory inventory = new Inventory(InventoryType.CHEST_3_ROW, "Test");
+    private final Inventory inventory = new Inventory(InventoryType.CHEST_3_ROW, of(GUI_TITLE)
+            .build());
 
     public void open(@NotNull Player player) {
         setupGui(player);
@@ -61,9 +63,9 @@ public class ServerGUI {
 
     private ItemStack createItem(@NotNull Material material, @NotNull String name, @NotNull String lore) {
         return ItemStack.builder(material)
-                .customName(of((name))
+                .customName(of(name)
                         .build())
-                .lore(txtLore((lore)))
+                .lore(txtLore(lore))
                 .build();
     }
 

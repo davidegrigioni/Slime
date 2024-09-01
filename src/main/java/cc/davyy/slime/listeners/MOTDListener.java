@@ -16,13 +16,13 @@ public class MOTDListener implements EventListener<ServerListPingEvent> {
 
     @Override
     public @NotNull Result run(@NotNull ServerListPingEvent event) {
-        final var onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
+        final var onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
         final ResponseData responseData = event.getResponseData();
 
         final String description = getConfig().getString("motd.description");
         final boolean playersHidden = getConfig().getBoolean("motd.players-hidden");
 
-        responseData.setOnline(onlinePlayers.size());
+        responseData.setOnline(onlinePlayers);
         responseData.setDescription(of(description)
                 .build());
         responseData.setPlayersHidden(playersHidden);

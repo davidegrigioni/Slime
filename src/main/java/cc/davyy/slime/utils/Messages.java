@@ -16,6 +16,10 @@ import static cc.davyy.slime.utils.FileUtils.getMessages;
 public enum Messages implements ComponentLike {
 
     RELOAD_CONFIG("messages.reload"),
+    MESSAGE_EMPTY("messages.message-empty"),
+    HOLOGRAM("messages.hologram"),
+    REGION_SETUP("messages.region-setup"),
+    REGION_SETUP_FIRST("messages.region-setup-first"),
     SPAWN_TELEPORT("messages.spawn-teleport"),
     SPAWN_SET("messages.spawn-set");
 
@@ -26,8 +30,6 @@ public enum Messages implements ComponentLike {
     Messages(String key) {
         this.key = key;
     }
-
-    public @NotNull String getKey() { return key; }
 
     @Override
     public @NotNull Component asComponent() {

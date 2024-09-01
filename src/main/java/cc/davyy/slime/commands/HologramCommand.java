@@ -3,7 +3,7 @@ package cc.davyy.slime.commands;
 import cc.davyy.slime.entities.types.ClickableHologram;
 import cc.davyy.slime.entities.types.MultiLineHologram;
 import cc.davyy.slime.entities.types.SimpleHologram;
-import cc.davyy.slime.entities.utils.HologramType;
+import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import com.asintoto.minestomacr.annotations.AutoRegister;
 import net.kyori.adventure.text.Component;
@@ -50,7 +50,11 @@ public class HologramCommand extends Command {
                     player.sendMessage(Component.text("You clicked the hologram!")));
         }
 
-        player.sendMessage(Component.text("Hologram of type " + hologramType.name() + " created at your position: " + holoPos.x() + ", " + holoPos.y() + ", " + holoPos.z()));
+        player.sendMessage(Messages.HOLOGRAM
+                .addPlaceholder("hologramtype", hologramType.name())
+                .asComponent());
     }
+
+    private enum HologramType { SIMPLE, MULTI_LINE, CLICKABLE }
 
 }

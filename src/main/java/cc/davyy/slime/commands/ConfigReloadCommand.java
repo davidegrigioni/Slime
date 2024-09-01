@@ -17,17 +17,18 @@ public class ConfigReloadCommand extends Command {
         super("creload");
 
         setCondition(((sender, commandString) -> {
-            final Player player = (Player) sender;
-            return player.hasPermission("slime.reload");
+            if (sender instanceof Player player) {
+                return player.hasPermission("slime.reload");
+            }
+            return true;
         }));
 
         setDefaultExecutor(this::reload);
     }
 
     private void reload(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final Player player = (Player) sender;
         reloadConfig();
-        player.sendMessage(Messages.RELOAD_CONFIG
+        sender.sendMessage(Messages.RELOAD_CONFIG
                 .asComponent());
     }
 
