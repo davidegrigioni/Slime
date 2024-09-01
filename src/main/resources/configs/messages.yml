@@ -2,3 +2,7 @@ messages:
   spawn-set: "<green>Set spawn to <pos></green>"
   spawn-teleport: "<green>You got teleported to spawn</green>"
   reload: "<green>Reloaded config successfully!</green>"
+
+titles:
+  title: "test"
+  subtitle: "test <regionname>"

@@ -34,9 +34,7 @@ public class RegionManager {
      * @param playerUuid The UUID of the player.
      * @return True if the player is setting up a region, false otherwise.
      */
-    public boolean isSettingUpRegion(@NotNull UUID playerUuid) {
-        return regionSetupMap.containsKey(playerUuid);
-    }
+    public boolean isSettingUpRegion(@NotNull UUID playerUuid) { return regionSetupMap.containsKey(playerUuid); }
 
     /**
      * Sets the first point for the region setup.
@@ -44,9 +42,7 @@ public class RegionManager {
      * @param playerUuid The UUID of the player.
      * @param point      The position to set as the first point.
      */
-    public void setPoint1(@NotNull UUID playerUuid, @NotNull Vec point) {
-        point1Map.put(playerUuid, point);
-    }
+    public void setPoint1(@NotNull UUID playerUuid, @NotNull Vec point) { point1Map.put(playerUuid, point); }
 
     /**
      * Sets the second point for the region setup.
@@ -54,9 +50,7 @@ public class RegionManager {
      * @param playerUuid The UUID of the player.
      * @param point      The position to set as the second point.
      */
-    public void setPoint2(@NotNull UUID playerUuid, @NotNull Vec point) {
-        point2Map.put(playerUuid, point);
-    }
+    public void setPoint2(@NotNull UUID playerUuid, @NotNull Vec point) { point2Map.put(playerUuid, point); }
 
     /**
      * Saves the region being set up.
@@ -85,9 +79,7 @@ public class RegionManager {
      * @param regionName The name of the region.
      * @return The region, or null if it doesn't exist.
      */
-    public Optional<Region> getRegion(@NotNull String regionName) {
-        return Optional.ofNullable(regions.get(regionName));
-    }
+    public Optional<Region> getRegion(@NotNull String regionName) { return Optional.ofNullable(regions.get(regionName)); }
 
     /**
      * Checks if a player is inside any region.

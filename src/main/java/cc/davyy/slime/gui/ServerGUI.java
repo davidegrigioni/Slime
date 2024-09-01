@@ -1,12 +1,13 @@
 package cc.davyy.slime.gui;
 
-import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.HeadProfile;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -14,18 +15,17 @@ import static cc.davyy.slime.utils.ColorUtils.txtLore;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.ColorUtils.of;
 
-public class ServerGUI extends Inventory {
+public class ServerGUI {
 
-    public ServerGUI() {
-        super(InventoryType.CHEST_3_ROW, "Server GUI");
+    private final Inventory inventory = new Inventory(InventoryType.CHEST_3_ROW, "Test");
 
-        addInventoryCondition(((player, i, clickType, result) ->
-                result.setCancel(true)));
+    public void setupGui(@NotNull Player player) {
+        inventory.addInventoryCondition(((players, slot, clickType, result) -> result.setCancel(true)));
 
-        setupItems(this);
+        setupItems(player);
     }
 
-    private void setupItems(Inventory inventory) {
+    private void setupItems(@NotNull Player player) {
         // Navigation
         final ItemStack compass = ItemStack.builder(Material.COMPASS)
                 .customName(of(getConfig().getString("compass-item.name"))
@@ -47,7 +47,7 @@ public class ServerGUI extends Inventory {
                 .customName(of(getConfig().getString("player-item.name"))
                         .build())
                 .lore(txtLore(getConfig().getString("player-item.lore")))
-                .set(ItemComponent.PROFILE, new HeadProfile(Objects.requireNonNull(PlayerSkin.fromUsername("test"))))
+                .set(ItemComponent.PROFILE, new HeadProfile(Objects.requireNonNull(player.getSkin())))
                 .build();
         inventory.setItemStack(11, playerManagement);
     }

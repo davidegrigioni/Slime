@@ -22,7 +22,10 @@ spawn:
 
 # Protection settings
 protection:
-  disable-build-protection: false
+  disable-build-protection: true
+  block-break-message:
+    enable: false
+    message: "<red>test</red>"
 
 # Items
 compass-item:
