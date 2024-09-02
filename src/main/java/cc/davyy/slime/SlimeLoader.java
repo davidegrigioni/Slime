@@ -1,12 +1,11 @@
 package cc.davyy.slime;
 
+import cc.davyy.slime.commands.LobbyCommand;
 import cc.davyy.slime.commands.RegionCommand;
-import cc.davyy.slime.listeners.AsyncPlayerConfigurationListener;
-import cc.davyy.slime.listeners.MOTDListener;
-import cc.davyy.slime.listeners.PlayerSpawnListener;
-import cc.davyy.slime.listeners.RegionListener;
+import cc.davyy.slime.listeners.*;
+import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.RegionManager;
-import cc.davyy.slime.misc.BrandAnimator;
+import cc.davyy.slime.managers.BrandManager;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
 import com.asintoto.minestomacr.MinestomACR;
@@ -25,7 +24,8 @@ public final class SlimeLoader {
     private final ComponentLogger componentLogger = ComponentLogger.logger(SlimeLoader.class);
 
     private RegionManager regionManager;
-    private BrandAnimator animator;
+    private BrandManager animator;
+    private LobbyManager lobbyManager;
 
     public void start() {
         final MinecraftServer minecraftServer = MinecraftServer.init();
@@ -42,6 +42,7 @@ public final class SlimeLoader {
         MinestomACR.init();
 
         MinecraftServer.getCommandManager().register(new RegionCommand(regionManager));
+        MinecraftServer.getCommandManager().register(new LobbyCommand(lobbyManager));
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
             final var onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
@@ -61,14 +62,16 @@ public final class SlimeLoader {
         handler.addListener(new AsyncPlayerConfigurationListener());
         handler.addListener(new PlayerSpawnListener());
         handler.addListener(new MOTDListener());
+        handler.addListener(new PlayerChatListener());
         new RegionListener(regionManager).init(handler);
     }
 
     private void injectGuice() {
         final Injector injector = Guice.createInjector(new SlimeModule(this));
 
-        animator = injector.getInstance(BrandAnimator.class);
+        animator = injector.getInstance(BrandManager.class);
         regionManager = injector.getInstance(RegionManager.class);
+        lobbyManager = injector.getInstance(LobbyManager.class);
     }
 
 }

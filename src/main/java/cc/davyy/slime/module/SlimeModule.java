@@ -1,14 +1,16 @@
 package cc.davyy.slime.module;
 
 import cc.davyy.slime.SlimeLoader;
+import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.RegionManager;
-import cc.davyy.slime.misc.BrandAnimator;
+import cc.davyy.slime.managers.BrandManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
 public class SlimeModule extends AbstractModule {
 
     private final SlimeLoader instance;
+    private final Class<Singleton> singleton = Singleton.class;
 
     public SlimeModule(SlimeLoader instance) {
         this.instance = instance;
@@ -18,8 +20,9 @@ public class SlimeModule extends AbstractModule {
     protected void configure() {
         bind(SlimeLoader.class).toInstance(instance);
 
-        bind(BrandAnimator.class).in(Singleton.class);
-        bind(RegionManager.class).in(Singleton.class);
+        bind(BrandManager.class).in(singleton);
+        bind(RegionManager.class).in(singleton);
+        bind(LobbyManager.class).in(singleton);
     }
 
 }

@@ -21,6 +21,7 @@ dependencies {
     implementation('ninja.leaping.configurate:configurate-hocon:3.7.1')
     implementation('com.github.Asintotoo:MinestomACR:2f300f9579')
     implementation('com.google.inject:guice:7.0.0')
+    implementation('net.kyori:adventure-text-serializer-ansi:4.17.0')
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation('org.junit.jupiter:junit-jupiter')

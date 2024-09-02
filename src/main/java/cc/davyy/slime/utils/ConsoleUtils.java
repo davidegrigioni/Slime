@@ -9,7 +9,10 @@ import java.util.concurrent.TimeUnit;
 
 public final class ConsoleUtils {
 
-    private static final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor(Thread.ofVirtual().name("SlimeConsoleWorker").factory());
+    private static final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor(Thread
+            .ofVirtual()
+            .name("SlimeConsoleWorker")
+            .factory());
     private static final Scanner CONSOLE_IN = new Scanner(System.in);
     private static final Object consoleLock = new Object();
 
