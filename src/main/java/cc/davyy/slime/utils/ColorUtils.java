@@ -31,7 +31,7 @@ public final class ColorUtils {
             .build();
 
     // Logger for outputting components as text in the console.
-    private static final ComponentLogger COMPONENT_LOGGER = ComponentLogger.logger(ColorUtils.class);
+    private static final ComponentLogger COMPONENT_LOGGER = ComponentLogger.logger();
 
     // List of MiniMessage placeholders for dynamic text processing.
     private final List<TagResolver> minimessagePlaceholders = new ArrayList<>();

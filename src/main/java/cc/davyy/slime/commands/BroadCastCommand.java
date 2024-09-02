@@ -49,47 +49,26 @@ public class BroadCastCommand extends Command {
     }
 
     private void executeBroadcast(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final String[] messageArray = context.get(messageArgumentArray);
-        final StringBuilder messageBuilder = new StringBuilder();
+        final String finalMessage = String.join("  ", context.get(messageArgumentArray));
 
-        if (messageBuilder.isEmpty()) {
+        if (finalMessage.isEmpty()) {
             sender.sendMessage(Messages.MESSAGE_EMPTY
                     .asComponent());
             return;
         }
-
-        for (String string : messageArray) { messageBuilder.append(string).append("  "); }
-
-        final String finalMessage = messageBuilder.toString();
 
         broadcast(finalMessage);
     }
 
     private void executeBroadcastTitle(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final String message = context.get(titleArg);
-        final Title title = Title.title(txt(message), Component.empty());
-
-        if (message.isEmpty()) {
-            sender.sendMessage(Messages.MESSAGE_EMPTY
-                    .asComponent());
-            return;
-        }
-
-        onlinePlayers.forEach(player -> player.showTitle(title));
+        sendTitle(message, Component.empty(), sender);
     }
 
     private void executeBroadcastTitleSub(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final String message = context.get(titleArg);
         final String subTitle = context.get(subTitleArg);
-        final Title title = Title.title(txt(message), txt(subTitle));
-
-        if (message.isEmpty()) {
-            sender.sendMessage(Messages.MESSAGE_EMPTY
-                    .asComponent());
-            return;
-        }
-
-        onlinePlayers.forEach(player -> player.showTitle(title));
+        sendTitle(message, txt(subTitle), sender);
     }
 
     private void executeBroadcastTitleSubTime(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -101,14 +80,30 @@ public class BroadCastCommand extends Command {
         final Long fadeOut = context.get(fadeOutArg);
 
         final Title.Times times = Title.Times.times(Duration.ofSeconds(fadeIn), Duration.ofSeconds(stay), Duration.ofSeconds(fadeOut));
-        final Title title = Title.title(txt(message), txt(subTitle), times);
+        sendTitle(message, txt(subTitle), times, sender);
+    }
 
-        if (message.isEmpty()) {
+    private void sendTitle(@NotNull String titleText, @NotNull Component subTitle, @NotNull CommandSender sender) {
+        if (titleText.isEmpty()) {
             sender.sendMessage(Messages.MESSAGE_EMPTY
                     .asComponent());
             return;
         }
 
+        final Title title = Title.title(of(titleText)
+                .build(), subTitle);
+        onlinePlayers.forEach(player -> player.showTitle(title));
+    }
+
+    private void sendTitle(@NotNull String titleText, @NotNull Component subTitle, @NotNull Title.Times times, @NotNull CommandSender sender) {
+        if (titleText.isEmpty()) {
+            sender.sendMessage(Messages.MESSAGE_EMPTY
+                    .asComponent());
+            return;
+        }
+
+        final Title title = Title.title(of(titleText)
+                .build(), subTitle, times);
         onlinePlayers.forEach(player -> player.showTitle(title));
     }
 
