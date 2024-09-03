@@ -33,7 +33,7 @@ public class ListCommandsCommand extends Command {
             switch (sender) {
                 case ConsoleSender ignored -> print(Component.text(Arrays.toString(command.getNames())));
                 case Player player -> player.sendMessage(command.getNames());
-                default -> componentLogger.info("Default Robo");
+                default -> componentLogger.info(commands.toString());
             }
         });
     }

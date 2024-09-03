@@ -1,5 +1,6 @@
 package cc.davyy.slime.listeners;
 
+import cc.davyy.slime.utils.ChatTranslatorUtils;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerChatEvent;
@@ -19,7 +20,7 @@ public class PlayerChatListener implements EventListener<PlayerChatEvent> {
 
         event.setCancelled(true);
 
-        instance.getPlayers().forEach(instancePlayer -> instancePlayer.sendMessage(player.getName() + ": " + message));
+        instance.getPlayers().forEach(instancePlayer -> ChatTranslatorUtils.sendTranslatedMessage(player, message));
 
         return Result.SUCCESS;
     }

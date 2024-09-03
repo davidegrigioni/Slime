@@ -5,8 +5,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Player;
 
-import static cc.davyy.slime.utils.ColorUtils.txt;
-
 @AutoRegister
 public class StopCommand extends Command {
 
@@ -20,10 +18,7 @@ public class StopCommand extends Command {
             return true;
         }));
 
-        setDefaultExecutor(((sender, context) -> {
-            MinecraftServer.stopCleanly();
-            sender.sendMessage(txt("Stopping..."));
-        }));
+        setDefaultExecutor(((sender, context) -> MinecraftServer.stopCleanly()));
     }
 
 }
