@@ -3,7 +3,6 @@ package cc.davyy.slime;
 import cc.davyy.slime.commands.LobbyCommand;
 import cc.davyy.slime.commands.RegionCommand;
 import cc.davyy.slime.listeners.*;
-import cc.davyy.slime.managers.ChatTranslatorManager;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.RegionManager;
 import cc.davyy.slime.module.SlimeModule;
@@ -25,7 +24,6 @@ public final class SlimeLoader {
 
     private RegionManager regionManager;
     private LobbyManager lobbyManager;
-    private ChatTranslatorManager chatTranslatorManager;
 
     public void start() {
         final MinecraftServer minecraftServer = MinecraftServer.init();
@@ -62,7 +60,6 @@ public final class SlimeLoader {
         handler.addListener(new AsyncPlayerConfigurationListener());
         handler.addListener(new PlayerSpawnListener());
         handler.addListener(new MOTDListener());
-        new PlayerChatListener(chatTranslatorManager).init();
         new RegionListener(regionManager).init(handler);
     }
 
@@ -71,7 +68,6 @@ public final class SlimeLoader {
 
         regionManager = injector.getInstance(RegionManager.class);
         lobbyManager = injector.getInstance(LobbyManager.class);
-        chatTranslatorManager = injector.getInstance(ChatTranslatorManager.class);
     }
 
 }
