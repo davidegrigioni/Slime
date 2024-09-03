@@ -1,17 +1,15 @@
-package cc.davyy.slime.entities.types;
+package cc.davyy.slime.entities.types.holo;
 
 import cc.davyy.slime.entities.base.AbstractHologram;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.entity.metadata.display.TextDisplayMeta;
-import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleHologram extends AbstractHologram {
 
-    public SimpleHologram(@NotNull Component text, @NotNull Instance instance, @NotNull Pos spawn) {
-        super(text, instance, spawn);
+    public SimpleHologram(@NotNull Component text) {
+        super(text);
         setupHologram();
     }
 

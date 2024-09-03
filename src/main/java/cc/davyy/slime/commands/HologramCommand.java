@@ -1,8 +1,8 @@
 package cc.davyy.slime.commands;
 
-import cc.davyy.slime.entities.types.ClickableHologram;
-import cc.davyy.slime.entities.types.MultiLineHologram;
-import cc.davyy.slime.entities.types.SimpleHologram;
+import cc.davyy.slime.entities.types.holo.ClickableHologram;
+import cc.davyy.slime.entities.types.holo.MultiLineHologram;
+import cc.davyy.slime.entities.types.holo.SimpleHologram;
 import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import com.asintoto.minestomacr.annotations.AutoRegister;
@@ -41,13 +41,18 @@ public class HologramCommand extends Command {
         final Pos holoPos = PosUtils.of(playerPos.x(), playerPos.y() + 2, playerPos.z());
 
         switch (hologramType) {
-            case SIMPLE -> new SimpleHologram(hologramText, player.getInstance(),
-                    holoPos);
-            case MULTI_LINE -> new MultiLineHologram(List.of(hologramText), player.getInstance(),
-                    holoPos, 1.5);
-            case CLICKABLE -> new ClickableHologram(hologramText, player.getInstance(),
-                    holoPos, (audience) ->
-                    player.sendMessage(Component.text("You clicked the hologram!")));
+            case SIMPLE -> {
+                SimpleHologram simpleHologram = new SimpleHologram(hologramText);
+                simpleHologram.show(player.getInstance(), holoPos);
+            }
+            case MULTI_LINE -> {
+                MultiLineHologram multiLineHologram = new MultiLineHologram(List.of(hologramText));
+                multiLineHologram.show(player.getInstance(), holoPos);
+            }
+            case CLICKABLE -> {
+                ClickableHologram clickableHologram = new ClickableHologram(hologramText, (audience -> player.sendMessage(Component.text("You clicked the hologram!"))));
+                clickableHologram.show(player.getInstance(), holoPos);
+            }
         }
 
         player.sendMessage(Messages.HOLOGRAM

@@ -13,11 +13,9 @@ public abstract class AbstractHologram extends Entity implements Hologram {
     protected Component text;
     protected Pos position;
 
-    public AbstractHologram(@NotNull Component text, @NotNull Instance instance, @NotNull Pos spawn) {
+    public AbstractHologram(@NotNull Component text) {
         super(EntityType.TEXT_DISPLAY);
         this.text = text;
-        this.position = spawn;
-        setInstance(instance, spawn);
     }
 
     @Override
@@ -45,7 +43,6 @@ public abstract class AbstractHologram extends Entity implements Hologram {
     @Override
     public void show(@NotNull Instance instance, @NotNull Pos position) {
         setInstance(instance, position);
-        spawn();
     }
 
     @Override

@@ -1,28 +1,41 @@
 package cc.davyy.slime.listeners;
 
-import cc.davyy.slime.utils.ChatTranslatorUtils;
+import cc.davyy.slime.managers.ChatTranslatorManager;
+import com.google.inject.Inject;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.EventListener;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerChatEvent;
-import net.minestom.server.instance.Instance;
-import org.jetbrains.annotations.NotNull;
 
-public class PlayerChatListener implements EventListener<PlayerChatEvent> {
+public class PlayerChatListener {
 
-    @Override
-    public @NotNull Class<PlayerChatEvent> eventType() { return PlayerChatEvent.class; }
+    private final GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
+    private final ChatTranslatorManager chatTranslatorManager;
 
-    @Override
-    public @NotNull Result run(@NotNull PlayerChatEvent event) {
-        final Player player = event.getPlayer();
-        final Instance instance = player.getInstance();
-        final String message = event.getMessage();
+    @Inject
+    public PlayerChatListener(ChatTranslatorManager chatTranslatorManager) {
+        this.chatTranslatorManager = chatTranslatorManager;
+    }
 
-        event.setCancelled(true);
+    public void init() {
+        globalEventHandler.addListener(PlayerChatEvent.class, event -> {
+            final Player player = event.getPlayer();
+            final String message = event.getMessage();
 
-        instance.getPlayers().forEach(instancePlayer -> ChatTranslatorUtils.sendTranslatedMessage(player, message));
+            event.setChatFormat(playerChatEvent -> {
+                // Define the chat format, including the player's name and message
+                String chatFormat = String.format("[%s] %s", player.getUsername(), message);
 
-        return Result.SUCCESS;
+                // Detect and translate the message
+                String translatedMessage = chatTranslatorManager.translateText(chatFormat, player.getLocale().getLanguage());
+
+                // Return the formatted and translated message as a Component
+                return Component.text(translatedMessage)
+                        .hoverEvent(HoverEvent.showText(Component.text(message))); // Show original message on hover
+            });
+        });
     }
 
 }

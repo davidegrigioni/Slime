@@ -32,7 +32,6 @@ public class ServerGUI {
 
     private void setupGui(@NotNull Player player) {
         inventory.addInventoryCondition(((players, slot, clickType, result) -> result.setCancel(true)));
-
         setupItems(player);
     }
 
@@ -61,7 +60,7 @@ public class ServerGUI {
         inventory.setItemStack(PLAYER_MANAGEMENT_SLOT, playerManagement);
     }
 
-    private ItemStack createItem(@NotNull Material material, @NotNull String name, @NotNull String lore) {
+    private @NotNull ItemStack createItem(@NotNull Material material, @NotNull String name, @NotNull String lore) {
         return ItemStack.builder(material)
                 .customName(of(name)
                         .build())

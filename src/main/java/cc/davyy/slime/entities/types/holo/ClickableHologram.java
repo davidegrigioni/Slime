@@ -1,21 +1,19 @@
-package cc.davyy.slime.entities.types;
+package cc.davyy.slime.entities.types.holo;
 
 import cc.davyy.slime.entities.base.AbstractHologram;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.metadata.display.TextDisplayMeta;
-import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
 public class ClickableHologram extends AbstractHologram {
 
     private final ClickCallback<Audience> onClickAction;
 
-    public ClickableHologram(@NotNull Component text, @NotNull Instance instance, @NotNull Pos spawn, @NotNull ClickCallback<Audience> onClickAction) {
-        super(text, instance, spawn);
+    public ClickableHologram(@NotNull Component text, @NotNull ClickCallback<Audience> onClickAction) {
+        super(text);
         this.onClickAction = onClickAction;
         setupClickableHologram();
     }
