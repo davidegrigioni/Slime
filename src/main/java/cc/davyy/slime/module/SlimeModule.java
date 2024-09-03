@@ -1,6 +1,7 @@
 package cc.davyy.slime.module;
 
 import cc.davyy.slime.SlimeLoader;
+import cc.davyy.slime.managers.ChatTranslatorManager;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.RegionManager;
 import cc.davyy.slime.managers.BrandManager;
@@ -23,6 +24,7 @@ public class SlimeModule extends AbstractModule {
         bind(BrandManager.class).in(singleton);
         bind(RegionManager.class).in(singleton);
         bind(LobbyManager.class).in(singleton);
+        bind(ChatTranslatorManager.class).in(singleton);
     }
 
 }
