@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation('net.minestom:minestom-snapshots:65f75bb059')
+    implementation('net.minestom:minestom-snapshots:4553d3c574')
     implementation('com.github.simplix-softworks:SimplixStorage:3.2.7')
     implementation('net.kyori:adventure-text-minimessage:4.17.0')
     implementation('me.lucko.luckperms:minestom:5.4-SNAPSHOT')
@@ -32,8 +32,18 @@ test {
     useJUnitPlatform()
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'cc.davyy.slime.Slime'
+tasks {
+    jar {
+        manifest {
+            attributes["Main-Class"] = "cc.davyy.slime.Slime"
+        }
+    }
+
+    build {
+        dependsOn(shadowJar)
+    }
+    shadowJar {
+        mergeServiceFiles()
+        archiveClassifier.set("") // Prevent the -all suffix on the shadowjar file.
     }
 }

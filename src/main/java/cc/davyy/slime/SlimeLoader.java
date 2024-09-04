@@ -18,7 +18,7 @@ import static cc.davyy.slime.utils.ColorUtils.txt;
 import static cc.davyy.slime.utils.FileUtils.*;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 
-public final class SlimeLoader {
+public class SlimeLoader {
 
     private final ComponentLogger componentLogger = ComponentLogger.logger(SlimeLoader.class);
 
@@ -26,10 +26,9 @@ public final class SlimeLoader {
     private LobbyManager lobbyManager;
 
     public void start() {
-        final MinecraftServer minecraftServer = MinecraftServer.init();
+        MinecraftServer minecraftServer = MinecraftServer.init();
 
-        setupLuckPerms();
-        setupConfig();
+        setupFiles();
 
         registerListeners();
 
@@ -43,28 +42,27 @@ public final class SlimeLoader {
         MinecraftServer.getCommandManager().register(new LobbyCommand(lobbyManager));
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
-            final var onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
-            final String kickMessage = getMessages().getString("kick");
+            var onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
+            String kickMessage = getMessages().getString("kick");
             onlinePlayers.forEach(player -> player.kick(of(kickMessage)
                     .build()));
             componentLogger.info(txt("Server Closing..."));
         });
 
-        final String ip = getConfig().getString("ip");
-        final int port = getConfig().getInt("port");
+        String ip = getConfig().getString("network.ip");
+        int port = getConfig().getInt("network.port");
         minecraftServer.start(ip, port);
     }
 
     private void registerListeners() {
-        final var handler = MinecraftServer.getGlobalEventHandler();
+        var handler = MinecraftServer.getGlobalEventHandler();
         handler.addListener(new AsyncPlayerConfigurationListener());
         handler.addListener(new PlayerSpawnListener());
-        handler.addListener(new MOTDListener());
         new RegionListener(regionManager).init(handler);
     }
 
     private void injectGuice() {
-        final Injector injector = Guice.createInjector(new SlimeModule(this));
+        Injector injector = Guice.createInjector(new SlimeModule(this));
 
         regionManager = injector.getInstance(RegionManager.class);
         lobbyManager = injector.getInstance(LobbyManager.class);

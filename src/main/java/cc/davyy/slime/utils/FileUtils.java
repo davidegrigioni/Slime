@@ -73,6 +73,11 @@ public final class FileUtils {
                 .enable();
     }
 
+    public static void setupFiles() {
+        setupConfig();
+        setupLuckPerms();
+    }
+
     /**
      * Reloads the configuration and messages files.
      * <p>

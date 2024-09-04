@@ -25,22 +25,23 @@ public class AsyncPlayerConfigurationListener implements EventListener<AsyncPlay
 
     @Override
     public @NotNull Result run(@NotNull AsyncPlayerConfigurationEvent event) {
-        final Player player = event.getPlayer();
+        Player player = event.getPlayer();
 
-        final InstanceManager instanceManager = MinecraftServer.getInstanceManager();
+        InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
-        final InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
+        InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
         instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
 
         instanceContainer.setChunkSupplier(LightingChunk::new);
 
-        final var instances = MinecraftServer.getInstanceManager().getInstances();
-        final Instance instance = instances.stream().skip(new Random().nextInt(instances.size())).findFirst().orElse(null);
+        var instances = MinecraftServer.getInstanceManager().getInstances();
+        Instance instance = instances.stream().skip(new Random().nextInt(instances.size())).findFirst().orElse(null);
         event.setSpawningInstance(instance);
 
-        final Pos pos = PosUtils.fromString(getConfig().getString("spawn-pos"));
-        Check.notNull(pos, "Position cannot be null, Check your Config!");
-        player.setRespawnPoint(pos);
+        final String posString = getConfig().getString("spawn-pos");
+        final Pos pos = PosUtils.fromString(posString);
+        //Check.notNull(pos, "Position cannot be null, Check your Config!");
+        player.setRespawnPoint(new Pos(0, 40f, 0));
 
         return Result.SUCCESS;
     }

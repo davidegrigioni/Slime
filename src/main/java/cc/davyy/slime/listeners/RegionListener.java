@@ -24,7 +24,7 @@ public class RegionListener {
     }
 
     public void init(GlobalEventHandler handler) {
-        handler.addListener(PlayerMoveEvent.class, event -> {
+        /*handler.addListener(PlayerMoveEvent.class, event -> {
             final Player player = event.getPlayer();
             final Optional<String> regionNameOpt = regionManager.isPlayerInRegion(player.getPosition());
 
@@ -37,7 +37,7 @@ public class RegionListener {
                         .build());
                 player.showTitle(title);
             }, player::clearTitle);
-        });
+        });*/
         handler.addListener(PlayerBlockBreakEvent.class, event -> {
             final boolean blockBreakEnabled = getConfig().getBoolean("disable-build-protection");
             final boolean messageEnabled = getConfig().getBoolean("block-break-message.enable");
