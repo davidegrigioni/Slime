@@ -41,6 +41,11 @@ public class BroadCastCommand extends Command {
     public BroadCastCommand() {
         super("broadcast");
 
+        setDefaultExecutor(((commandSender, commandContext) -> {
+            String commandName = commandContext.getCommandName();
+            commandSender.sendMessage("Usage: /" + commandName);
+        }));
+
         setCondition(((sender, commandString) -> switch (sender) {
             case SlimePlayer player -> player.hasPermission("slime.broadcast");
             case ConsoleSender ignored -> true;

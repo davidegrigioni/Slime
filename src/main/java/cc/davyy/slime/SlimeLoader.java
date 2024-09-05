@@ -4,10 +4,7 @@ import cc.davyy.slime.commands.DebugCommand;
 import cc.davyy.slime.commands.LobbyCommand;
 import cc.davyy.slime.commands.RegionCommand;
 import cc.davyy.slime.listeners.*;
-import cc.davyy.slime.managers.BrandManager;
-import cc.davyy.slime.managers.ChatTranslatorManager;
-import cc.davyy.slime.managers.LobbyManager;
-import cc.davyy.slime.managers.RegionManager;
+import cc.davyy.slime.managers.*;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
 import com.asintoto.minestomacr.MinestomACR;
@@ -25,6 +22,8 @@ public class SlimeLoader {
     private ChatTranslatorManager chatTranslatorManager;
     private LobbyManager lobbyManager;
     private RegionManager regionManager;
+    private SidebarManager sidebarManager;
+    private TablistManager tablistManager;
 
     public void start() {
         MinecraftServer minecraftServer = MinecraftServer.init();
@@ -58,7 +57,7 @@ public class SlimeLoader {
 
     private void registerListeners() {
         var handler = MinecraftServer.getGlobalEventHandler();
-        handler.addListener(new PlayerSpawnListener());
+        new PlayerSpawnListener(sidebarManager).init(handler);
         new AsyncPlayerConfigurationListener(lobbyManager).init(handler);
         new RegionListener(regionManager).init(handler);
         new PlayerChatListener(chatTranslatorManager).init(handler);
@@ -68,9 +67,11 @@ public class SlimeLoader {
         Injector injector = Guice.createInjector(new SlimeModule(this));
 
         brandManager = injector.getInstance(BrandManager.class);
-        chatTranslatorManager = injector.getInstance(ChatTranslatorManager.class);
+        //chatTranslatorManager = injector.getInstance(ChatTranslatorManager.class);
         lobbyManager = injector.getInstance(LobbyManager.class);
         regionManager = injector.getInstance(RegionManager.class);
+        sidebarManager = injector.getInstance(SidebarManager.class);
+        tablistManager = injector.getInstance(TablistManager.class);
     }
 
 }

@@ -3,7 +3,9 @@ package cc.davyy.slime.model;
 import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;
+import net.luckperms.api.model.data.DataMutateResult;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.Node;
 import net.luckperms.api.platform.PlayerAdapter;
 import net.luckperms.api.util.Tristate;
 import net.minestom.server.entity.Player;
@@ -14,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import static cc.davyy.slime.utils.ColorUtils.of;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public final class SlimePlayer extends Player {
 
@@ -32,6 +35,25 @@ public final class SlimePlayer extends Player {
 
     private @NotNull CachedMetaData getLuckPermsMetaData() {
         return this.getLuckPermsUser().getCachedData().getMetaData();
+    }
+
+    /**
+     * Sets a permission for the player. This method uses a {@link Node} rather
+     * than a permission name, this allows for permissions that rely on context.
+     * You may choose not to implement this method on a production server, and
+     * leave permission management to the LuckPerms web interface or in-game
+     * commands.
+     *
+     * @param permission the permission to set
+     * @param value the value of the permission
+     * @return the result of the operation
+     */
+    public @NotNull CompletableFuture<DataMutateResult> setPermission(@NotNull Node permission, boolean value) {
+        User user = this.getLuckPermsUser();
+        DataMutateResult result = value
+                ? user.data().add(permission)
+                : user.data().remove(permission);
+        return this.luckPerms.getUserManager().saveUser(user).thenApply(ignored -> result);
     }
 
     /**

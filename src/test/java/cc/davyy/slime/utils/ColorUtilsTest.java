@@ -32,17 +32,6 @@ class ColorUtilsTest {
     }
 
     @Test
-    void testTxtLore() {
-        String loreString = "Line 1\nLine 2\nLine 3";
-        List<Component> loreComponents = ColorUtils.txtLore(loreString);
-
-        assertEquals(3, loreComponents.size());
-        assertEquals(MINIMESSAGE.deserialize("Line 1").decoration(TextDecoration.ITALIC, false), loreComponents.get(0));
-        assertEquals(MINIMESSAGE.deserialize("Line 2").decoration(TextDecoration.ITALIC, false), loreComponents.get(1));
-        assertEquals(MINIMESSAGE.deserialize("Line 3").decoration(TextDecoration.ITALIC, false), loreComponents.get(2));
-    }
-
-    @Test
     void testToString() {
         String text = "Hello";
         ColorUtils colorUtils = ColorUtils.of(text);

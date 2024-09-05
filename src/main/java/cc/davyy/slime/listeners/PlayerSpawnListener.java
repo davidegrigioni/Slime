@@ -1,24 +1,30 @@
 package cc.davyy.slime.listeners;
 
-import net.minestom.server.entity.Player;
-import net.minestom.server.event.EventListener;
+import cc.davyy.slime.managers.SidebarManager;
+import cc.davyy.slime.model.SlimePlayer;
+import com.google.inject.Inject;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerSpawnEvent;
-import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.JoinUtils.applyJoinKit;
 
-public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
+public class PlayerSpawnListener {
 
-    @Override
-    public @NotNull Class<PlayerSpawnEvent> eventType() { return PlayerSpawnEvent.class; }
+    private final SidebarManager sidebarManager;
 
-    @Override
-    public @NotNull Result run(@NotNull PlayerSpawnEvent event) {
-        final Player player = event.getPlayer();
+    @Inject
+    public PlayerSpawnListener(SidebarManager sidebarManager) {
+        this.sidebarManager = sidebarManager;
+    }
 
-        applyJoinKit(player);
+    public void init(GlobalEventHandler handler) {
+        handler.addListener(PlayerSpawnEvent.class, event -> {
+            final SlimePlayer player = (SlimePlayer) event.getPlayer();
 
-        return Result.SUCCESS;
+            sidebarManager.showSidebar(player);
+
+            applyJoinKit(player);
+        });
     }
 
 }

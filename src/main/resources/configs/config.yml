@@ -48,3 +48,11 @@ player-item:
 motd:
   description: "test"
   players-hidden: true
+
+# Scoreboard
+scoreboard:
+  title: "<red>Test</red>"
+  lines:
+    - "test"
+    - "test"
+    - "<playercount>"
