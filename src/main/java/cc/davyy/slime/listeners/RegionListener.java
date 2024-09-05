@@ -2,13 +2,8 @@ package cc.davyy.slime.listeners;
 
 import cc.davyy.slime.managers.RegionManager;
 import com.google.inject.Inject;
-import net.kyori.adventure.title.Title;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
-import net.minestom.server.event.player.PlayerMoveEvent;
-
-import java.util.Optional;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.FileUtils.getMessages;
@@ -39,14 +34,14 @@ public class RegionListener {
             }, player::clearTitle);
         });*/
         handler.addListener(PlayerBlockBreakEvent.class, event -> {
-            final boolean blockBreakEnabled = getConfig().getBoolean("disable-build-protection");
-            final boolean messageEnabled = getConfig().getBoolean("block-break-message.enable");
+            final boolean blockBreakEnabled = getConfig().getBoolean("protection.disable-build-protection");
+            final boolean messageEnabled = getConfig().getBoolean("protection.block-break-message.enable");
 
             if (blockBreakEnabled) {
                 event.setCancelled(true);
 
                 if (messageEnabled) {
-                    final String message = getMessages().getString("block-break-message.message");
+                    final String message = getMessages().getString("protection.block-break-message.message");
                     event.getPlayer().sendMessage(of(message)
                             .build());
                 }

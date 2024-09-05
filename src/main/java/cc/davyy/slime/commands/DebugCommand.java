@@ -14,7 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
+import static cc.davyy.slime.utils.FileUtils.getConfig;
 
+// TODO: Remove this command
 public class DebugCommand extends Command {
 
     private final LobbyManager lobbyManager;
@@ -28,6 +30,8 @@ public class DebugCommand extends Command {
         addSyntax(this::executeInstances, ArgumentType.Literal("instances"));
         addSyntax(this::executeMainInstanceCheck, ArgumentType.Literal("ismaininstance"));
         addSyntax(this::gui, ArgumentType.Literal("servergui"));
+        addSyntax(this::checkAnimationStatus, ArgumentType.Literal("animationstatus"));
+        addSyntax(this::listAnimationStyles, ArgumentType.Literal("animationstyles"));
     }
 
     private void gui(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -53,6 +57,18 @@ public class DebugCommand extends Command {
         final Player player = (Player) sender;
         final Collection<Integer> lobbyIDs = lobbyManager.getAllLobbiesID();
         player.sendMessage(lobbyIDs.toString());
+    }
+
+    private void checkAnimationStatus(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final Player player = (Player) sender;
+        boolean isAnimating = getConfig().getBoolean("branding.animate");
+        player.sendMessage(isAnimating ? "Brand name animation is enabled." : "Brand name animation is disabled.");
+    }
+
+    private void listAnimationStyles(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final Player player = (Player) sender;
+        Collection<String> styles = getConfig().getStringList("branding.animation-styles");
+        player.sendMessage(of("Animation Styles: " + String.join(", ", styles)).parseLegacy().build());
     }
 
 }

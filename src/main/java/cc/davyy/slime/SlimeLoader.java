@@ -5,6 +5,7 @@ import cc.davyy.slime.commands.LobbyCommand;
 import cc.davyy.slime.commands.RegionCommand;
 import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.BrandManager;
+import cc.davyy.slime.managers.ChatTranslatorManager;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.RegionManager;
 import cc.davyy.slime.module.SlimeModule;
@@ -12,21 +13,18 @@ import cc.davyy.slime.utils.ConsoleUtils;
 import com.asintoto.minestomacr.MinestomACR;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
-import static cc.davyy.slime.utils.ColorUtils.txt;
 import static cc.davyy.slime.utils.FileUtils.*;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 
 public class SlimeLoader {
 
-    private final ComponentLogger componentLogger = ComponentLogger.logger(SlimeLoader.class);
-
     private BrandManager brandManager;
-    private RegionManager regionManager;
+    private ChatTranslatorManager chatTranslatorManager;
     private LobbyManager lobbyManager;
+    private RegionManager regionManager;
 
     public void start() {
         MinecraftServer minecraftServer = MinecraftServer.init();
@@ -50,7 +48,6 @@ public class SlimeLoader {
             String kickMessage = getMessages().getString("messages.kick");
             onlinePlayers.forEach(player -> player.kick(of(kickMessage)
                     .build()));
-            componentLogger.info(txt("Server Closing..."));
             //MinecraftServer.getInstanceManager().getInstances().forEach(Instance::saveChunksToStorage);
         });
 
@@ -64,14 +61,16 @@ public class SlimeLoader {
         handler.addListener(new PlayerSpawnListener());
         new AsyncPlayerConfigurationListener(lobbyManager).init(handler);
         new RegionListener(regionManager).init(handler);
+        new PlayerChatListener(chatTranslatorManager).init(handler);
     }
 
     private void injectGuice() {
         Injector injector = Guice.createInjector(new SlimeModule(this));
 
-        regionManager = injector.getInstance(RegionManager.class);
-        lobbyManager = injector.getInstance(LobbyManager.class);
         brandManager = injector.getInstance(BrandManager.class);
+        chatTranslatorManager = injector.getInstance(ChatTranslatorManager.class);
+        lobbyManager = injector.getInstance(LobbyManager.class);
+        regionManager = injector.getInstance(RegionManager.class);
     }
 
 }

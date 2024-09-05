@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+import static cc.davyy.slime.utils.ColorUtils.print;
+
 public class RegionCommand extends Command {
 
     private final ArgumentString regionNameArg = ArgumentType.String("regionName");
@@ -46,37 +48,48 @@ public class RegionCommand extends Command {
     }
 
     private void createRegion(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final Player player = (Player) sender;
-        final String regionName = context.get(regionNameArg);
-        regionManager.startRegionSetup(player.getUuid(), regionName);
+        switch (sender) {
+            case SlimePlayer player -> {
+                final String regionName = context.get(regionNameArg);
+                regionManager.startRegionSetup(player.getUuid(), regionName);
 
-        player.sendMessage(Messages.REGION_SETUP
-                .addPlaceholder("regionname", regionName)
-                .asComponent());
+                player.sendMessage(Messages.REGION_SETUP
+                        .addPlaceholder("regionname", regionName)
+                        .asComponent());
+            }
+            case ConsoleSender ignored -> print(Messages.CANNOT_EXECUTE_FROM_CONSOLE
+                    .asComponent());
+            default -> {}
+        }
     }
 
     private void setRegion(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final Player player = (Player) sender;
-        final int pointNumber = context.get(pointArg);
-        final Vec playerPosition = player.getPosition().asVec();
+        switch (sender) {
+            case SlimePlayer player -> {
+                final int pointNumber = context.get(pointArg);
+                final Vec playerPosition = player.getPosition().asVec();
 
-        if (!regionManager.isSettingUpRegion(player.getUuid())) {
-            player.sendMessage(Messages.REGION_SETUP_FIRST
+                if (!regionManager.isSettingUpRegion(player.getUuid())) {
+                    player.sendMessage(Messages.REGION_SETUP_FIRST
+                            .asComponent());
+                    return;
+                }
+
+                switch (pointNumber) {
+                    case 1 -> {
+                        regionManager.setPoint1(player.getUuid(), playerPosition);
+                        player.sendMessage("First point set at " + playerPosition);
+                    }
+                    case 2 -> {
+                        regionManager.setPoint2(player.getUuid(), playerPosition);
+                        player.sendMessage("Second point set at " + playerPosition);
+                    }
+                }
+            }
+            case ConsoleSender ignored -> print(Messages.CANNOT_EXECUTE_FROM_CONSOLE
                     .asComponent());
-            return;
+            default -> {}
         }
-
-        switch (pointNumber) {
-            case 1 -> {
-                regionManager.setPoint1(player.getUuid(), playerPosition);
-                player.sendMessage("First point set at " + playerPosition);
-            }
-            case 2 -> {
-                regionManager.setPoint2(player.getUuid(), playerPosition);
-                player.sendMessage("Second point set at " + playerPosition);
-            }
-        }
-
     }
 
     private void saveRegion(@NotNull CommandSender sender, @NotNull CommandContext context) {

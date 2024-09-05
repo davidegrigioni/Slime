@@ -6,7 +6,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -14,6 +13,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static net.minestom.server.MinecraftServer.LOGGER;
 
 @Singleton
 public class LobbyManager {
@@ -74,20 +75,40 @@ public class LobbyManager {
      * @param lobbyID The id of the lobby to teleport to.
      */
     public void teleportPlayerToLobby(@NotNull Player player, int lobbyID) {
-        Instance targetInstance;
-
         if (lobbyID == 0) {
-            // Teleport to the main instance if lobbyID is 0
-            targetInstance = mainLobbyContainer;
-        } else {
-            // Find the lobby with the given ID
-            Lobby lobby = lobbies.get(lobbyID);
-            Check.notNull(lobby, "Lobby " + lobbyID + " not found!");
-            targetInstance = lobby.sharedInstance();
+            if (player.getInstance() == mainLobbyContainer) {
+                player.sendMessage("You are already in the main lobby!");
+                return;
+            }
+            player.setInstance(mainLobbyContainer).thenRun(() -> player.sendMessage("Teleported to the main lobby."))
+                    .exceptionally(ex -> {
+                        LOGGER.error("Failed to teleport player to the main lobby", ex);
+                        player.sendMessage("Failed to teleport to the main lobby. Please try again.");
+                        return null;
+                    });
+            return;
         }
 
-        // Teleport the player to the target instance
-        player.setInstance(targetInstance).thenRun(() -> player.sendMessage("Teleported to " + (lobbyID == 0 ? "main instance" : "lobby " + lobbyID)));
+        final Lobby lobby = lobbies.get(lobbyID);
+
+        if (lobby == null) {
+            LOGGER.error("Lobby {} not found!", lobbyID);
+            player.sendMessage("Lobby not found!");
+            return;
+        }
+
+        if (player.getInstance() == lobby.sharedInstance()) {
+            player.sendMessage("You are already in this lobby!");
+            return;
+        }
+
+        player.setInstance(lobby.sharedInstance())
+                .thenRun(() -> player.sendMessage("Teleported to " + lobbyID))
+                .exceptionally(ex -> {
+                    LOGGER.error("Failed to teleport player to lobby {}", lobbyID, ex);
+                    player.sendMessage("Failed to teleport. Please try again.");
+                    return null;
+                });
     }
 
     /**
@@ -95,8 +116,6 @@ public class LobbyManager {
      *
      * @return a collection of lobby ids.
      */
-    public Collection<Integer> getAllLobbiesID() {
-        return new ArrayList<>(lobbies.keySet());
-    }
+    public Collection<Integer> getAllLobbiesID() { return new ArrayList<>(lobbies.keySet()); }
 
 }

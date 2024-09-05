@@ -3,7 +3,6 @@ package cc.davyy.slime.utils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -20,6 +19,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static net.minestom.server.MinecraftServer.LOGGER;
+
 /**
  * Utility class for handling color and text formatting using Adventure's MiniMessage and ANSI serialization.
  */
@@ -31,9 +32,6 @@ public final class ColorUtils {
     // ANSI serializer for converting components into ANSI escape codes for terminal output.
     private static final ANSIComponentSerializer ANSI_SERIALIZER = ANSIComponentSerializer.builder()
             .build();
-
-    // Logger for outputting components as text in the console.
-    private static final ComponentLogger COMPONENT_LOGGER = ComponentLogger.logger();
 
     private static final Pattern LEGACY_REGEX = Pattern.compile("[§&][0-9a-fk-or]");
     private static final Map<String, String> LEGACY_TO_MINIMESSAGE;
@@ -177,7 +175,7 @@ public final class ColorUtils {
      */
     public static void print(@NotNull Component component) {
         final String ansiString = ANSI_SERIALIZER.serialize(component);
-        COMPONENT_LOGGER.info(ansiString);
+        LOGGER.info(ansiString);
     }
 
     /**

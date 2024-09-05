@@ -23,16 +23,16 @@ public class ServerGUI {
             .build());
 
     public void open(@NotNull Player player) {
-        setupGui(player);
+        setupGui();
         player.openInventory(inventory);
     }
 
-    private void setupGui(@NotNull Player player) {
+    private void setupGui() {
         inventory.addInventoryCondition(((players, slot, clickType, result) -> result.setCancel(true)));
-        setupItems(player);
+        setupItems();
     }
 
-    private void setupItems(@NotNull Player player) {
+    private void setupItems() {
         // Navigation
         final String navigatorName = getConfig().getString("compass-item.name");
         final List<String> navigatorLore = getConfig().getStringList("compass-item.lore");

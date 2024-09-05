@@ -79,21 +79,35 @@ public class BroadCastCommand extends Command {
     }
 
     private void executeBroadcastTitleSub(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final String message = context.get(titleArg);
-        final String subTitle = context.get(subTitleArg);
-        sendTitle(message, txt(subTitle), sender);
+        switch (sender) {
+            case SlimePlayer player -> {
+                final String message = context.get(titleArg);
+                final String subTitle = context.get(subTitleArg);
+                sendTitle(message, txt(subTitle), player);
+            }
+            case ConsoleSender ignored -> print(Messages.CANNOT_EXECUTE_FROM_CONSOLE
+                    .asComponent());
+            default -> {}
+        }
     }
 
     private void executeBroadcastTitleSubTime(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final String message = context.get(titleArg);
-        final String subTitle = context.get(subTitleArg);
+        switch (sender) {
+            case SlimePlayer player -> {
+                final String message = context.get(titleArg);
+                final String subTitle = context.get(subTitleArg);
 
-        final Long fadeIn = context.get(fadeInArg);
-        final Long stay = context.get(stayArg);
-        final Long fadeOut = context.get(fadeOutArg);
+                final Long fadeIn = context.get(fadeInArg);
+                final Long stay = context.get(stayArg);
+                final Long fadeOut = context.get(fadeOutArg);
 
-        final Title.Times times = Title.Times.times(Duration.ofSeconds(fadeIn), Duration.ofSeconds(stay), Duration.ofSeconds(fadeOut));
-        sendTitle(message, txt(subTitle), times, sender);
+                final Title.Times times = Title.Times.times(Duration.ofSeconds(fadeIn), Duration.ofSeconds(stay), Duration.ofSeconds(fadeOut));
+                sendTitle(message, txt(subTitle), times, player);
+            }
+            case ConsoleSender ignored -> print(Messages.CANNOT_EXECUTE_FROM_CONSOLE
+                    .asComponent());
+            default -> {}
+        }
     }
 
     private void sendTitle(@NotNull String titleText, @NotNull Component subTitle, @NotNull CommandSender sender) {

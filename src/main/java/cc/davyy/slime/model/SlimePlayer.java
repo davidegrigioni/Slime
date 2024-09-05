@@ -1,5 +1,6 @@
 package cc.davyy.slime.model;
 
+import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.model.user.User;
@@ -9,6 +10,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.PlayerConnection;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
+
+import static cc.davyy.slime.utils.ColorUtils.of;
 
 import java.util.UUID;
 
@@ -53,6 +56,19 @@ public final class SlimePlayer extends Player {
     public @NotNull Tristate getPermissionValue(@NotNull String permissionName) {
         User user = this.getLuckPermsUser();
         return user.getCachedData().getPermissionData().checkPermission(permissionName);
+    }
+
+    /**
+     * Gets the prefix of the player. This method uses the MiniMessage library
+     * to parse the prefix, which is a more advanced option than using legacy
+     * chat formatting.
+     *
+     * @return the prefix of the player
+     */
+    public @NotNull Component getPrefix() {
+        String prefix = this.getLuckPermsMetaData().getPrefix();
+        if (prefix == null) return Component.empty();
+        return of(prefix).parseLegacy().build();
     }
 
 }
