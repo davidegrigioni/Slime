@@ -1,4 +1,4 @@
-package cc.davyy.slime.managers.npc;
+package cc.davyy.slime.entities;
 
 import com.google.inject.Singleton;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;

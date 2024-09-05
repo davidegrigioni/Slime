@@ -24,6 +24,8 @@ public class SlimeModule extends AbstractModule {
         bind(MOTDManager.class).in(singleton);
         bind(RegionManager.class).in(singleton);
         bind(SidebarManager.class).in(singleton);
+        bind(HologramManager.class).in(singleton);
+        //bind(NPCManager.class).in(singleton);
     }
 
 }

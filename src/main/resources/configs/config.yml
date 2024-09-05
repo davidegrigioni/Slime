@@ -56,3 +56,7 @@ scoreboard:
     - "test"
     - "test"
     - "<playercount>"
+
+# Header & Footer
+header: "test"
+footer: "test"

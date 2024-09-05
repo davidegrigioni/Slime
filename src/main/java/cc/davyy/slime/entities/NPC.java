@@ -1,4 +1,4 @@
-package cc.davyy.slime.managers.npc;
+package cc.davyy.slime.entities;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static cc.davyy.slime.managers.npc.NPCManager.JOINING_INSTANCE_TAG;
+import static cc.davyy.slime.entities.NPCManager.JOINING_INSTANCE_TAG;
 
 public class NPC extends EntityCreature {
 

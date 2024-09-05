@@ -1,16 +1,20 @@
 package cc.davyy.slime;
 
-import cc.davyy.slime.commands.DebugCommand;
-import cc.davyy.slime.commands.LobbyCommand;
-import cc.davyy.slime.commands.RegionCommand;
+import cc.davyy.slime.commands.*;
 import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.*;
+import cc.davyy.slime.entities.NPCManager;
+import cc.davyy.slime.managers.npc.NameTagManager;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
 import com.asintoto.minestomacr.MinestomACR;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.network.packet.server.play.TeamsPacket;
+import net.minestom.server.scoreboard.Team;
+import net.minestom.server.scoreboard.TeamBuilder;
+import net.minestom.server.scoreboard.TeamManager;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.*;
@@ -24,6 +28,9 @@ public class SlimeLoader {
     private RegionManager regionManager;
     private SidebarManager sidebarManager;
     private TablistManager tablistManager;
+    private NPCManager npcManager;
+    private NameTagManager nameTagManager;
+    private HologramManager hologramManager;
 
     public void start() {
         MinecraftServer minecraftServer = MinecraftServer.init();
@@ -41,6 +48,8 @@ public class SlimeLoader {
         MinecraftServer.getCommandManager().register(new RegionCommand(regionManager));
         MinecraftServer.getCommandManager().register(new LobbyCommand(lobbyManager));
         MinecraftServer.getCommandManager().register(new DebugCommand(lobbyManager));
+        MinecraftServer.getCommandManager().register(new NPCCommand(npcManager, nameTagManager));
+        MinecraftServer.getCommandManager().register(new HologramCommand(hologramManager));
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
             var onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
@@ -57,10 +66,19 @@ public class SlimeLoader {
 
     private void registerListeners() {
         var handler = MinecraftServer.getGlobalEventHandler();
-        new PlayerSpawnListener(sidebarManager).init(handler);
+
+        npcManager = new NPCManager(handler);
+        TeamManager teamManager = MinecraftServer.getTeamManager();
+        Team nameTagTeam = new TeamBuilder("name-tags", teamManager)
+                .collisionRule(TeamsPacket.CollisionRule.NEVER)
+                .build();
+        nameTagManager = new NameTagManager(handler, entity -> nameTagTeam);
+
         new AsyncPlayerConfigurationListener(lobbyManager).init(handler);
+        new InventoryListener().init(handler);
+        new PlayerChatListener().init(handler);
+        new PlayerSpawnListener(nameTagManager, sidebarManager).init(handler);
         new RegionListener(regionManager).init(handler);
-        new PlayerChatListener(chatTranslatorManager).init(handler);
     }
 
     private void injectGuice() {
@@ -72,6 +90,8 @@ public class SlimeLoader {
         regionManager = injector.getInstance(RegionManager.class);
         sidebarManager = injector.getInstance(SidebarManager.class);
         tablistManager = injector.getInstance(TablistManager.class);
+        //npcManager = injector.getInstance(NPCManager.class);
+        hologramManager = injector.getInstance(HologramManager.class);
     }
 
 }
