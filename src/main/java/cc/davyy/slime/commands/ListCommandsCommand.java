@@ -1,8 +1,8 @@
 package cc.davyy.slime.commands;
 
+import cc.davyy.slime.model.SlimePlayer;
 import com.asintoto.minestomacr.annotations.AutoRegister;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ConsoleSender;
@@ -19,11 +19,16 @@ import static cc.davyy.slime.utils.ColorUtils.print;
 @AutoRegister
 public class ListCommandsCommand extends Command {
 
-    private final ComponentLogger componentLogger = ComponentLogger.logger(ListCommandsCommand.class);
     private final Set<Command> commands = MinecraftServer.getCommandManager().getCommands();
 
     public ListCommandsCommand() {
         super("listcommands");
+
+        setCondition(((sender, commandString) -> switch (sender) {
+            case SlimePlayer player -> player.hasPermission("slime.listcommands");
+            case ConsoleSender ignored -> true;
+            default -> false;
+        }));
 
         setDefaultExecutor(this::execute);
     }
@@ -33,7 +38,7 @@ public class ListCommandsCommand extends Command {
             switch (sender) {
                 case ConsoleSender ignored -> print(Component.text(Arrays.toString(command.getNames())));
                 case Player player -> player.sendMessage(command.getNames());
-                default -> componentLogger.info(commands.toString());
+                default -> {}
             }
         });
     }

@@ -1,9 +1,11 @@
 package cc.davyy.slime.commands;
 
+import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import com.asintoto.minestomacr.annotations.AutoRegister;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.coordinate.Pos;
@@ -18,6 +20,12 @@ public class SpawnCommand extends Command {
 
     public SpawnCommand() {
         super("spawn");
+
+        setCondition(((sender, commandString) -> switch (sender) {
+            case SlimePlayer player -> player.hasPermission("slime.spawn");
+            case ConsoleSender ignored -> true;
+            default -> false;
+        }));
 
         setDefaultExecutor(this::spawn);
 
@@ -39,6 +47,12 @@ public class SpawnCommand extends Command {
 
         public SetSpawnCommand() {
             super("setspawn");
+
+            setCondition(((sender, commandString) -> switch (sender) {
+                case SlimePlayer player -> player.hasPermission("slime.setspawn");
+                case ConsoleSender ignored -> true;
+                default -> false;
+            }));
 
             setDefaultExecutor(this::setSpawn);
         }

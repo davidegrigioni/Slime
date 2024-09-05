@@ -2,9 +2,11 @@ package cc.davyy.slime.commands;
 
 import cc.davyy.slime.managers.RegionManager;
 import cc.davyy.slime.model.Region;
+import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
@@ -31,12 +33,15 @@ public class RegionCommand extends Command {
         super("region");
         this.regionManager = regionManager;
 
+        setCondition(((sender, commandString) -> switch (sender) {
+            case SlimePlayer player -> player.hasPermission("slime.region");
+            case ConsoleSender ignored -> true;
+            default -> false;
+        }));
+
         addSyntax(this::createRegion, regionNameArg);
-
         addSyntax(this::setRegion, pointArg);
-
         addSyntax(this::saveRegion, saveArg, regionNameArg);
-
         addSyntax(this::cancelSetup, cancelArg);
     }
 
