@@ -9,12 +9,16 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.instance.Instance;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Utility class for handling color and text formatting using Adventure's MiniMessage and ANSI serialization.
@@ -22,9 +26,7 @@ import java.util.List;
 public final class ColorUtils {
 
     // MiniMessage instance for processing text with MiniMessage syntax.
-    private static final MiniMessage MINIMESSAGE = MiniMessage.builder()
-            .strict(true)
-            .build();
+    private static final MiniMessage MINIMESSAGE = MiniMessage.miniMessage();
 
     // ANSI serializer for converting components into ANSI escape codes for terminal output.
     private static final ANSIComponentSerializer ANSI_SERIALIZER = ANSIComponentSerializer.builder()
@@ -33,9 +35,58 @@ public final class ColorUtils {
     // Logger for outputting components as text in the console.
     private static final ComponentLogger COMPONENT_LOGGER = ComponentLogger.logger();
 
+    private static final Pattern LEGACY_REGEX = Pattern.compile("[§&][0-9a-fk-or]");
+    private static final Map<String, String> LEGACY_TO_MINIMESSAGE;
+    static {
+        LEGACY_TO_MINIMESSAGE = new HashMap<>();
+        LEGACY_TO_MINIMESSAGE.put("§0", "<black>");
+        LEGACY_TO_MINIMESSAGE.put("§1", "<dark_blue>");
+        LEGACY_TO_MINIMESSAGE.put("§2", "<dark_green>");
+        LEGACY_TO_MINIMESSAGE.put("§3", "<dark_aqua>");
+        LEGACY_TO_MINIMESSAGE.put("§4", "<dark_red>");
+        LEGACY_TO_MINIMESSAGE.put("§5", "<dark_purple>");
+        LEGACY_TO_MINIMESSAGE.put("§6", "<gold>");
+        LEGACY_TO_MINIMESSAGE.put("§7", "<gray>");
+        LEGACY_TO_MINIMESSAGE.put("§8", "<dark_gray>");
+        LEGACY_TO_MINIMESSAGE.put("§9", "<blue>");
+        LEGACY_TO_MINIMESSAGE.put("§a", "<green>");
+        LEGACY_TO_MINIMESSAGE.put("§b", "<aqua>");
+        LEGACY_TO_MINIMESSAGE.put("§c", "<red>");
+        LEGACY_TO_MINIMESSAGE.put("§d", "<light_purple>");
+        LEGACY_TO_MINIMESSAGE.put("§e", "<yellow>");
+        LEGACY_TO_MINIMESSAGE.put("§f", "<white>");
+        LEGACY_TO_MINIMESSAGE.put("§k", "<obfuscated>");
+        LEGACY_TO_MINIMESSAGE.put("§l", "<bold>");
+        LEGACY_TO_MINIMESSAGE.put("§m", "<strikethrough>");
+        LEGACY_TO_MINIMESSAGE.put("§n", "<underlined>");
+        LEGACY_TO_MINIMESSAGE.put("§o", "<italic>");
+        LEGACY_TO_MINIMESSAGE.put("§r", "<reset>");
+        LEGACY_TO_MINIMESSAGE.put("&0", "<black>");
+        LEGACY_TO_MINIMESSAGE.put("&1", "<dark_blue>");
+        LEGACY_TO_MINIMESSAGE.put("&2", "<dark_green>");
+        LEGACY_TO_MINIMESSAGE.put("&3", "<dark_aqua>");
+        LEGACY_TO_MINIMESSAGE.put("&4", "<dark_red>");
+        LEGACY_TO_MINIMESSAGE.put("&5", "<dark_purple>");
+        LEGACY_TO_MINIMESSAGE.put("&6", "<gold>");
+        LEGACY_TO_MINIMESSAGE.put("&7", "<gray>");
+        LEGACY_TO_MINIMESSAGE.put("&8", "<dark_gray>");
+        LEGACY_TO_MINIMESSAGE.put("&9", "<blue>");
+        LEGACY_TO_MINIMESSAGE.put("&a", "<green>");
+        LEGACY_TO_MINIMESSAGE.put("&b", "<aqua>");
+        LEGACY_TO_MINIMESSAGE.put("&c", "<red>");
+        LEGACY_TO_MINIMESSAGE.put("&d", "<light_purple>");
+        LEGACY_TO_MINIMESSAGE.put("&e", "<yellow>");
+        LEGACY_TO_MINIMESSAGE.put("&f", "<white>");
+        LEGACY_TO_MINIMESSAGE.put("&k", "<obfuscated>");
+        LEGACY_TO_MINIMESSAGE.put("&l", "<bold>");
+        LEGACY_TO_MINIMESSAGE.put("&m", "<strikethrough>");
+        LEGACY_TO_MINIMESSAGE.put("&n", "<underlined>");
+        LEGACY_TO_MINIMESSAGE.put("&o", "<italic>");
+        LEGACY_TO_MINIMESSAGE.put("&r", "<reset>");
+    }
+
     // List of MiniMessage placeholders for dynamic text processing.
     private final List<TagResolver> minimessagePlaceholders = new ArrayList<>();
-
     // The raw text to be processed.
     private String text;
 
@@ -55,7 +106,27 @@ public final class ColorUtils {
      *
      * @return The processed Component with the applied MiniMessage placeholders and formatting.
      */
-    public @NotNull Component build() { return MINIMESSAGE.deserialize(getText(), this.minimessagePlaceholders.toArray(new TagResolver[0])) .decoration(TextDecoration.ITALIC, false); }
+    public @NotNull Component build() { return MINIMESSAGE.deserialize(getText(), this.minimessagePlaceholders.toArray(new TagResolver[0])).decoration(TextDecoration.ITALIC, false); }
+
+    /**
+     * Parse legacy color codes and formatting, including <code>{@literal &}</code> and
+     * <code>{@literal §}</code> into their minimessage equivalents.
+     *
+     * @return the color parser object
+     */
+    public @NotNull ColorUtils parseLegacy() {
+        String textParsed = getText();
+        final @NotNull Matcher matcher = LEGACY_REGEX.matcher(textParsed);
+
+        while (matcher.find()) {
+            final String match = matcher.group();
+            textParsed = textParsed.replace(match, LEGACY_TO_MINIMESSAGE.getOrDefault(match, match));
+        }
+
+        setText(textParsed);
+
+        return this;
+    }
 
     /**
      * Adds a MiniMessage placeholder to the current instance with a Component value.
@@ -80,7 +151,7 @@ public final class ColorUtils {
      */
     public @NotNull ColorUtils parseMMP(@Subst("test_placeholder") @NotNull String placeholder, @NotNull String value) {
         this.minimessagePlaceholders.add(
-                Placeholder.component(placeholder, of(value).build())
+                Placeholder.component(placeholder, of(value).parseLegacy().build())
         );
         return this;
     }
@@ -88,13 +159,15 @@ public final class ColorUtils {
     /**
      * Converts a newline-separated string into a list of Components, each representing a line of text.
      *
-     * @param loreString The string to be split into lines and converted.
+     * @param strings The string to be split into lines and converted.
      * @return A list of Components, each corresponding to a line in the input string.
      */
-    public static List<Component> txtLore(@NotNull String loreString) {
-        return Arrays.stream(loreString.split("\n"))
-                .map(ColorUtils::txt)
-                .toList();
+    public static List<Component> stringListToComponentList(List<String> strings) {
+        List<Component> lore = new ArrayList<>();
+        for (String line : strings) {
+            lore.add(MINIMESSAGE.deserialize(line).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+        }
+        return lore;
     }
 
     /**
@@ -115,7 +188,19 @@ public final class ColorUtils {
      */
     public static Component txt(@NotNull String message) { return MINIMESSAGE.deserialize(message).decoration(TextDecoration.ITALIC, false); }
 
-    public static void broadcast(@NotNull String message) { MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player -> player.sendMessage(txt(message))); }
+    public static void broadcastAllInstances(@NotNull String message) {
+        MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player ->
+                player.sendMessage(of(message)
+                        .parseLegacy()
+                        .build()));
+    }
+
+    public static void broadcastSingleInstance(@NotNull String message, @NotNull Instance targetInstance) {
+        targetInstance.getPlayers().forEach(player ->
+                player.sendMessage(of(message)
+                        .parseLegacy()
+                        .build()));
+    }
 
     @Override
     public String toString() { return getText(); }

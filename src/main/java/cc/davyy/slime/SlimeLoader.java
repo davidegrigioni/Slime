@@ -1,8 +1,10 @@
 package cc.davyy.slime;
 
+import cc.davyy.slime.commands.DebugCommand;
 import cc.davyy.slime.commands.LobbyCommand;
 import cc.davyy.slime.commands.RegionCommand;
 import cc.davyy.slime.listeners.*;
+import cc.davyy.slime.managers.BrandManager;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.RegionManager;
 import cc.davyy.slime.module.SlimeModule;
@@ -22,6 +24,7 @@ public class SlimeLoader {
 
     private final ComponentLogger componentLogger = ComponentLogger.logger(SlimeLoader.class);
 
+    private BrandManager brandManager;
     private RegionManager regionManager;
     private LobbyManager lobbyManager;
 
@@ -30,23 +33,25 @@ public class SlimeLoader {
 
         setupFiles();
 
+        injectGuice();
+
         registerListeners();
 
         ConsoleUtils.setupConsole();
-
-        injectGuice();
 
         MinestomACR.init();
 
         MinecraftServer.getCommandManager().register(new RegionCommand(regionManager));
         MinecraftServer.getCommandManager().register(new LobbyCommand(lobbyManager));
+        MinecraftServer.getCommandManager().register(new DebugCommand(lobbyManager));
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
             var onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
-            String kickMessage = getMessages().getString("kick");
+            String kickMessage = getMessages().getString("messages.kick");
             onlinePlayers.forEach(player -> player.kick(of(kickMessage)
                     .build()));
             componentLogger.info(txt("Server Closing..."));
+            //MinecraftServer.getInstanceManager().getInstances().forEach(Instance::saveChunksToStorage);
         });
 
         String ip = getConfig().getString("network.ip");
@@ -56,8 +61,8 @@ public class SlimeLoader {
 
     private void registerListeners() {
         var handler = MinecraftServer.getGlobalEventHandler();
-        handler.addListener(new AsyncPlayerConfigurationListener());
         handler.addListener(new PlayerSpawnListener());
+        new AsyncPlayerConfigurationListener(lobbyManager).init(handler);
         new RegionListener(regionManager).init(handler);
     }
 
@@ -66,6 +71,7 @@ public class SlimeLoader {
 
         regionManager = injector.getInstance(RegionManager.class);
         lobbyManager = injector.getInstance(LobbyManager.class);
+        brandManager = injector.getInstance(BrandManager.class);
     }
 
 }

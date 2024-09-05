@@ -31,11 +31,6 @@ public class RegionCommand extends Command {
         super("region");
         this.regionManager = regionManager;
 
-        setCondition(((sender, commandString) -> {
-            final Player player = (Player) sender;
-            return player.hasPermission("slime.region");
-        }));
-
         addSyntax(this::createRegion, regionNameArg);
 
         addSyntax(this::setRegion, pointArg);

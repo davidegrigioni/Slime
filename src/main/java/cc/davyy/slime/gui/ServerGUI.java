@@ -3,17 +3,14 @@ package cc.davyy.slime.gui;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.component.HeadProfile;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+import java.util.List;
 
-import static cc.davyy.slime.utils.ColorUtils.txtLore;
+import static cc.davyy.slime.utils.ColorUtils.*;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
-import static cc.davyy.slime.utils.ColorUtils.of;
 
 public class ServerGUI {
 
@@ -38,33 +35,33 @@ public class ServerGUI {
     private void setupItems(@NotNull Player player) {
         // Navigation
         final String navigatorName = getConfig().getString("compass-item.name");
-        final String navigatorLore = getConfig().getString("compass-item.lore");
+        final List<String> navigatorLore = getConfig().getStringList("compass-item.lore");
         final ItemStack compass = createItem(Material.COMPASS, navigatorName, navigatorLore);
         inventory.setItemStack(NAVIGATOR_SLOT, compass);
 
         // Server settings
         final String settingsName = getConfig().getString("settings-item.name");
-        final String settingsLore = getConfig().getString("settings-item.lore");
+        final List<String> settingsLore = getConfig().getStringList("settings-item.lore");
         final ItemStack settings = createItem(Material.REDSTONE, settingsName, settingsLore);
         inventory.setItemStack(SETTINGS_SLOT, settings);
 
         // Player management
         final String playersManagementName =  getConfig().getString("player-item.name");
-        final String playersManagementLore = getConfig().getString("player-item.lore");
+        final List<String> playersManagementLore = getConfig().getStringList("player-item.lore");
         final ItemStack playerManagement = ItemStack.builder(Material.PLAYER_HEAD)
                 .customName(of(playersManagementName)
                         .build())
-                .lore(txtLore(playersManagementLore))
-                .set(ItemComponent.PROFILE, new HeadProfile(Objects.requireNonNull(player.getSkin())))
+                .lore(stringListToComponentList(playersManagementLore))
+                //.set(ItemComponent.PROFILE, new HeadProfile(PlayerSkin.fromUsername("davideenoo")))
                 .build();
         inventory.setItemStack(PLAYER_MANAGEMENT_SLOT, playerManagement);
     }
 
-    private @NotNull ItemStack createItem(@NotNull Material material, @NotNull String name, @NotNull String lore) {
+    private @NotNull ItemStack createItem(@NotNull Material material, @NotNull String name, @NotNull List<String> lore) {
         return ItemStack.builder(material)
                 .customName(of(name)
                         .build())
-                .lore(txtLore(lore))
+                .lore(stringListToComponentList(lore))
                 .build();
     }
 

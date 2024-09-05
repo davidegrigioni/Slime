@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.*;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +32,7 @@ public class LobbyManager {
         this.mainLobbyContainer = instanceManager.createInstanceContainer();
         this.mainLobbyContainer.setChunkLoader(IChunkLoader.noop());
         this.mainLobbyContainer.setChunkSupplier(LightingChunk::new);
+        this.mainLobbyContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 20, Block.GRASS_BLOCK));
     }
 
     /**
@@ -43,6 +45,8 @@ public class LobbyManager {
         final int lobbyID = lobbyIDCounter.getAndIncrement();
 
         final SharedInstance sharedInstance = MinecraftServer.getInstanceManager().createSharedInstance(mainLobbyContainer);
+        sharedInstance.setChunkSupplier(LightingChunk::new);
+
         Lobby lobby = new Lobby(lobbyID, lobbyName, sharedInstance);
         lobbies.put(lobbyID, lobby);
         return lobby;
@@ -56,17 +60,34 @@ public class LobbyManager {
     public InstanceContainer getMainLobbyContainer() { return mainLobbyContainer; }
 
     /**
+     * Checks if the given instance is the main instance.
+     *
+     * @param instance The instance to check.
+     * @return true if the instance is the main one, false otherwise.
+     */
+    public boolean isMainInstance(@NotNull Instance instance) { return instance.equals(mainLobbyContainer); }
+
+    /**
      * Teleports the player to the specified lobby.
      *
      * @param player The player to teleport.
      * @param lobbyID The id of the lobby to teleport to.
      */
     public void teleportPlayerToLobby(@NotNull Player player, int lobbyID) {
-        final Lobby lobby = lobbies.get(lobbyID);
+        Instance targetInstance;
 
-        Check.notNull(lobby, "Lobby " + lobbyID + " not found!");
+        if (lobbyID == 0) {
+            // Teleport to the main instance if lobbyID is 0
+            targetInstance = mainLobbyContainer;
+        } else {
+            // Find the lobby with the given ID
+            Lobby lobby = lobbies.get(lobbyID);
+            Check.notNull(lobby, "Lobby " + lobbyID + " not found!");
+            targetInstance = lobby.sharedInstance();
+        }
 
-        player.setInstance(lobby.sharedInstance()).thenRun(() -> player.sendMessage("Teleported to " + lobbyID));
+        // Teleport the player to the target instance
+        player.setInstance(targetInstance).thenRun(() -> player.sendMessage("Teleported to " + (lobbyID == 0 ? "main instance" : "lobby " + lobbyID)));
     }
 
     /**

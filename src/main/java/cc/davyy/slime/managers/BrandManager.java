@@ -37,6 +37,11 @@ public class BrandManager {
     private final long animationInterval;
 
     /**
+     * Default brand name when animation is disabled.
+     */
+    private final String defaultBrandName;
+
+    /**
      * Index of the current brand name style in the list.
      */
     private int currentIndex = 0;
@@ -48,13 +53,17 @@ public class BrandManager {
      * starts the brand name animation.
      */
     public BrandManager() {
-        this.brandNameStyles = getConfig().getStringList("animation-styles");
-        this.animationInterval = getConfig().getLong("animation-interval");
-        final boolean animateEnabled = getConfig().getBoolean("animate");
+        this.brandNameStyles = getConfig().getStringList("branding.animation-styles");
+        this.animationInterval = getConfig().getLong("branding.animation-interval");
+        this.defaultBrandName = getConfig().getString("branding.brand-name");
+        final boolean animateEnabled = getConfig().getBoolean("branding.animate");
 
-        if (animateEnabled) {
-            startAnimation();
+        if (!animateEnabled) {
+            setDefaultBrandName();
+            return;
         }
+
+        startAnimation();
     }
 
     /**
@@ -92,6 +101,17 @@ public class BrandManager {
         MinecraftServer.setBrandName(legacyBrandName);
 
         currentIndex = (currentIndex + 1) % brandNameStyles.size();
+    }
+
+    /**
+     * Sets the default brand name when animation is not enabled.
+     */
+    private void setDefaultBrandName() {
+        final Component component = ColorUtils.of(defaultBrandName).parseLegacy().build();
+        final String legacyBrandName = LegacyComponentSerializer.legacyAmpersand().serialize(component);
+        MinecraftServer.setBrandName(legacyBrandName);
+
+        LOGGER.info("Animation disabled, setting default brand name: {}", defaultBrandName);
     }
 
 }

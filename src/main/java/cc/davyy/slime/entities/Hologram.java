@@ -15,8 +15,6 @@ public interface Hologram {
 
     Pos getPosition();
 
-    void show(@NotNull Instance instance, @NotNull Pos position);
-
     void hide();
 
     void destroy();

@@ -24,8 +24,6 @@ public class LobbyCommand extends Command {
         super("lobby");
         this.lobbyManager = lobbyManager;
 
-        setCondition(((sender, commandString) -> sender.hasPermission("slime.lobby")));
-
         addSyntax(this::execute, createArg);
         addSyntax(this::teleport, teleportArg, lobbyIDArg);
     }

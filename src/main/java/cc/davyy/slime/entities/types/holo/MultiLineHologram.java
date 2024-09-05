@@ -13,13 +13,6 @@ public class MultiLineHologram extends AbstractHologram {
     public MultiLineHologram(@NotNull List<Component> lines) {
         super(Component.text(""));
         this.lines = lines;
-        setupHolograms();
-    }
-
-    private void setupHolograms() {
-        for (Component line : lines) {
-            new SimpleHologram(line);
-        }
     }
 
     @Override

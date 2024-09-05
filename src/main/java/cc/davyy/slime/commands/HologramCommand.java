@@ -42,16 +42,13 @@ public class HologramCommand extends Command {
 
         switch (hologramType) {
             case SIMPLE -> {
-                SimpleHologram simpleHologram = new SimpleHologram(hologramText);
-                simpleHologram.show(player.getInstance(), holoPos);
+                new SimpleHologram(hologramText, player.getInstance(), player.getPosition());
             }
             case MULTI_LINE -> {
                 MultiLineHologram multiLineHologram = new MultiLineHologram(List.of(hologramText));
-                multiLineHologram.show(player.getInstance(), holoPos);
             }
             case CLICKABLE -> {
                 ClickableHologram clickableHologram = new ClickableHologram(hologramText, (audience -> player.sendMessage(Component.text("You clicked the hologram!"))));
-                clickableHologram.show(player.getInstance(), holoPos);
             }
         }
 

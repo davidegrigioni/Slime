@@ -1,12 +1,15 @@
 package cc.davyy.slime.utils;
 
 import cc.davyy.slime.misc.HoconConfigurationAdapter;
+import cc.davyy.slime.model.SlimePlayer;
 import de.leonhard.storage.SimplixBuilder;
 import de.leonhard.storage.Yaml;
 import me.lucko.luckperms.common.config.generic.adapter.EnvironmentVariableConfigAdapter;
 import me.lucko.luckperms.common.config.generic.adapter.MultiConfigurationAdapter;
 import me.lucko.luckperms.minestom.CommandRegistry;
 import me.lucko.luckperms.minestom.LuckPermsMinestom;
+import net.luckperms.api.LuckPerms;
+import net.minestom.server.MinecraftServer;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -64,13 +67,14 @@ public final class FileUtils {
      */
     public static void setupLuckPerms() {
         final Path dir = Path.of("luckperms");
-        LuckPermsMinestom.builder(dir)
+        LuckPerms luckPerms = LuckPermsMinestom.builder(dir)
                 .commandRegistry(CommandRegistry.minestom())
                 .configurationAdapter(plugin -> new MultiConfigurationAdapter(plugin,
                         new EnvironmentVariableConfigAdapter(plugin),
                         new HoconConfigurationAdapter(plugin)))
                 .dependencyManager(true)
                 .enable();
+        MinecraftServer.getConnectionManager().setPlayerProvider((uuid, username, connection) -> new SlimePlayer(luckPerms, uuid, username, connection));
     }
 
     public static void setupFiles() {

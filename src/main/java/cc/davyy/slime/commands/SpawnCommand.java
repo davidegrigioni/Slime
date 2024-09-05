@@ -19,11 +19,6 @@ public class SpawnCommand extends Command {
     public SpawnCommand() {
         super("spawn");
 
-        setCondition(((sender, commandString) -> {
-            final Player player = (Player) sender;
-            return player.hasPermission("slime.spawn");
-        }));
-
         setDefaultExecutor(this::spawn);
 
         addSubcommand(new SetSpawnCommand());
@@ -31,7 +26,7 @@ public class SpawnCommand extends Command {
 
     private void spawn(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final Player player = (Player) sender;
-        final String posString = getConfig().getString("spawn-pos");
+        final String posString = getConfig().getString("spawn.position");
         final Pos pos = PosUtils.fromString(posString);
 
         Check.notNull(pos, "Position cannot be null, Check your Config!");
@@ -45,11 +40,6 @@ public class SpawnCommand extends Command {
         public SetSpawnCommand() {
             super("setspawn");
 
-            setCondition(((sender, commandString) -> {
-                final Player player = (Player) sender;
-                return player.hasPermission("slime.setspawn");
-            }));
-
             setDefaultExecutor(this::setSpawn);
         }
 
@@ -57,7 +47,7 @@ public class SpawnCommand extends Command {
             final Player player = (Player) sender;
             final Pos pos = player.getPosition();
 
-            getConfig().set("spawn-pos", PosUtils.toString(pos));
+            getConfig().set("spawn.position", PosUtils.toString(pos));
             player.sendMessage(Messages.SPAWN_SET
                     .addPlaceholder("pos", PosUtils.toString(pos))
                     .asComponent());

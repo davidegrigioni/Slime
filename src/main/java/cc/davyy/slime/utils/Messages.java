@@ -16,6 +16,7 @@ import static cc.davyy.slime.utils.FileUtils.getMessages;
 public enum Messages implements ComponentLike {
 
     RELOAD_CONFIG("messages.reload"),
+    CANNOT_EXECUTE_FROM_CONSOLE("messages.cannot-execute-console"),
     MESSAGE_EMPTY("messages.message-empty"),
     HOLOGRAM("messages.hologram"),
     REGION_SETUP("messages.region-setup"),

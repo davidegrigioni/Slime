@@ -1,13 +1,16 @@
 package cc.davyy.slime.commands;
 
+import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.asintoto.minestomacr.annotations.AutoRegister;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentType;
@@ -24,32 +27,35 @@ import static cc.davyy.slime.utils.ColorUtils.*;
 public class BroadCastCommand extends Command {
 
     private final ArgumentStringArray messageArgumentArray = ArgumentType.StringArray("message");
-    private final ArgumentString titleArg = ArgumentType.String("title");
-    private final ArgumentString subTitleArg = ArgumentType.String("subtitle");
+    private final ArgumentString titleArg = ArgumentType.String("titleArg");
+    private final ArgumentString subTitleArg = ArgumentType.String("subtitleArg");
+
+    private final ArgumentLiteral titleSubCommandArg = ArgumentType.Literal("title");
+
     private final Collection<Player> onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
 
-    private final ArgumentLong fadeInArg = ArgumentType.Long("fadeIn");
-    private final ArgumentLong stayArg = ArgumentType.Long("stay");
-    private final ArgumentLong fadeOutArg = ArgumentType.Long("fadeOut");
+    private final ArgumentLong fadeInArg = ArgumentType.Long("fadeInArg");
+    private final ArgumentLong stayArg = ArgumentType.Long("stayArg");
+    private final ArgumentLong fadeOutArg = ArgumentType.Long("fadeOutArg");
 
     public BroadCastCommand() {
         super("broadcast");
 
-        setCondition(((sender, commandString) -> {
-            if (sender instanceof Player player) {
-                return player.hasPermission("slime.broadcast");
-            }
-            return true;
+        setCondition(((sender, commandString) -> switch (sender) {
+            case SlimePlayer player -> player.hasPermission("slime.broadcast");
+            case ConsoleSender ignored -> true;
+            default -> false;
         }));
 
         addSyntax(this::executeBroadcast, messageArgumentArray);
-        addSyntax(this::executeBroadcastTitle, titleArg);
-        addSyntax(this::executeBroadcastTitleSub, titleArg, subTitleArg);
-        addSyntax(this::executeBroadcastTitleSubTime, titleArg, subTitleArg, fadeInArg, stayArg, fadeOutArg);
+
+        addSyntax(this::executeBroadcastTitle, titleSubCommandArg, titleArg);
+        addSyntax(this::executeBroadcastTitleSub, titleSubCommandArg, titleArg, subTitleArg);
+        addSyntax(this::executeBroadcastTitleSubTime, titleSubCommandArg, titleArg, subTitleArg, fadeInArg, stayArg, fadeOutArg);
     }
 
     private void executeBroadcast(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final String finalMessage = String.join("  ", context.get(messageArgumentArray));
+        final String finalMessage = String.join(" ", context.get(messageArgumentArray));
 
         if (finalMessage.isEmpty()) {
             sender.sendMessage(Messages.MESSAGE_EMPTY
@@ -57,12 +63,19 @@ public class BroadCastCommand extends Command {
             return;
         }
 
-        broadcast(finalMessage);
+        broadcastAllInstances(finalMessage);
     }
 
     private void executeBroadcastTitle(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final String message = context.get(titleArg);
-        sendTitle(message, Component.empty(), sender);
+        switch (sender) {
+            case SlimePlayer player -> {
+                final String message = context.get(titleArg);
+                sendTitle(message, Component.empty(), player);
+            }
+            case ConsoleSender ignored -> print(Messages.CANNOT_EXECUTE_FROM_CONSOLE
+                    .asComponent());
+            default -> {}
+        }
     }
 
     private void executeBroadcastTitleSub(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -91,6 +104,7 @@ public class BroadCastCommand extends Command {
         }
 
         final Title title = Title.title(of(titleText)
+                .parseLegacy()
                 .build(), subTitle);
         onlinePlayers.forEach(player -> player.showTitle(title));
     }
@@ -103,6 +117,7 @@ public class BroadCastCommand extends Command {
         }
 
         final Title title = Title.title(of(titleText)
+                .parseLegacy()
                 .build(), subTitle, times);
         onlinePlayers.forEach(player -> player.showTitle(title));
     }

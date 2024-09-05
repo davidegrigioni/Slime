@@ -7,7 +7,7 @@ network:
 
 # Branding information
 branding:
-  brand-name: "&c&lPowered &bby &aSLIME"
+  brand-name: "<red>Powered by SLIME</red>"
   animate: false
   animation-interval: 2
   animation-styles:

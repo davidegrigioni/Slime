@@ -41,11 +41,6 @@ public abstract class AbstractHologram extends Entity implements Hologram {
     }
 
     @Override
-    public void show(@NotNull Instance instance, @NotNull Pos position) {
-        setInstance(instance, position);
-    }
-
-    @Override
     public void hide() {
         remove();
     }

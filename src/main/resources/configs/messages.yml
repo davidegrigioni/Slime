@@ -7,6 +7,7 @@ messages:
   hologram: "<green>Hologram of type <hologramtype> created!</green>"
   region-setup: "<green>Region setup started for <regionname></green>"
   region-setup-first: "<red>You need to start a region setup first using /region create (regionName).</red>"
+  cannot-execute-console: "<red>Cannot execute from console</red>"
 
 titles:
   title: "test"
