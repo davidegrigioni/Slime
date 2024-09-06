@@ -6,8 +6,8 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
-import static cc.davyy.slime.utils.FileUtils.getMessages;
 import static cc.davyy.slime.utils.ColorUtils.of;
+import static net.minestom.server.MinecraftServer.LOGGER;
 
 public class RegionListener {
 
@@ -19,20 +19,6 @@ public class RegionListener {
     }
 
     public void init(GlobalEventHandler handler) {
-        /*handler.addListener(PlayerMoveEvent.class, event -> {
-            final Player player = event.getPlayer();
-            final Optional<String> regionNameOpt = regionManager.isPlayerInRegion(player.getPosition());
-
-            regionNameOpt.ifPresentOrElse(regionName -> {
-                String mainTitle = getMessages().getString("titles.title");
-                String subTitle = getMessages().getString("titles.subtitle");
-                final Title title = Title.title(of(mainTitle)
-                        .build(), of(subTitle)
-                        .parseMMP("regionname", regionName)
-                        .build());
-                player.showTitle(title);
-            }, player::clearTitle);
-        });*/
         handler.addListener(PlayerBlockBreakEvent.class, event -> {
             final boolean blockBreakEnabled = getConfig().getBoolean("protection.disable-build-protection");
             final boolean messageEnabled = getConfig().getBoolean("protection.block-break-message.enable");
@@ -41,9 +27,14 @@ public class RegionListener {
                 event.setCancelled(true);
 
                 if (messageEnabled) {
-                    final String message = getMessages().getString("protection.block-break-message.message");
-                    event.getPlayer().sendMessage(of(message)
-                            .build());
+                    final String message = getConfig().getString("protection.block-break-message.message");
+
+                    if (message != null && !message.isEmpty()) {
+                        event.getPlayer().sendMessage(of(message).build());
+                        return;
+                    }
+
+                    LOGGER.warn("Block break message is not configured properly.");
                 }
             }
         });

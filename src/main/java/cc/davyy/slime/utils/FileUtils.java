@@ -4,6 +4,8 @@ import cc.davyy.slime.misc.HoconConfigurationAdapter;
 import cc.davyy.slime.model.SlimePlayer;
 import de.leonhard.storage.SimplixBuilder;
 import de.leonhard.storage.Yaml;
+import dev.expx.payments.PaymentHandler;
+import dev.expx.payments.StoreType;
 import me.lucko.luckperms.common.config.generic.adapter.EnvironmentVariableConfigAdapter;
 import me.lucko.luckperms.common.config.generic.adapter.MultiConfigurationAdapter;
 import me.lucko.luckperms.minestom.CommandRegistry;
@@ -80,6 +82,11 @@ public final class FileUtils {
     public static void setupFiles() {
         setupConfig();
         setupLuckPerms();
+        //setupPayments();
+    }
+
+    private static void setupPayments() {
+        PaymentHandler.init(StoreType.CRAFTINGSTORE_STORE, Path.of("store"));
     }
 
     /**

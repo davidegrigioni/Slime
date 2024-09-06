@@ -8,6 +8,7 @@ import cc.davyy.slime.utils.ColorUtils;
 import com.google.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
@@ -45,6 +46,11 @@ public class PlayerSpawnListener {
             playerTag.mount();
 
             applyJoinKit(player);
+        });
+        handler.addListener(PlayerDisconnectEvent.class, event -> {
+            final SlimePlayer player = (SlimePlayer) event.getPlayer();
+
+            sidebarManager.removeSidebar(player);
         });
     }
 

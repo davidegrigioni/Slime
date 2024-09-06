@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static cc.davyy.slime.utils.FileUtils.getMessages;
 
@@ -18,14 +19,13 @@ public enum Messages implements ComponentLike {
     RELOAD_CONFIG("messages.reload"),
     CANNOT_EXECUTE_FROM_CONSOLE("messages.cannot-execute-console"),
     MESSAGE_EMPTY("messages.message-empty"),
-    HOLOGRAM("messages.hologram"),
     REGION_SETUP("messages.region-setup"),
     REGION_SETUP_FIRST("messages.region-setup-first"),
     SPAWN_TELEPORT("messages.spawn-teleport"),
     SPAWN_SET("messages.spawn-set");
 
     private final String key;
-    private final MiniMessage mm = MiniMessage.miniMessage();
+    private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final List<TagResolver> minimessagePlaceholders = new ArrayList<>();
 
     Messages(String key) {
@@ -34,22 +34,18 @@ public enum Messages implements ComponentLike {
 
     @Override
     public @NotNull Component asComponent() {
-        String rawMessage = getMessages().getString(key);
-        return mm.deserialize(rawMessage, minimessagePlaceholders.toArray(new TagResolver[0]));
+        String rawMessage = Optional.ofNullable(getMessages().getString(key))
+                .orElse("Message not found for key: " + key);
+        return miniMessage.deserialize(rawMessage, minimessagePlaceholders.toArray(new TagResolver[0]));
     }
 
     public @NotNull Messages addPlaceholder(@Subst("test_placeholder") @NotNull String placeholder, @NotNull ComponentLike value) {
-        this.minimessagePlaceholders.add(
-                Placeholder.component(placeholder, value)
-        );
+        minimessagePlaceholders.add(Placeholder.component(placeholder, value));
         return this;
     }
 
     public @NotNull Messages addPlaceholder(@Subst("test_placeholder") @NotNull String placeholder, @NotNull String value) {
-        this.minimessagePlaceholders.add(
-                Placeholder.component(placeholder, ColorUtils.of(value)
-                        .build())
-        );
+        minimessagePlaceholders.add(Placeholder.component(placeholder, ColorUtils.of(value).parseLegacy().build()));
         return this;
     }
 

@@ -63,6 +63,12 @@ public class BrandManager {
             return;
         }
 
+        if (animationInterval <= 0) {
+            LOGGER.warn("Animation interval is non-positive, animation will not start.");
+            setDefaultBrandName();
+            return;
+        }
+
         startAnimation();
     }
 
@@ -85,33 +91,37 @@ public class BrandManager {
      */
     private void updateBrandName() {
         if (brandNameStyles == null || brandNameStyles.isEmpty()) {
-            LOGGER.info("No brand name styles available for animation.");
+            LOGGER.warn("No brand name styles available for animation.");
             return;
         }
 
-        final String brandName = brandNameStyles.get(currentIndex);
+        try {
+            final String brandName = brandNameStyles.get(currentIndex);
 
-        final Component component = ColorUtils
-                .of(brandName)
-                .build();
-        final String legacyBrandName = LegacyComponentSerializer
-                .legacyAmpersand()
-                .serialize(component);
+            final Component component = ColorUtils.of(brandName).build();
+            final String legacyBrandName = LegacyComponentSerializer.legacyAmpersand().serialize(component);
 
-        MinecraftServer.setBrandName(legacyBrandName);
+            MinecraftServer.setBrandName(legacyBrandName);
 
-        currentIndex = (currentIndex + 1) % brandNameStyles.size();
+            currentIndex = (currentIndex + 1) % brandNameStyles.size();
+        } catch (Exception ex) {
+            LOGGER.error("Error updating brand name", ex);
+        }
     }
 
     /**
      * Sets the default brand name when animation is not enabled.
      */
     private void setDefaultBrandName() {
-        final Component component = ColorUtils.of(defaultBrandName).parseLegacy().build();
-        final String legacyBrandName = LegacyComponentSerializer.legacyAmpersand().serialize(component);
-        MinecraftServer.setBrandName(legacyBrandName);
+        try {
+            final Component component = ColorUtils.of(defaultBrandName).parseLegacy().build();
+            final String legacyBrandName = LegacyComponentSerializer.legacyAmpersand().serialize(component);
+            MinecraftServer.setBrandName(legacyBrandName);
 
-        LOGGER.info("Animation disabled, setting default brand name: {}", defaultBrandName);
+            LOGGER.info("Animation disabled, setting default brand name: {}", defaultBrandName);
+        } catch (Exception ex) {
+            LOGGER.error("Error setting default brand name", ex);
+        }
     }
 
 }

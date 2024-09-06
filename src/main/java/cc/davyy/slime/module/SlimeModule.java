@@ -21,7 +21,6 @@ public class SlimeModule extends AbstractModule {
         bind(BrandManager.class).in(singleton);
         bind(ChatTranslatorManager.class).in(singleton);
         bind(LobbyManager.class).in(singleton);
-        bind(MOTDManager.class).in(singleton);
         bind(RegionManager.class).in(singleton);
         bind(SidebarManager.class).in(singleton);
         bind(HologramManager.class).in(singleton);

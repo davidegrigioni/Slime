@@ -9,12 +9,17 @@ import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
 import com.asintoto.minestomacr.MinestomACR;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.scoreboard.TeamBuilder;
 import net.minestom.server.scoreboard.TeamManager;
+
+import java.util.Collection;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.*;
@@ -22,46 +27,43 @@ import static cc.davyy.slime.utils.FileUtils.getConfig;
 
 public class SlimeLoader {
 
-    private BrandManager brandManager;
-    private ChatTranslatorManager chatTranslatorManager;
-    private LobbyManager lobbyManager;
-    private RegionManager regionManager;
-    private SidebarManager sidebarManager;
-    private TablistManager tablistManager;
+    private static final ComponentLogger LOGGER = ComponentLogger.logger(SlimeLoader.class);
+
+    @Inject private BrandManager brandManager;
+    //@Inject private ChatTranslatorManager chatTranslatorManager;
+    @Inject private LobbyManager lobbyManager;
+    @Inject private RegionManager regionManager;
+    @Inject private SidebarManager sidebarManager;
+    @Inject private TablistManager tablistManager;
+    @Inject private HologramManager hologramManager;
+
     private NPCManager npcManager;
     private NameTagManager nameTagManager;
-    private HologramManager hologramManager;
 
     public void start() {
+        LOGGER.info("Initializing Minecraft Server...");
         MinecraftServer minecraftServer = MinecraftServer.init();
 
         setupFiles();
-
+        validateConfig();
         injectGuice();
 
+        LOGGER.info("Registering listeners...");
         registerListeners();
 
+        LOGGER.info("Setting up console...");
         ConsoleUtils.setupConsole();
 
+        LOGGER.info("Initializing MinestomACR...");
         MinestomACR.init();
 
-        MinecraftServer.getCommandManager().register(new RegionCommand(regionManager));
-        MinecraftServer.getCommandManager().register(new LobbyCommand(lobbyManager));
-        MinecraftServer.getCommandManager().register(new DebugCommand(lobbyManager));
-        MinecraftServer.getCommandManager().register(new NPCCommand(npcManager, nameTagManager));
-        MinecraftServer.getCommandManager().register(new HologramCommand(hologramManager));
+        LOGGER.info("Registering commands...");
+        registerCommands();
 
-        MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
-            var onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
-            String kickMessage = getMessages().getString("messages.kick");
-            onlinePlayers.forEach(player -> player.kick(of(kickMessage)
-                    .build()));
-            //MinecraftServer.getInstanceManager().getInstances().forEach(Instance::saveChunksToStorage);
-        });
+        LOGGER.info("Setting up shutdown tasks...");
+        setupShutdownTask();
 
-        String ip = getConfig().getString("network.ip");
-        int port = getConfig().getInt("network.port");
-        minecraftServer.start(ip, port);
+        startServer(minecraftServer);
     }
 
     private void registerListeners() {
@@ -82,16 +84,42 @@ public class SlimeLoader {
     }
 
     private void injectGuice() {
+        LOGGER.info("Injecting dependencies using Guice...");
         Injector injector = Guice.createInjector(new SlimeModule(this));
+        injector.injectMembers(this);
+    }
 
-        brandManager = injector.getInstance(BrandManager.class);
-        //chatTranslatorManager = injector.getInstance(ChatTranslatorManager.class);
-        lobbyManager = injector.getInstance(LobbyManager.class);
-        regionManager = injector.getInstance(RegionManager.class);
-        sidebarManager = injector.getInstance(SidebarManager.class);
-        tablistManager = injector.getInstance(TablistManager.class);
-        //npcManager = injector.getInstance(NPCManager.class);
-        hologramManager = injector.getInstance(HologramManager.class);
+    private void registerCommands() {
+        var commandManager = MinecraftServer.getCommandManager();
+        commandManager.register(new RegionCommand(regionManager));
+        commandManager.register(new LobbyCommand(lobbyManager));
+        commandManager.register(new DebugCommand(lobbyManager));
+        commandManager.register(new NPCCommand(npcManager, nameTagManager));
+        commandManager.register(new HologramCommand(hologramManager));
+    }
+
+    private void setupShutdownTask() {
+        MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
+            Collection<Player> onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
+            String kickMessage = getMessages().getString("messages.kick");
+            onlinePlayers.forEach(player -> player.kick(of(kickMessage).build()));
+        });
+    }
+
+    private void startServer(MinecraftServer minecraftServer) {
+        String ip = getConfig().getString("network.ip");
+        int port = getConfig().getInt("network.port");
+        minecraftServer.start(ip, port);
+        LOGGER.info("Server started on IP: {}, Port: {}", ip, port);
+    }
+
+    private void validateConfig() {
+        String ip = getConfig().getString("network.ip");
+        int port = getConfig().getInt("network.port");
+        if (ip == null || port == 0) {
+            LOGGER.error("Invalid IP or port configuration.");
+            throw new IllegalArgumentException("Invalid IP or port configuration.");
+        }
     }
 
 }

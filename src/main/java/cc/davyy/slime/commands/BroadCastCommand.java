@@ -4,6 +4,7 @@ import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.asintoto.minestomacr.annotations.AutoRegister;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
@@ -22,6 +23,7 @@ import java.time.Duration;
 import java.util.Collection;
 
 import static cc.davyy.slime.utils.ColorUtils.*;
+import static net.kyori.adventure.text.Component.text;
 
 @AutoRegister
 public class BroadCastCommand extends Command {
@@ -32,8 +34,6 @@ public class BroadCastCommand extends Command {
 
     private final ArgumentLiteral titleSubCommandArg = ArgumentType.Literal("title");
 
-    private final Collection<Player> onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
-
     private final ArgumentLong fadeInArg = ArgumentType.Long("fadeInArg");
     private final ArgumentLong stayArg = ArgumentType.Long("stayArg");
     private final ArgumentLong fadeOutArg = ArgumentType.Long("fadeOutArg");
@@ -42,8 +42,17 @@ public class BroadCastCommand extends Command {
         super("broadcast");
 
         setDefaultExecutor(((commandSender, commandContext) -> {
-            String commandName = commandContext.getCommandName();
-            commandSender.sendMessage("Usage: /" + commandName);
+            String usage = """
+                    /broadcast [message]\s
+                    /broadcast title <title>\s
+                    /broadcast title <title> <subtitle>\s
+                    /broadcast title <title> <subtitle> <fadeIn> <stay> <fadeOut>""";
+
+            Component usageMessage = text("Usage Instructions:").color(TextColor.color(255, 0, 0))
+                    .append(Component.newline())
+                    .append(text(usage).color(TextColor.color(255, 255, 255)));
+
+            commandSender.sendMessage(usageMessage);
         }));
 
         setCondition(((sender, commandString) -> switch (sender) {
@@ -63,8 +72,7 @@ public class BroadCastCommand extends Command {
         final String finalMessage = String.join(" ", context.get(messageArgumentArray));
 
         if (finalMessage.isEmpty()) {
-            sender.sendMessage(Messages.MESSAGE_EMPTY
-                    .asComponent());
+            sender.sendMessage(Messages.MESSAGE_EMPTY.asComponent());
             return;
         }
 
@@ -72,73 +80,69 @@ public class BroadCastCommand extends Command {
     }
 
     private void executeBroadcastTitle(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        switch (sender) {
-            case SlimePlayer player -> {
-                final String message = context.get(titleArg);
-                sendTitle(message, Component.empty(), player);
-            }
-            case ConsoleSender ignored -> print(Messages.CANNOT_EXECUTE_FROM_CONSOLE
-                    .asComponent());
-            default -> {}
+        if (sender instanceof SlimePlayer player) {
+            final String message = context.get(titleArg);
+            sendTitle(message, "", player);
+            return;
         }
+
+        print(Messages.CANNOT_EXECUTE_FROM_CONSOLE.asComponent());
     }
 
     private void executeBroadcastTitleSub(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        switch (sender) {
-            case SlimePlayer player -> {
-                final String message = context.get(titleArg);
-                final String subTitle = context.get(subTitleArg);
-                sendTitle(message, txt(subTitle), player);
-            }
-            case ConsoleSender ignored -> print(Messages.CANNOT_EXECUTE_FROM_CONSOLE
-                    .asComponent());
-            default -> {}
+        if (sender instanceof SlimePlayer player) {
+            final String message = context.get(titleArg);
+            final String subTitle = context.get(subTitleArg);
+            sendTitle(message, subTitle, player);
+            return;
         }
+
+        print(Messages.CANNOT_EXECUTE_FROM_CONSOLE.asComponent());
     }
 
     private void executeBroadcastTitleSubTime(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        switch (sender) {
-            case SlimePlayer player -> {
-                final String message = context.get(titleArg);
-                final String subTitle = context.get(subTitleArg);
+        if (sender instanceof SlimePlayer player) {
+            final String message = context.get(titleArg);
+            final String subTitle = context.get(subTitleArg);
 
-                final Long fadeIn = context.get(fadeInArg);
-                final Long stay = context.get(stayArg);
-                final Long fadeOut = context.get(fadeOutArg);
+            final Long fadeIn = context.get(fadeInArg);
+            final Long stay = context.get(stayArg);
+            final Long fadeOut = context.get(fadeOutArg);
 
-                final Title.Times times = Title.Times.times(Duration.ofSeconds(fadeIn), Duration.ofSeconds(stay), Duration.ofSeconds(fadeOut));
-                sendTitle(message, txt(subTitle), times, player);
-            }
-            case ConsoleSender ignored -> print(Messages.CANNOT_EXECUTE_FROM_CONSOLE
-                    .asComponent());
-            default -> {}
-        }
-    }
-
-    private void sendTitle(@NotNull String titleText, @NotNull Component subTitle, @NotNull CommandSender sender) {
-        if (titleText.isEmpty()) {
-            sender.sendMessage(Messages.MESSAGE_EMPTY
-                    .asComponent());
+            final Title.Times times = Title.Times.times(Duration.ofSeconds(fadeIn), Duration.ofSeconds(stay), Duration.ofSeconds(fadeOut));
+            sendTitle(message, subTitle, times, player);
             return;
         }
 
-        final Title title = Title.title(of(titleText)
-                .parseLegacy()
-                .build(), subTitle);
-        onlinePlayers.forEach(player -> player.showTitle(title));
+        print(Messages.CANNOT_EXECUTE_FROM_CONSOLE.asComponent());
     }
 
-    private void sendTitle(@NotNull String titleText, @NotNull Component subTitle, @NotNull Title.Times times, @NotNull CommandSender sender) {
+    private void sendTitle(@NotNull String titleText, @NotNull String subTitle, @NotNull CommandSender sender) {
         if (titleText.isEmpty()) {
-            sender.sendMessage(Messages.MESSAGE_EMPTY
-                    .asComponent());
+            sender.sendMessage(Messages.MESSAGE_EMPTY.asComponent());
             return;
         }
 
-        final Title title = Title.title(of(titleText)
-                .parseLegacy()
-                .build(), subTitle, times);
-        onlinePlayers.forEach(player -> player.showTitle(title));
+        final Title title = Title.title(of(titleText).parseLegacy().build(), of(subTitle).parseLegacy().build());
+        getOnlinePlayers().forEach(player -> player.showTitle(title));
+    }
+
+    private void sendTitle(@NotNull String titleText, @NotNull String subTitle, @NotNull Title.Times times, @NotNull CommandSender sender) {
+        if (titleText.isEmpty()) {
+            sender.sendMessage(Messages.MESSAGE_EMPTY.asComponent());
+            return;
+        }
+
+        final Title title = Title.title(of(titleText).parseLegacy().build(), of(subTitle).parseLegacy().build(), times);
+        getOnlinePlayers().forEach(player -> player.showTitle(title));
+    }
+
+    private void broadcastAllInstances(@NotNull String message) {
+        getOnlinePlayers().forEach(player -> player.sendMessage(of(message).parseLegacy().build()));
+    }
+
+    private Collection<Player> getOnlinePlayers() {
+        return MinecraftServer.getConnectionManager().getOnlinePlayers();
     }
 
 }

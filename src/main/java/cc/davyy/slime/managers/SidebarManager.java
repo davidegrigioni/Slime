@@ -6,10 +6,10 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
@@ -19,56 +19,56 @@ import static cc.davyy.slime.utils.ColorUtils.of;
 public class SidebarManager {
 
     private final Sidebar sidebar;
-    private final Map<UUID, Sidebar> sidebarMap = new HashMap<>();
+    private final Map<UUID, Sidebar> sidebarMap = new ConcurrentHashMap<>();
 
     public SidebarManager() {
         String sidebarTitle = getConfig().getString("scoreboard.title");
-        this.sidebar = new Sidebar(of(sidebarTitle)
-                .build());
+        this.sidebar = new Sidebar(of(sidebarTitle).build());
 
         List<String> lines = getConfig().getStringList("scoreboard.lines");
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            for (int i = 0; i < lines.size(); i++) {
-                addLine(lines.get(i), lines.size() - i);
-            }
-        }).repeat(1, TimeUnit.SECONDS.toChronoUnit()).schedule();
-
+        MinecraftServer.getSchedulerManager().buildTask(() -> updateSidebarLines(lines))
+                .repeat(1, TimeUnit.SECONDS.toChronoUnit()).schedule();
     }
 
-    public void showSidebar(@NotNull Player player) {
-        sidebar.addViewer(player);
-        sidebarMap.put(player.getUuid(), sidebar);
-    }
-
-    public void removeSidebar(@NotNull Player player) {
-        if (sidebarMap.containsKey(player.getUuid())) {
-            sidebarMap.get(player.getUuid()).removeViewer(player);
-            sidebarMap.remove(player.getUuid());
+    private void updateSidebarLines(@NotNull List<String> lines) {
+        for (int i = 0; i < lines.size(); i++) {
+            String text = lines.get(i);
+            int score = lines.size() - i;
+            updateOrAddLine(text, score);
         }
     }
 
-    public void addLine(@NotNull String text, int score) {
+    private void updateOrAddLine(@NotNull String text, int score) {
         String lineId = "line-" + score;
+        var onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
 
-        // Remove existing line with the same ID before adding the new one
-        sidebar.removeLine(lineId);
+        // Check if the line already exists
+        if (sidebar.getLine(lineId) != null) {
+            sidebar.updateLineContent(lineId, of(text)
+                    .parseMMP("playercount", String.valueOf(onlinePlayers))
+                    .build());
+            return;
+        }
 
         // Create the line with dynamic player count
         sidebar.createLine(new Sidebar.ScoreboardLine(lineId,
                 of(text)
-                        .parseMMP("playercount", String.valueOf(MinecraftServer.getConnectionManager().getOnlinePlayers().size()))
+                        .parseMMP("playercount", String.valueOf(onlinePlayers))
                         .build(), score, Sidebar.NumberFormat.blank()));
     }
 
-    /**
-     * Updates a specific line in the sidebar.
-     *
-     * @param lineId The ID of the line to update.
-     * @param text   The new text.
-     */
-    public void updateLine(@NotNull String lineId, @NotNull String text) {
-        sidebar.updateLineContent(lineId, of(text)
-                .build());
+    public void showSidebar(@NotNull Player player) {
+        if (!sidebarMap.containsKey(player.getUuid())) {
+            sidebar.addViewer(player);
+            sidebarMap.put(player.getUuid(), sidebar);
+        }
+    }
+
+    public void removeSidebar(@NotNull Player player) {
+        Sidebar playerSidebar = sidebarMap.remove(player.getUuid());
+        if (playerSidebar != null) {
+            playerSidebar.removeViewer(player);
+        }
     }
 
 }

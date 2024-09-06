@@ -23,9 +23,11 @@ public class AsyncPlayerConfigurationListener {
     public void init(GlobalEventHandler handler) {
         handler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
             final Player player = event.getPlayer();
-            event.setSpawningInstance(lobbyManager.getMainLobbyContainer());
             final String posString = getConfig().getString("spawn.position");
             final Pos pos = PosUtils.fromString(posString);
+
+            event.setSpawningInstance(lobbyManager.getMainLobbyContainer());
+
             Check.notNull(pos, "Position cannot be null, Check your Config!");
             player.setRespawnPoint(pos);
         });

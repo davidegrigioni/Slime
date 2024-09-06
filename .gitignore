@@ -6,6 +6,7 @@ build/
 
 luckperms/
 configs/
+store/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
