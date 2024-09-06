@@ -60,3 +60,6 @@ scoreboard:
 # Header & Footer
 header: "test"
 footer: "test"
+
+# Broadcast
+broadcast: "<red>[ANNUNCIO]</red> <message>"

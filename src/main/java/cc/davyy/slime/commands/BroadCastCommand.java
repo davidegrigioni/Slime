@@ -23,6 +23,7 @@ import java.time.Duration;
 import java.util.Collection;
 
 import static cc.davyy.slime.utils.ColorUtils.*;
+import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static net.kyori.adventure.text.Component.text;
 
 @AutoRegister
@@ -48,9 +49,11 @@ public class BroadCastCommand extends Command {
                     /broadcast title <title> <subtitle>\s
                     /broadcast title <title> <subtitle> <fadeIn> <stay> <fadeOut>""";
 
-            Component usageMessage = text("Usage Instructions:").color(TextColor.color(255, 0, 0))
+            Component usageMessage = text("Usage Instructions:")
+                    .color(TextColor.color(255, 0, 0))
                     .append(Component.newline())
-                    .append(text(usage).color(TextColor.color(255, 255, 255)));
+                    .append(text(usage)
+                            .color(TextColor.color(255, 255, 255)));
 
             commandSender.sendMessage(usageMessage);
         }));
@@ -69,6 +72,7 @@ public class BroadCastCommand extends Command {
     }
 
     private void executeBroadcast(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final String configMessage = getConfig().getString("broadcast");
         final String finalMessage = String.join(" ", context.get(messageArgumentArray));
 
         if (finalMessage.isEmpty()) {
@@ -76,7 +80,10 @@ public class BroadCastCommand extends Command {
             return;
         }
 
-        broadcastAllInstances(finalMessage);
+        broadcastAllInstances(of(configMessage)
+                .parseMMP("message", finalMessage)
+                .parseLegacy()
+                .build());
     }
 
     private void executeBroadcastTitle(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -137,8 +144,8 @@ public class BroadCastCommand extends Command {
         getOnlinePlayers().forEach(player -> player.showTitle(title));
     }
 
-    private void broadcastAllInstances(@NotNull String message) {
-        getOnlinePlayers().forEach(player -> player.sendMessage(of(message).parseLegacy().build()));
+    private void broadcastAllInstances(@NotNull Component message) {
+        getOnlinePlayers().forEach(player -> player.sendMessage(message));
     }
 
     private Collection<Player> getOnlinePlayers() {

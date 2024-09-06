@@ -30,11 +30,9 @@ public class SlimeLoader {
     private static final ComponentLogger LOGGER = ComponentLogger.logger(SlimeLoader.class);
 
     @Inject private BrandManager brandManager;
-    //@Inject private ChatTranslatorManager chatTranslatorManager;
     @Inject private LobbyManager lobbyManager;
     @Inject private RegionManager regionManager;
     @Inject private SidebarManager sidebarManager;
-    @Inject private TablistManager tablistManager;
     @Inject private HologramManager hologramManager;
 
     private NPCManager npcManager;

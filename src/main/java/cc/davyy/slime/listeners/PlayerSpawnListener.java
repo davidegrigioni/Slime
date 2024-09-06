@@ -4,7 +4,6 @@ import cc.davyy.slime.managers.SidebarManager;
 import cc.davyy.slime.managers.npc.NameTag;
 import cc.davyy.slime.managers.npc.NameTagManager;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.ColorUtils;
 import com.google.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.GlobalEventHandler;
@@ -13,6 +12,7 @@ import net.minestom.server.event.player.PlayerSpawnEvent;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.JoinUtils.applyJoinKit;
+import static cc.davyy.slime.utils.ColorUtils.of;
 
 public class PlayerSpawnListener {
 
@@ -33,8 +33,8 @@ public class PlayerSpawnListener {
             final String footer = getConfig().getString("footer");
 
             player.sendPlayerListHeaderAndFooter(
-                    ColorUtils.of(header).build(),
-                    ColorUtils.of(footer).build()
+                    of(header).build(),
+                    of(footer).build()
             );
 
             sidebarManager.showSidebar(player);

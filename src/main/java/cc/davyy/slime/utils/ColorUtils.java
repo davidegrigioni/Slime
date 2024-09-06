@@ -96,6 +96,11 @@ public final class ColorUtils {
                 player.sendMessage(of(message).parseLegacy().build()));
     }
 
+    /*public static final StringTemplate.Processor<Component, RuntimeException> MM = stringTemplate -> {
+        String interpolated = STR.process(stringTemplate);
+        return MINIMESSAGE.deserialize(interpolated).decoration(TextDecoration.ITALIC, false);
+    };*/
+
     @Override
     public String toString() {
         return getText();

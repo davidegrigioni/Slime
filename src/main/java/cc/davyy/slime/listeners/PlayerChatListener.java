@@ -11,6 +11,7 @@ public class PlayerChatListener {
     public void init(GlobalEventHandler handler) {
         handler.addListener(PlayerChatEvent.class, event -> {
             final SlimePlayer player = (SlimePlayer) event.getPlayer();
+
             event.setChatFormat(e -> text().append(
                     player.getPrefix()
                             .append(text(" ")),
