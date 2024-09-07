@@ -8,6 +8,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
@@ -84,16 +85,6 @@ public final class ColorUtils {
 
     public static @NotNull Component txt(@NotNull String message) {
         return MINIMESSAGE.deserialize(message).decoration(TextDecoration.ITALIC, false);
-    }
-
-    public static void broadcastAllInstances(@NotNull String message) {
-        MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player ->
-                player.sendMessage(of(message).parseLegacy().build()));
-    }
-
-    public static void broadcastSingleInstance(@NotNull String message, @NotNull Instance targetInstance) {
-        targetInstance.getPlayers().forEach(player ->
-                player.sendMessage(of(message).parseLegacy().build()));
     }
 
     /*public static final StringTemplate.Processor<Component, RuntimeException> MM = stringTemplate -> {

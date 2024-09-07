@@ -11,6 +11,8 @@ import com.asintoto.minestomacr.MinestomACR;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
@@ -20,6 +22,7 @@ import net.minestom.server.scoreboard.TeamBuilder;
 import net.minestom.server.scoreboard.TeamManager;
 
 import java.util.Collection;
+import java.util.List;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.*;
@@ -73,6 +76,15 @@ public class SlimeLoader {
                 .collisionRule(TeamsPacket.CollisionRule.NEVER)
                 .build();
         nameTagManager = new NameTagManager(handler, entity -> nameTagTeam);
+
+        /*handler.addListener(PlayerFlagEvent.class, e ->
+                e.player().sendMessage(Component
+                        .text("You have been flagged for " + e.checkName() + " with a certainty of " + e.certainty())
+                        .color(NamedTextColor.RED)));
+
+        MangoAC.Config config = new MangoAC.Config(false, List.of(), List.of());
+        MangoAC ac = new MangoAC(config);
+        ac.start();*/
 
         new AsyncPlayerConfigurationListener(lobbyManager).init(handler);
         new InventoryListener().init(handler);

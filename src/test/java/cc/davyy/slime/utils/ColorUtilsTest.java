@@ -1,8 +1,10 @@
 package cc.davyy.slime.utils;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -36,6 +38,74 @@ class ColorUtilsTest {
         String text = "Hello";
         ColorUtils colorUtils = ColorUtils.of(text);
         assertEquals(text, colorUtils.toString());
+    }
+
+    @Test
+    void testSendPlaceholders() {
+        String text = "<red>Hello, <player>!";
+        Component playerComponent = Component.text("JohnDoe").color(NamedTextColor.RED);
+
+        // Act
+        Component result = ColorUtils.of(text)
+                .parseMMP("player", playerComponent)
+                .build();
+
+        // Expected result
+        Component expected = MINIMESSAGE.deserialize("<red>Hello, <player>!",
+                        Placeholder.component("player", playerComponent))
+                .decoration(TextDecoration.ITALIC, false);
+
+        // Assert
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testSendPlaceholdersWithMultipleValues() {
+        String text = "<red>Hello, <player>! You have <count> messages.";
+        Component playerComponent = Component.text("JohnDoe").color(NamedTextColor.RED);
+        Component countComponent = Component.text("5").color(NamedTextColor.GREEN);
+
+        // Act
+        Component result = ColorUtils.of(text)
+                .parseMMP("player", playerComponent)
+                .parseMMP("count", countComponent)
+                .build();
+
+        // Expected result
+        Component expected = MINIMESSAGE.deserialize("<red>Hello, <player>! You have <count> messages.",
+                        Placeholder.component("player", playerComponent),
+                        Placeholder.component("count", countComponent))
+                .decoration(TextDecoration.ITALIC, false);
+
+        // Assert
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testSendPlaceholdersWithInvalidPairs() {
+        String text = "<player> says hello";
+
+        // Act & Assert
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> ColorUtils.sendPlaceholders(null, text, "player")
+        );
+
+        assertEquals("Placeholders should be passed in pairs of key and value", thrown.getMessage());
+    }
+
+    @Test
+    void testSendPlaceholdersWithEmptyText() {
+        String text = "";
+
+        // Act
+        Component result = ColorUtils.of(text).build();
+
+        // Expected result
+        Component expected = Component.empty();
+
+        // Assert
+        assertEquals(expected, result);
     }
 
 }

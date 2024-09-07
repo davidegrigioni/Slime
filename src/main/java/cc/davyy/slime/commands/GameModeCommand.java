@@ -11,6 +11,8 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import static cc.davyy.slime.utils.GeneralUtils.sendColorable;
+
 @AutoRegister
 public class GameModeCommand extends Command {
 
@@ -20,15 +22,20 @@ public class GameModeCommand extends Command {
     public GameModeCommand() {
         super("gamemode");
 
+        /*
+        set perm
+         */
         setCondition(Conditions::playerOnly);
 
-        addSyntax(this::execute, gameModeArgumentEnum);
+        addSyntax(this::executeSelf, gameModeArgumentEnum);
     }
 
-    private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    private void executeSelf(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final Player player = (Player) sender;
-        GameMode gameMode = context.get(gameModeArgumentEnum);
+        final GameMode gameMode = context.get(gameModeArgumentEnum);
+
         player.setGameMode(gameMode);
+        sendColorable(player, "Your game mode has been updated to " + gameMode.name());
     }
 
 }

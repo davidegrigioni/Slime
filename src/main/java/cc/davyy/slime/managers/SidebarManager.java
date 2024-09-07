@@ -65,9 +65,10 @@ public class SidebarManager {
     }
 
     public void removeSidebar(@NotNull Player player) {
-        Sidebar playerSidebar = sidebarMap.remove(player.getUuid());
-        if (playerSidebar != null) {
-            playerSidebar.removeViewer(player);
+        Sidebar sidebar = sidebarMap.get(player.getUuid());
+        if (sidebar != null) {
+            sidebarMap.remove(player.getUuid());
+            sidebar.removeViewer(player);
         }
     }
 

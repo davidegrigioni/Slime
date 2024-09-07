@@ -6,7 +6,6 @@ import com.asintoto.minestomacr.annotations.AutoRegister;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
@@ -16,14 +15,14 @@ import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentLong;
-import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.util.Collection;
 
 import static cc.davyy.slime.utils.ColorUtils.*;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
+import static cc.davyy.slime.utils.GeneralUtils.broadcastAllInstances;
+import static cc.davyy.slime.utils.GeneralUtils.getOnlinePlayers;
 import static net.kyori.adventure.text.Component.text;
 
 @AutoRegister
@@ -142,14 +141,6 @@ public class BroadCastCommand extends Command {
 
         final Title title = Title.title(of(titleText).parseLegacy().build(), of(subTitle).parseLegacy().build(), times);
         getOnlinePlayers().forEach(player -> player.showTitle(title));
-    }
-
-    private void broadcastAllInstances(@NotNull Component message) {
-        getOnlinePlayers().forEach(player -> player.sendMessage(message));
-    }
-
-    private Collection<Player> getOnlinePlayers() {
-        return MinecraftServer.getConnectionManager().getOnlinePlayers();
     }
 
 }
