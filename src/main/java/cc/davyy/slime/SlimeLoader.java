@@ -11,22 +11,17 @@ import com.asintoto.minestomacr.MinestomACR;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.scoreboard.TeamBuilder;
 import net.minestom.server.scoreboard.TeamManager;
 
-import java.util.Collection;
-import java.util.List;
-
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.*;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
+import static cc.davyy.slime.utils.GeneralUtils.getOnlinePlayers;
 
 public class SlimeLoader {
 
@@ -43,7 +38,7 @@ public class SlimeLoader {
 
     public void start() {
         LOGGER.info("Initializing Minecraft Server...");
-        MinecraftServer minecraftServer = MinecraftServer.init();
+        final MinecraftServer minecraftServer = MinecraftServer.init();
 
         setupFiles();
         validateConfig();
@@ -68,11 +63,11 @@ public class SlimeLoader {
     }
 
     private void registerListeners() {
-        var handler = MinecraftServer.getGlobalEventHandler();
+        final var handler = MinecraftServer.getGlobalEventHandler();
 
         npcManager = new NPCManager(handler);
-        TeamManager teamManager = MinecraftServer.getTeamManager();
-        Team nameTagTeam = new TeamBuilder("name-tags", teamManager)
+        final TeamManager teamManager = MinecraftServer.getTeamManager();
+        final Team nameTagTeam = new TeamBuilder("name-tags", teamManager)
                 .collisionRule(TeamsPacket.CollisionRule.NEVER)
                 .build();
         nameTagManager = new NameTagManager(handler, entity -> nameTagTeam);
@@ -95,12 +90,12 @@ public class SlimeLoader {
 
     private void injectGuice() {
         LOGGER.info("Injecting dependencies using Guice...");
-        Injector injector = Guice.createInjector(new SlimeModule(this));
+        final Injector injector = Guice.createInjector(new SlimeModule(this));
         injector.injectMembers(this);
     }
 
     private void registerCommands() {
-        var commandManager = MinecraftServer.getCommandManager();
+        final var commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new RegionCommand(regionManager));
         commandManager.register(new LobbyCommand(lobbyManager));
         commandManager.register(new DebugCommand(lobbyManager));
@@ -110,22 +105,21 @@ public class SlimeLoader {
 
     private void setupShutdownTask() {
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
-            Collection<Player> onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
             String kickMessage = getMessages().getString("messages.kick");
-            onlinePlayers.forEach(player -> player.kick(of(kickMessage).build()));
+            getOnlinePlayers().forEach(player -> player.kick(of(kickMessage).build()));
         });
     }
 
     private void startServer(MinecraftServer minecraftServer) {
-        String ip = getConfig().getString("network.ip");
-        int port = getConfig().getInt("network.port");
+        final String ip = getConfig().getString("network.ip");
+        final int port = getConfig().getInt("network.port");
         minecraftServer.start(ip, port);
         LOGGER.info("Server started on IP: {}, Port: {}", ip, port);
     }
 
     private void validateConfig() {
-        String ip = getConfig().getString("network.ip");
-        int port = getConfig().getInt("network.port");
+        final String ip = getConfig().getString("network.ip");
+        final int port = getConfig().getInt("network.port");
         if (ip == null || port == 0) {
             LOGGER.error("Invalid IP or port configuration.");
             throw new IllegalArgumentException("Invalid IP or port configuration.");

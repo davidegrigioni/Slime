@@ -2,17 +2,18 @@ package cc.davyy.slime.utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Instance;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,6 +87,83 @@ public final class ColorUtils {
     public static @NotNull Component txt(@NotNull String message) {
         return MINIMESSAGE.deserialize(message).decoration(TextDecoration.ITALIC, false);
     }
+
+    // 1. Insert a component placeholder
+    public static Component formatWithComponent(@NotNull String template, @Subst("test_pl") @NotNull String placeholder, @NotNull Component component) {
+        return MINIMESSAGE.deserialize(template, Placeholder.component(placeholder, component));
+    }
+
+    /*
+     * Example usage:
+     * Component message = MiniMessageUtils.formatWithComponent("<gray>Hello <name>!", "name", Component.text("John", NamedTextColor.BLUE));
+     * // Result: "Hello John!" where John is blue.
+     */
+
+    // 2. Insert unparsed text placeholder
+    public static Component formatWithUnparsed(@NotNull String template, @Subst("test_pl") @NotNull String placeholder, @NotNull String unparsedText) {
+        return MINIMESSAGE.deserialize(template, Placeholder.unparsed(placeholder, unparsedText));
+    }
+
+    /*
+     * Example usage:
+     * Component message = MiniMessageUtils.formatWithUnparsed("<gray>Hello <name>", "name", "<red>John :)");
+     * // Result: "Hello <red>John :)" as plain text, no parsing for the name.
+     */
+
+    // 3. Insert parsed text placeholder
+    public static Component formatWithParsed(@NotNull String template, @Subst("test_pl") @NotNull String placeholder, @NotNull String parsedText) {
+        return MINIMESSAGE.deserialize(template, Placeholder.parsed(placeholder, parsedText));
+    }
+
+    /*
+     * Example usage:
+     * Component message = MiniMessageUtils.formatWithParsed("<gray>Hello <name>!", "name", "<red>John");
+     * // Result: "Hello John!" where John is red.
+     */
+
+    // 4. Insert custom styling with a placeholder
+    public static Component formatWithStyle(@NotNull String template, @Subst("test_pl") @NotNull String styleTag, @NotNull TextColor color, @NotNull ClickEvent clickEvent) {
+        return MINIMESSAGE.deserialize(template, Placeholder.styling(styleTag, clickEvent, color));
+    }
+
+    /*
+     * Example usage:
+     * Component message = MiniMessageUtils.formatWithStyle("<my-style>Click me!</my-style>", "my-style", NamedTextColor.GREEN, ClickEvent.runCommand("/hello"));
+     * // Result: Green "Click me!" text that runs the `/hello` command when clicked.
+     */
+
+    // 5. Insert a formatted number placeholder
+    public static Component formatWithNumber(@NotNull String template, @Subst("test_pl") @NotNull String placeholder, double number) {
+        return MINIMESSAGE.deserialize(template, Formatter.number(placeholder, number));
+    }
+
+    /*
+     * Example usage:
+     * Component message = MiniMessageUtils.formatWithNumber("<gray>Your balance is <balance>.", "balance", 150.75, "#.00");
+     * // Result: "Your balance is 150.75" with the number formatted.
+     */
+
+    // 6. Insert a formatted date placeholder
+    public static Component formatWithDate(@NotNull String template, @Subst("test_pl") @NotNull String placeholder, @NotNull LocalDateTime date) {
+        return MINIMESSAGE.deserialize(template, Formatter.date(placeholder, date));
+    }
+
+    /*
+     * Example usage:
+     * Component message = MiniMessageUtils.formatWithDate("<gray>Current date is: <date>.", "date", LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss");
+     * // Result: "Current date is: 2024-09-08 14:55:32" (formatted date)
+     */
+
+    // 7. Insert a choice-based placeholder (for dynamic text based on number)
+    public static Component formatWithChoice(@NotNull String template, @Subst("test_pl") @NotNull String placeholder, int number) {
+        return MINIMESSAGE.deserialize(template, Formatter.choice(placeholder, number));
+    }
+
+    /*
+     * Example usage:
+     * Component message = MiniMessageUtils.formatWithChoice("<gray>I met <choice>!", "choice", 5, "0#no developer|1#one developer|1<many developers");
+     * // Result: "I met many developers!" since the input number was 5.
+     */
 
     /*public static final StringTemplate.Processor<Component, RuntimeException> MM = stringTemplate -> {
         String interpolated = STR.process(stringTemplate);

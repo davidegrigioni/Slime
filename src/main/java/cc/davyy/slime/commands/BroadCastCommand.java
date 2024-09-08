@@ -4,7 +4,6 @@ import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.asintoto.minestomacr.annotations.AutoRegister;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ConsoleSender;
@@ -23,7 +22,9 @@ import static cc.davyy.slime.utils.ColorUtils.*;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.GeneralUtils.broadcastAllInstances;
 import static cc.davyy.slime.utils.GeneralUtils.getOnlinePlayers;
+import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.TextColor.color;
 
 @AutoRegister
 public class BroadCastCommand extends Command {
@@ -42,17 +43,17 @@ public class BroadCastCommand extends Command {
         super("broadcast");
 
         setDefaultExecutor(((commandSender, commandContext) -> {
-            String usage = """
+            final String usage = """
                     /broadcast [message]\s
                     /broadcast title <title>\s
                     /broadcast title <title> <subtitle>\s
                     /broadcast title <title> <subtitle> <fadeIn> <stay> <fadeOut>""";
 
-            Component usageMessage = text("Usage Instructions:")
-                    .color(TextColor.color(255, 0, 0))
-                    .append(Component.newline())
+            final Component usageMessage = text("Usage Instructions:")
+                    .color(color(255, 0, 0))
+                    .append(newline())
                     .append(text(usage)
-                            .color(TextColor.color(255, 255, 255)));
+                            .color(color(255, 255, 255)));
 
             commandSender.sendMessage(usageMessage);
         }));

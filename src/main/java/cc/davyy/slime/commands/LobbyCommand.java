@@ -6,7 +6,6 @@ import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ConsoleSender;
@@ -20,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import static cc.davyy.slime.utils.ColorUtils.print;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.TextColor.color;
 
 public class LobbyCommand extends Command {
 
@@ -35,19 +35,19 @@ public class LobbyCommand extends Command {
         this.lobbyManager = lobbyManager;
 
         setDefaultExecutor(((commandSender, commandContext) -> {
-            Component usageMessage = text("Usage Instructions:")
-                    .color(TextColor.color(255, 0, 0))
+            final Component usageMessage = text("Usage Instructions:")
+                    .color(color(255, 0, 0))
                     .append(newline())
                     .append(text("/lobby create")
-                            .color(TextColor.color(255, 255, 255))
+                            .color(color(255, 255, 255))
                             .append(text(" - Creates a new lobby.")))
                     .append(newline())
                     .append(text("/lobby teleport <id>")
-                            .color(TextColor.color(255, 255, 255))
+                            .color(color(255, 255, 255))
                             .append(text(" - Teleports you to the lobby with the specified ID.")))
                     .append(newline())
                     .append(text("Example usage: /lobby teleport 1")
-                            .color(TextColor.color(100, 200, 100))
+                            .color(color(100, 200, 100))
                             .decorate(TextDecoration.ITALIC));
 
             commandSender.sendMessage(usageMessage);

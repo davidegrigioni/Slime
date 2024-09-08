@@ -2,10 +2,8 @@ package cc.davyy.slime.commands;
 
 import cc.davyy.slime.entities.NPC;
 import cc.davyy.slime.entities.NPCManager;
-import cc.davyy.slime.managers.npc.NameTag;
 import cc.davyy.slime.managers.npc.NameTagManager;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.ColorUtils;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -37,10 +35,14 @@ public class NPCCommand extends Command {
 
         NPC npc = npcManager.createNPC(EntityType.PLAYER, create, null, null);
         npc.setInstance(player.getInstance(), player.getPosition());
-        NameTag nameTag = nameTagManager.createNameTag(npc);
-        nameTag.setText(ColorUtils.of(create)
-                .parseLegacy()
-                .build());
+    }
+
+    private void createInteractNPC(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final SlimePlayer player = (SlimePlayer) sender;
+        final String create = context.get(npcNameArg);
+
+        NPC npc = npcManager.createNPC(EntityType.PLAYER, create, entityAttackEvent -> player.sendMessage("test1"), playerEntityInteractEvent -> player.sendMessage("test2"));
+        npc.setInstance(player.getInstance(), player.getPosition());
     }
 
 }

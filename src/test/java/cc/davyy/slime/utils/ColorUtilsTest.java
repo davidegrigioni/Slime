@@ -82,19 +82,6 @@ class ColorUtilsTest {
     }
 
     @Test
-    void testSendPlaceholdersWithInvalidPairs() {
-        String text = "<player> says hello";
-
-        // Act & Assert
-        IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class,
-                () -> ColorUtils.sendPlaceholders(null, text, "player")
-        );
-
-        assertEquals("Placeholders should be passed in pairs of key and value", thrown.getMessage());
-    }
-
-    @Test
     void testSendPlaceholdersWithEmptyText() {
         String text = "";
 
