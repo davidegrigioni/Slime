@@ -2,7 +2,6 @@ package cc.davyy.slime.commands;
 
 import cc.davyy.slime.managers.BroadcastManager;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
@@ -14,9 +13,7 @@ import net.minestom.server.command.builder.arguments.ArgumentStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import org.jetbrains.annotations.NotNull;
 
-import static cc.davyy.slime.utils.ColorUtils.*;
 import static cc.davyy.slime.utils.GeneralUtils.getOnlinePlayers;
-import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
@@ -36,6 +33,8 @@ public class BroadCastCommand extends Command {
         super("broadcast");
         this.broadcastManager = broadcastManager;
 
+        //setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.broadcast")));
+
         setDefaultExecutor(((commandSender, commandContext) -> {
             final String usage = """
                     /broadcast [message]\s
@@ -51,8 +50,6 @@ public class BroadCastCommand extends Command {
             commandSender.sendMessage(usageMessage);
         }));
 
-        setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.broadcast")));
-
         addSyntax(this::executeBroadcast, messageArgumentArray);
 
         addSyntax(this::executeBroadcastTitle, titleSubCommandArg, titleArg);
@@ -67,41 +64,26 @@ public class BroadCastCommand extends Command {
     }
 
     private void executeBroadcastTitle(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        if (sender instanceof SlimePlayer player) {
-            final String message = context.get(titleArg);
+        final SlimePlayer player = (SlimePlayer) sender;
+        final String message = context.get(titleArg);
 
-            broadcastManager.broadcastTitle(player, message, getOnlinePlayers());
-
-            return;
-        }
-
-        print(Messages.CANNOT_EXECUTE_FROM_CONSOLE.asComponent());
+        broadcastManager.broadcastTitle(player, message, getOnlinePlayers());
     }
 
     private void executeBroadcastTitleSub(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        if (sender instanceof SlimePlayer player) {
-            final String message = context.get(titleArg);
-            final String subTitle = context.get(subTitleArg);
+        final SlimePlayer player = (SlimePlayer) sender;
+        final String message = context.get(titleArg);
+        final String subTitle = context.get(subTitleArg);
 
-            broadcastManager.broadcastTitle(player, message, subTitle, getOnlinePlayers());
-
-            return;
-        }
-
-        print(Messages.CANNOT_EXECUTE_FROM_CONSOLE.asComponent());
+        broadcastManager.broadcastTitle(player, message, subTitle, getOnlinePlayers());
     }
 
     private void executeBroadcastTitleSubTime(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        if (sender instanceof SlimePlayer player) {
-            final String message = context.get(titleArg);
-            final String subTitle = context.get(subTitleArg);
+        final SlimePlayer player = (SlimePlayer) sender;
+        final String message = context.get(titleArg);
+        final String subTitle = context.get(subTitleArg);
 
-            broadcastManager.broadcastTitleWithTimes(player, message, subTitle, getOnlinePlayers());
-
-            return;
-        }
-
-        print(Messages.CANNOT_EXECUTE_FROM_CONSOLE.asComponent());
+        broadcastManager.broadcastTitleWithTimes(player, message, subTitle, getOnlinePlayers());
     }
 
 }

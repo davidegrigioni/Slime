@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.ColorUtils.of;
+import static cc.davyy.slime.utils.GeneralUtils.getOnlinePlayers;
 
 @Singleton
 public class SidebarManager {
@@ -22,10 +23,10 @@ public class SidebarManager {
     private final Map<UUID, Sidebar> sidebarMap = new ConcurrentHashMap<>();
 
     public SidebarManager() {
-        String sidebarTitle = getConfig().getString("scoreboard.title");
+        final String sidebarTitle = getConfig().getString("scoreboard.title");
         this.sidebar = new Sidebar(of(sidebarTitle).build());
 
-        List<String> lines = getConfig().getStringList("scoreboard.lines");
+        final List<String> lines = getConfig().getStringList("scoreboard.lines");
         MinecraftServer.getSchedulerManager().buildTask(() -> updateSidebarLines(lines))
                 .repeat(1, TimeUnit.SECONDS.toChronoUnit()).schedule();
     }
@@ -39,13 +40,13 @@ public class SidebarManager {
     }
 
     private void updateOrAddLine(@NotNull String text, int score) {
-        String lineId = "line-" + score;
-        var onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
+        final String lineId = "line-" + score;
+        final var onlinePlayersSize = getOnlinePlayers().size();
 
         // Check if the line already exists
         if (sidebar.getLine(lineId) != null) {
             sidebar.updateLineContent(lineId, of(text)
-                    .parseMMP("playercount", String.valueOf(onlinePlayers))
+                    .parseMMP("playercount", String.valueOf(onlinePlayersSize))
                     .build());
             return;
         }
@@ -53,7 +54,7 @@ public class SidebarManager {
         // Create the line with dynamic player count
         sidebar.createLine(new Sidebar.ScoreboardLine(lineId,
                 of(text)
-                        .parseMMP("playercount", String.valueOf(onlinePlayers))
+                        .parseMMP("playercount", String.valueOf(onlinePlayersSize))
                         .build(), score, Sidebar.NumberFormat.blank()));
     }
 
@@ -65,7 +66,7 @@ public class SidebarManager {
     }
 
     public void removeSidebar(@NotNull Player player) {
-        Sidebar sidebar = sidebarMap.get(player.getUuid());
+        final Sidebar sidebar = sidebarMap.get(player.getUuid());
         if (sidebar != null) {
             sidebarMap.remove(player.getUuid());
             sidebar.removeViewer(player);

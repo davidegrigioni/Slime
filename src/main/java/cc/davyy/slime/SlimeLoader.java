@@ -13,10 +13,13 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.scoreboard.TeamBuilder;
 import net.minestom.server.scoreboard.TeamManager;
+
+import java.util.Optional;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.*;
@@ -34,6 +37,7 @@ public class SlimeLoader {
     @Inject private SidebarManager sidebarManager;
     @Inject private HologramManager hologramManager;
     @Inject private SpawnManager spawnManager;
+    @Inject private GameModeManager gameModeManager;
 
     private NPCManager npcManager;
     private NameTagManager nameTagManager;
@@ -60,6 +64,8 @@ public class SlimeLoader {
 
         LOGGER.info("Setting up shutdown tasks...");
         setupShutdownTask();
+
+        //handleVelocityProxy();
 
         startServer(minecraftServer);
     }
@@ -105,11 +111,12 @@ public class SlimeLoader {
         commandManager.register(new HologramCommand(hologramManager));
         commandManager.register(new BroadCastCommand(broadcastManager));
         commandManager.register(new SpawnCommand(spawnManager));
+        commandManager.register(new GameModeCommand(gameModeManager));
     }
 
     private void setupShutdownTask() {
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
-            String kickMessage = getMessages().getString("messages.kick");
+            final String kickMessage = getMessages().getString("messages.kick");
             getOnlinePlayers().forEach(player -> player.kick(of(kickMessage).build()));
             //MinecraftServer.getInstanceManager().getInstances().forEach(Instance::saveChunksToStorage);
         });
@@ -129,6 +136,18 @@ public class SlimeLoader {
             LOGGER.error("Invalid IP or port configuration.");
             throw new IllegalArgumentException("Invalid IP or port configuration.");
         }
+    }
+
+    private void handleVelocityProxy() {
+        final String velocitySecret = getConfig().getString("velocity-secret");
+        Optional.ofNullable(velocitySecret)
+                .ifPresentOrElse(
+                        secret -> {
+                            VelocityProxy.enable(secret);
+                            LOGGER.info("Enabled Velocity Support with provided secret.");
+                        },
+                        () -> LOGGER.info("Velocity support not enabled. No secret provided.")
+                );
     }
 
 }

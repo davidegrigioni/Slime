@@ -79,11 +79,6 @@ public final class ColorUtils {
         return lore;
     }
 
-    public static void print(@NotNull Component component) {
-        String ansiString = ANSI_SERIALIZER.serialize(component);
-        LOGGER.info(ansiString);
-    }
-
     public static @NotNull Component txt(@NotNull String message) {
         return MINIMESSAGE.deserialize(message).decoration(TextDecoration.ITALIC, false);
     }

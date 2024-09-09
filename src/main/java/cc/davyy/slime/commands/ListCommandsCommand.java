@@ -2,19 +2,15 @@ package cc.davyy.slime.commands;
 
 import cc.davyy.slime.model.SlimePlayer;
 import com.asintoto.minestomacr.annotations.AutoRegister;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Set;
 
-import static cc.davyy.slime.utils.ColorUtils.print;
+import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 
 @AutoRegister
 public class ListCommandsCommand extends Command {
@@ -24,23 +20,14 @@ public class ListCommandsCommand extends Command {
     public ListCommandsCommand() {
         super("listcommands");
 
-        setCondition(((sender, commandString) -> switch (sender) {
-            case SlimePlayer player -> player.hasPermission("slime.listcommands");
-            case ConsoleSender ignored -> true;
-            default -> false;
-        }));
+        setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.listcommands")));
 
         setDefaultExecutor(this::execute);
     }
 
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        commands.forEach(command -> {
-            switch (sender) {
-                case ConsoleSender ignored -> print(Component.text(Arrays.toString(command.getNames())));
-                case Player player -> player.sendMessage(command.getNames());
-                default -> {}
-            }
-        });
+        final SlimePlayer player = (SlimePlayer) sender;
+        commands.forEach(command -> player.sendMessage(command.getNames()));
     }
 
 }

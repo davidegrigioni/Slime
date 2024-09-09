@@ -24,6 +24,7 @@ public class SlimeModule extends AbstractModule {
         bind(HologramManager.class);
         bind(BroadcastManager.class);
         bind(SpawnManager.class);
+        bind(GameModeManager.class);
         //bind(NPCManager.class).in(singleton);
     }
 
