@@ -14,6 +14,7 @@ import java.util.Collection;
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.GeneralUtils.broadcastAllInstances;
+import static cc.davyy.slime.utils.GeneralUtils.sendComponent;
 
 @Singleton
 public class BroadcastManager {
@@ -22,7 +23,7 @@ public class BroadcastManager {
         final String configMessage = getConfig().getString("broadcast");
 
         if (message.isEmpty()) {
-            sender.sendMessage(Messages.MESSAGE_EMPTY.asComponent());
+            sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
             return;
         }
 
@@ -34,7 +35,7 @@ public class BroadcastManager {
 
     public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull Collection<Player> players) {
         if (titleText.isEmpty()) {
-            sender.sendMessage(Messages.MESSAGE_EMPTY.asComponent());
+            sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
             return;
         }
 
@@ -44,7 +45,7 @@ public class BroadcastManager {
 
     public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<Player> players) {
         if (titleText.isEmpty()) {
-            sender.sendMessage(Messages.MESSAGE_EMPTY.asComponent());
+            sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
             return;
         }
 
@@ -54,7 +55,7 @@ public class BroadcastManager {
 
     public void broadcastTitleWithTimes(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<Player> players) {
         if (titleText.isEmpty()) {
-            sender.sendMessage(Messages.MESSAGE_EMPTY.asComponent());
+            sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
             return;
         }
 

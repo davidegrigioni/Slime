@@ -6,7 +6,6 @@ import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
@@ -17,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.ColorUtils.*;
 import static cc.davyy.slime.utils.GeneralUtils.getOnlinePlayers;
+import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
@@ -51,11 +51,7 @@ public class BroadCastCommand extends Command {
             commandSender.sendMessage(usageMessage);
         }));
 
-        setCondition(((sender, commandString) -> switch (sender) {
-            case SlimePlayer player -> player.hasPermission("slime.broadcast");
-            case ConsoleSender ignored -> true;
-            default -> false;
-        }));
+        setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.broadcast")));
 
         addSyntax(this::executeBroadcast, messageArgumentArray);
 

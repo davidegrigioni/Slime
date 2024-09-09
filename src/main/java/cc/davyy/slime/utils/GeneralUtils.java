@@ -1,8 +1,10 @@
 package cc.davyy.slime.utils;
 
+import cc.davyy.slime.model.SlimePlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
@@ -42,16 +44,20 @@ public final class GeneralUtils {
         return Component.translatable(key, args);
     }
 
-    public static void sendTranslatable(@NotNull Player player, @NotNull String key, @NotNull Component... args) {
-        player.sendMessage(translatable(key, args));
+    public static void sendTranslatable(@NotNull CommandSender sender, @NotNull String key, @NotNull Component... args) {
+        sender.sendMessage(translatable(key, args));
     }
 
-    public static void sendColorable(@NotNull Player player, @NotNull String text) {
-        player.sendMessage(txt(text));
+    public static void sendColorable(@NotNull CommandSender sender, @NotNull String text) {
+        sender.sendMessage(txt(text));
     }
 
-    public static void sendComponent(@NotNull Player player, @NotNull Component text) {
-        player.sendMessage(text);
+    public static void sendComponent(@NotNull CommandSender sender, @NotNull Component text) {
+        sender.sendMessage(text);
+    }
+
+    public static boolean hasPlayerPermission(@NotNull CommandSender sender, @NotNull String permission) {
+        return sender instanceof SlimePlayer player && player.hasPermission(permission);
     }
 
 }
