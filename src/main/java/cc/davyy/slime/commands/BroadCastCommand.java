@@ -67,11 +67,6 @@ public class BroadCastCommand extends Command {
     private void executeBroadcast(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final String finalMessage = String.join(" ", context.get(messageArgumentArray));
 
-        if (finalMessage.isEmpty()) {
-            sender.sendMessage(Messages.MESSAGE_EMPTY.asComponent());
-            return;
-        }
-
         broadcastManager.broadcastMessage(sender, finalMessage);
     }
 
