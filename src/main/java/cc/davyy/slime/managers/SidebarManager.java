@@ -74,6 +74,11 @@ public class SidebarManager {
         }
     }
 
+    public void toggleSidebar(@NotNull Player player) {
+        if (sidebar.getViewers().contains(player)) sidebar.removeViewer(player);
+        else sidebar.addViewer(player);
+    }
+
     public void removeSidebar(@NotNull Player player) {
         final Sidebar sidebar = sidebarMap.get(player.getUuid());
         if (sidebar != null) {

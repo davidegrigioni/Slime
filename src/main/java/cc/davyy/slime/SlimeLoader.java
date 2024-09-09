@@ -103,7 +103,7 @@ public class SlimeLoader {
     private void registerCommands() {
         final var commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new LobbyCommand(lobbyManager));
-        commandManager.register(new DebugCommand(lobbyManager));
+        commandManager.register(new DebugCommand(sidebarManager, lobbyManager));
         commandManager.register(new NPCCommand(npcManager, nameTagManager));
         commandManager.register(new HologramCommand(hologramManager));
         commandManager.register(new BroadCastCommand(broadcastManager));

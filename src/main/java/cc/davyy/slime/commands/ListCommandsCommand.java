@@ -20,7 +20,7 @@ public class ListCommandsCommand extends Command {
     public ListCommandsCommand() {
         super("listcommands");
 
-        setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.listcommands")));
+        //setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.listcommands")));
 
         setDefaultExecutor(this::execute);
     }

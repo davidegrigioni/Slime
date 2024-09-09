@@ -22,7 +22,6 @@ dependencies {
     implementation('org.slf4j:slf4j-simple:2.0.16')
     implementation('com.github.Asintotoo:MinestomACR:2f300f9579')
     implementation('com.google.inject:guice:7.0.0')
-    implementation('net.kyori:adventure-text-serializer-ansi:4.17.0')
     implementation('ninja.leaping.configurate:configurate-hocon:3.7.1')
     //implementation('org.spongepowered:configurate-hocon:4.1.2')
     // https://github.com/expxx/Minestom-Payments

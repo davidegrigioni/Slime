@@ -9,7 +9,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +28,6 @@ import static net.minestom.server.MinecraftServer.LOGGER;
 public final class ColorUtils {
 
     private static final MiniMessage MINIMESSAGE = MiniMessage.miniMessage();
-    private static final ANSIComponentSerializer ANSI_SERIALIZER = ANSIComponentSerializer.builder().build();
     private static final Pattern LEGACY_REGEX = Pattern.compile("[§&][0-9a-fk-or]");
 
     private static final Map<String, String> LEGACY_TO_MINIMESSAGE = createLegacyMap();

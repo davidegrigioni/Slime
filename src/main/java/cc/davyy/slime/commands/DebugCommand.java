@@ -2,6 +2,7 @@ package cc.davyy.slime.commands;
 
 import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.managers.LobbyManager;
+import cc.davyy.slime.managers.SidebarManager;
 import com.google.inject.Inject;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
@@ -19,11 +20,13 @@ import static cc.davyy.slime.utils.FileUtils.getConfig;
 // TODO: Remove this command
 public class DebugCommand extends Command {
 
+    private final SidebarManager sidebarManager;
     private final LobbyManager lobbyManager;
 
     @Inject
-    public DebugCommand(LobbyManager lobbyManager) {
+    public DebugCommand(SidebarManager sidebarManager, LobbyManager lobbyManager) {
         super("debug");
+        this.sidebarManager = sidebarManager;
         this.lobbyManager = lobbyManager;
 
         addSyntax(this::execute, ArgumentType.Literal("brandname"));
@@ -32,6 +35,12 @@ public class DebugCommand extends Command {
         addSyntax(this::gui, ArgumentType.Literal("servergui"));
         addSyntax(this::checkAnimationStatus, ArgumentType.Literal("animationstatus"));
         addSyntax(this::listAnimationStyles, ArgumentType.Literal("animationstyles"));
+        addSyntax(this::removeSidebar, ArgumentType.Literal("rsidebar"));
+    }
+
+    private void removeSidebar(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final Player player = (Player) sender;
+        sidebarManager.toggleSidebar(player);
     }
 
     private void gui(@NotNull CommandSender sender, @NotNull CommandContext context) {
