@@ -18,10 +18,13 @@ public class GameModeManager {
 
     public void setGameMode(@NotNull Player player, @NotNull GameMode gameMode, @NotNull Player target) {
         target.setGameMode(gameMode);
-        player.sendMessage(Messages.GAMEMODE_SWITCH
+        player.sendMessage(Messages.GAMEMODE_SWITCH_OTHER_SELF
+                .addPlaceholder("target", target.getName())
                 .addPlaceholder("gamemode", gameMode.name())
                 .asComponent());
-        target.sendMessage(Messages.GAMEMODE_OTHER_MESSAGE.asComponent());
+        target.sendMessage(Messages.GAMEMODE_SWITCH_OTHER
+                .addPlaceholder("gamemode", gameMode.name())
+                .asComponent());
     }
 
     @NotNull

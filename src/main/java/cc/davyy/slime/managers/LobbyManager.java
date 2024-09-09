@@ -42,7 +42,7 @@ public class LobbyManager {
      * @return The newly created Lobby.
      */
     public Lobby createNewLobby() {
-        final String lobbyName = "lobby" + lobbyCounter.getAndIncrement();
+        final String lobbyName = "Lobby " + lobbyCounter.getAndIncrement();
         final int lobbyID = lobbyIDCounter.getAndIncrement();
 
         final SharedInstance sharedInstance = MinecraftServer.getInstanceManager().createSharedInstance(mainLobbyContainer);
@@ -66,7 +66,9 @@ public class LobbyManager {
      * @param instance The instance to check.
      * @return true if the instance is the main one, false otherwise.
      */
-    public boolean isMainInstance(@NotNull Instance instance) { return instance.equals(mainLobbyContainer); }
+    public boolean isMainInstance(@NotNull Instance instance) {
+        return instance.equals(mainLobbyContainer);
+    }
 
     /**
      * Teleports the player to the specified lobby.
@@ -117,5 +119,29 @@ public class LobbyManager {
      * @return a collection of lobby ids.
      */
     public Collection<Integer> getAllLobbiesID() { return new ArrayList<>(lobbies.keySet()); }
+
+    /**
+     * Gets the lobby where the player currently is.
+     *
+     * @param player The player whose lobby needs to be found.
+     * @return The Lobby where the player is, or null if not in a lobby.
+     */
+    public Lobby getLobbyByPlayer(@NotNull Player player) {
+        Instance playerInstance = player.getInstance();
+        if (playerInstance == null) {
+            // Handle the null case, maybe return a default lobby or log an error
+            LOGGER.error("Player's instance is null for player {}", player.getUsername());
+            return null;
+        }
+
+        if (isMainInstance(playerInstance)) {
+            return null; // Player is in the main lobby, no specific lobby assigned
+        }
+
+        return lobbies.values().stream()
+                .filter(lobby -> lobby.sharedInstance().equals(playerInstance))
+                .findFirst()
+                .orElse(null); // Return null if no lobby matches
+    }
 
 }

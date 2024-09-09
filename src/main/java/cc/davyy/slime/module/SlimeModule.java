@@ -2,6 +2,7 @@ package cc.davyy.slime.module;
 
 import cc.davyy.slime.SlimeLoader;
 import cc.davyy.slime.managers.*;
+import cc.davyy.slime.model.HologramFactory;
 import com.google.inject.AbstractModule;
 
 public class SlimeModule extends AbstractModule {
@@ -23,7 +24,8 @@ public class SlimeModule extends AbstractModule {
         bind(BroadcastManager.class);
         bind(SpawnManager.class);
         bind(GameModeManager.class);
-        //bind(NPCManager.class).in(singleton);
+
+        bind(HologramFactory.class);
     }
 
 }

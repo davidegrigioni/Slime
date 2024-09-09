@@ -60,6 +60,7 @@ scoreboard:
     - "<gray><strikethrough>                                                        </strikethrough></gray>"
     - "<gradient:#ff7f50:#ff4500>Welcome to the Lobby!</gradient>"
     - "<gradient:#00ff00:#7fff00>Online Players: <playercount></gradient>"
+    - "<green>Lobby: <lobby></green>"
     - "<gradient:#00bfff:#1e90ff>Your rank: <rank></gradient>"
     - "<gradient:#ffd700:#ff8c00>Enjoy your stay!</gradient>"
     - "<gray><strikethrough>                                                        </strikethrough></gray>"

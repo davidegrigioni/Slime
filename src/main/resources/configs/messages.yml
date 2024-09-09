@@ -1,14 +1,14 @@
 messages:
-  spawn-set: "<green>Set spawn to <pos></green>"
-  spawn-teleport: "<green>You got teleported to spawn</green>"
-  reload: "<green>Reloaded config successfully!</green>"
-  kick: "<red>Server closing...</red>"
-  message-empty: "<red>Message cannot be empty.</red>"
-  hologram: "<green>Hologram of type <hologramtype> created!</green>"
-  region-setup: "<green>Region setup started for <regionname></green>"
-  region-setup-first: "<red>You need to start a region setup first using /region create (regionName).</red>"
-  cannot-execute-console: "<red>Cannot execute from console</red>"
+  spawn-set: "<gradient:#00FF00:#007700>Set spawn to <pos></gradient>"
+  spawn-teleport: "<gradient:#00FF00:#007700>You got teleported to spawn</gradient>"
 
-titles:
-  title: "test"
-  subtitle: "test <regionname>"
+  reload: "<gradient:#00FF00:#007700>Reloaded config successfully!</gradient>"
+  kick: "<gradient:#FF0000:#AA0000>Server closing...</gradient>"
+  message-empty: "<gradient:#FF0000:#AA0000>Message cannot be empty.</gradient>"
+  hologram: "<gradient:#00FF00:#007700>Hologram of type <hologramtype> created!</gradient>"
+
+  cannot-execute-console: "<gradient:#FF0000:#AA0000>You can not execute this command from console</gradient>"
+
+  gamemode-switch: "<green>Switched GameMode to <gamemode></green>"
+  gamemode-switch-other: "<green>Your GameMode has been switched to <gamemode></green>"
+  gamemode-switch-other-self: "<green>Switched the GameMode for <target> to <gamemode></green>"

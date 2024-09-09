@@ -1,5 +1,7 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.model.Lobby;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
@@ -20,9 +22,12 @@ import static cc.davyy.slime.utils.GeneralUtils.getOnlinePlayers;
 public class SidebarManager {
 
     private final Sidebar sidebar;
+    private final LobbyManager lobbyManager;
     private final Map<UUID, Sidebar> sidebarMap = new ConcurrentHashMap<>();
 
-    public SidebarManager() {
+    @Inject
+    public SidebarManager(LobbyManager lobbyManager) {
+        this.lobbyManager = lobbyManager;
         final String sidebarTitle = getConfig().getString("scoreboard.title");
         this.sidebar = new Sidebar(of(sidebarTitle).build());
 
@@ -43,19 +48,23 @@ public class SidebarManager {
         final String lineId = "line-" + score;
         final var onlinePlayersSize = getOnlinePlayers().size();
 
-        // Check if the line already exists
-        if (sidebar.getLine(lineId) != null) {
-            sidebar.updateLineContent(lineId, of(text)
-                    .parseMMP("playercount", String.valueOf(onlinePlayersSize))
-                    .build());
-            return;
-        }
+        for (Player player : getOnlinePlayers()) {
+            final Lobby playerLobby = lobbyManager.getLobbyByPlayer(player);
+            final String lobbyName = playerLobby != null ? playerLobby.name() : "Main Lobby";
 
-        // Create the line with dynamic player count
-        sidebar.createLine(new Sidebar.ScoreboardLine(lineId,
-                of(text)
+            if (sidebar.getLine(lineId) != null) {
+                sidebar.updateLineContent(lineId, of(text)
+                        .parseMMP("lobby", lobbyName)
                         .parseMMP("playercount", String.valueOf(onlinePlayersSize))
-                        .build(), score, Sidebar.NumberFormat.blank()));
+                        .build());
+            } else {
+                sidebar.createLine(new Sidebar.ScoreboardLine(lineId,
+                        of(text)
+                                .parseMMP("lobby", lobbyName)
+                                .parseMMP("playercount", String.valueOf(onlinePlayersSize))
+                                .build(), score, Sidebar.NumberFormat.blank()));
+            }
+        }
     }
 
     public void showSidebar(@NotNull Player player) {

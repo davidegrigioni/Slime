@@ -23,7 +23,7 @@ public class SpawnCommand extends Command {
         super("spawn");
         this.spawnManager = spawnManager;
 
-        setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.spawn")));
+        //setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.spawn")));
 
         setDefaultExecutor(this::spawn);
 
@@ -48,7 +48,7 @@ public class SpawnCommand extends Command {
             super("setspawn");
             this.spawnManager = spawnManager;
 
-            setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.setspawn")));
+            //setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.setspawn")));
 
             setDefaultExecutor(this::setSpawn);
         }

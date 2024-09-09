@@ -16,16 +16,15 @@ import static cc.davyy.slime.utils.FileUtils.getMessages;
 
 public enum Messages implements ComponentLike {
 
-    RELOAD_CONFIG("messages.configReloaded"),
-    GAMEMODE_SWITCH("messages.gamemodeSwitchSelf"),
-    GAMEMODE_OTHER_CHANGED("messages.gamemodeSwitch"),
-    GAMEMODE_OTHER_MESSAGE("messages.gamemodeSwitchOther"),
-    CANNOT_EXECUTE_FROM_CONSOLE("messages.cannotExecuteFromConsole"),
-    MESSAGE_EMPTY("messages.messageEmpty"),
-    REGION_SETUP("messages.regionSetupStarted"),
-    REGION_SETUP_FIRST("messages.regionSetupRequired"),
-    SPAWN_TELEPORT("messages.spawnTeleport"),
-    SPAWN_SET("messages.spawnSet");
+    RELOAD_CONFIG("messages.reload"),
+    MESSAGE_EMPTY("messages.message-empty"),
+
+    SPAWN_TELEPORT("messages.spawn-teleport"),
+    SPAWN_SET("messages.spawn-set"),
+
+    GAMEMODE_SWITCH("messages.gamemode-switch"),
+    GAMEMODE_SWITCH_OTHER_SELF("messages.gamemode-switch-other-self"),
+    GAMEMODE_SWITCH_OTHER("messages.gamemode-switch-other");
 
     private final String key;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
