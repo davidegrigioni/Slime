@@ -28,21 +28,24 @@ protection:
     message: "<red>test</red>"
 
 # Items
-server-gui-title: "test"
+server-gui-title: "<gradient:#ff007f:#7f00ff>XenooCC Server</gradient>"
+
 compass-item:
-  name: "<red>test</red>"
+  name: "<gradient:#ff4500:#ff7f50>Compass</gradient>"
   lore:
-    - "test"
-    - "test"
+    - "<gradient:#00ff00:#7fff00>Navigate the world</gradient>"
+    - "<gradient:#ffd700:#ff8c00>Explore and discover!</gradient>"
+
 settings-item:
-  name: "<red>Settings</red>"
+  name: "<gradient:#ff4500:#ff7f50>Settings</gradient>"
   lore:
-    - "test"
-    - "test"
+    - "<gradient:#00bfff:#1e90ff>Customize your experience</gradient>"
+    - "<gradient:#ff007f:#7f00ff>Adjust preferences</gradient>"
+
 player-item:
-  name: "<red>player settings</red>"
+  name: "<gradient:#ff4500:#ff7f50>Player Settings</gradient>"
   lore:
-    - "test"
+    - "<gradient:#00ff00:#7fff00>Manage player options</gradient>"
 
 # MOTD
 motd:
@@ -51,15 +54,28 @@ motd:
 
 # Scoreboard
 scoreboard:
-  title: "<red>Test</red>"
+  title: "<gradient:#ff007f:#7f00ff>XenooCC</gradient>"
   lines:
-    - "test"
-    - "test"
-    - "<playercount>"
+    - "<gray><strikethrough>                                                        </strikethrough></gray>"
+    - "<gradient:#ff7f50:#ff4500>Welcome to the Lobby!</gradient>"
+    - "<gradient:#00ff00:#7fff00>Online Players: <playercount></gradient>"
+    - "<gradient:#00bfff:#1e90ff>Your rank: <rank></gradient>"
+    - "<gradient:#ffd700:#ff8c00>Enjoy your stay!</gradient>"
+    - "<gray><strikethrough>                                                        </strikethrough></gray>"
 
 # Header & Footer
-header: "test"
-footer: "test"
+header: "<gradient:#ff007f:#7f00ff>Welcome to XenooCC!</gradient>"
+footer: "<gradient:#00bfff:#1e90ff>Enjoy your stay!</gradient>"
 
 # Broadcast
 broadcast: "<red>[ANNUNCIO]</red> <message>"
+title-settings:
+  fadeIn:
+    value: 2
+    unit: seconds
+  stay:
+    value: 1
+    unit: minutes
+  fadeOut:
+    value: 2
+    unit: seconds

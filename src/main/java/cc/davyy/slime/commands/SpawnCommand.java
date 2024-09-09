@@ -1,9 +1,10 @@
 package cc.davyy.slime.commands;
 
+import cc.davyy.slime.managers.SpawnManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
-import com.asintoto.minestomacr.annotations.AutoRegister;
+import com.google.inject.Inject;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
@@ -13,13 +14,14 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import static cc.davyy.slime.utils.FileUtils.getConfig;
-
-@AutoRegister
 public class SpawnCommand extends Command {
 
-    public SpawnCommand() {
+    private final SpawnManager spawnManager;
+
+    @Inject
+    public SpawnCommand(SpawnManager spawnManager) {
         super("spawn");
+        this.spawnManager = spawnManager;
 
         setCondition(((sender, commandString) -> switch (sender) {
             case SlimePlayer player -> player.hasPermission("slime.spawn");
@@ -29,24 +31,26 @@ public class SpawnCommand extends Command {
 
         setDefaultExecutor(this::spawn);
 
-        addSubcommand(new SetSpawnCommand());
+        addSubcommand(new SetSpawnCommand(spawnManager));
     }
 
     private void spawn(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final Player player = (Player) sender;
-        final String posString = getConfig().getString("spawn.position");
-        final Pos pos = PosUtils.fromString(posString);
 
-        Check.notNull(pos, "Position cannot be null, Check your Config!");
+        final Pos spawnPos = spawnManager.getSpawnPosition();
+        Check.notNull(spawnPos, "Position cannot be null, check your config!");
 
-        player.teleport(pos).thenRun(() -> player.sendMessage(Messages.SPAWN_TELEPORT
-                .asComponent()));
+        spawnManager.teleportToSpawn(player);
     }
 
     private static class SetSpawnCommand extends Command {
 
-        public SetSpawnCommand() {
+        private final SpawnManager spawnManager;
+
+        @Inject
+        public SetSpawnCommand(SpawnManager spawnManager) {
             super("setspawn");
+            this.spawnManager = spawnManager;
 
             setCondition(((sender, commandString) -> switch (sender) {
                 case SlimePlayer player -> player.hasPermission("slime.setspawn");
@@ -61,7 +65,7 @@ public class SpawnCommand extends Command {
             final Player player = (Player) sender;
             final Pos pos = player.getPosition();
 
-            getConfig().set("spawn.position", PosUtils.toString(pos));
+            spawnManager.setSpawnPosition(pos);
             player.sendMessage(Messages.SPAWN_SET
                     .addPlaceholder("pos", PosUtils.toString(pos))
                     .asComponent());

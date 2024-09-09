@@ -27,11 +27,13 @@ public class SlimeLoader {
 
     private static final ComponentLogger LOGGER = ComponentLogger.logger(SlimeLoader.class);
 
+    @Inject private BroadcastManager broadcastManager;
     @Inject private BrandManager brandManager;
     @Inject private LobbyManager lobbyManager;
     @Inject private RegionManager regionManager;
     @Inject private SidebarManager sidebarManager;
     @Inject private HologramManager hologramManager;
+    @Inject private SpawnManager spawnManager;
 
     private NPCManager npcManager;
     private NameTagManager nameTagManager;
@@ -101,12 +103,15 @@ public class SlimeLoader {
         commandManager.register(new DebugCommand(lobbyManager));
         commandManager.register(new NPCCommand(npcManager, nameTagManager));
         commandManager.register(new HologramCommand(hologramManager));
+        commandManager.register(new BroadCastCommand(broadcastManager));
+        commandManager.register(new SpawnCommand(spawnManager));
     }
 
     private void setupShutdownTask() {
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
             String kickMessage = getMessages().getString("messages.kick");
             getOnlinePlayers().forEach(player -> player.kick(of(kickMessage).build()));
+            //MinecraftServer.getInstanceManager().getInstances().forEach(Instance::saveChunksToStorage);
         });
     }
 
