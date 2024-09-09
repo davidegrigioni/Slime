@@ -1,6 +1,5 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.model.Region;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import org.junit.jupiter.api.BeforeEach;

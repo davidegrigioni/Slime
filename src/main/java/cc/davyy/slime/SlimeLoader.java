@@ -33,7 +33,6 @@ public class SlimeLoader {
     @Inject private BroadcastManager broadcastManager;
     @Inject private BrandManager brandManager;
     @Inject private LobbyManager lobbyManager;
-    @Inject private RegionManager regionManager;
     @Inject private SidebarManager sidebarManager;
     @Inject private HologramManager hologramManager;
     @Inject private SpawnManager spawnManager;
@@ -93,7 +92,6 @@ public class SlimeLoader {
         new InventoryListener().init(handler);
         new PlayerChatListener().init(handler);
         new PlayerSpawnListener(nameTagManager, sidebarManager).init(handler);
-        new RegionListener(regionManager).init(handler);
     }
 
     private void injectGuice() {
@@ -104,7 +102,6 @@ public class SlimeLoader {
 
     private void registerCommands() {
         final var commandManager = MinecraftServer.getCommandManager();
-        commandManager.register(new RegionCommand(regionManager));
         commandManager.register(new LobbyCommand(lobbyManager));
         commandManager.register(new DebugCommand(lobbyManager));
         commandManager.register(new NPCCommand(npcManager, nameTagManager));
