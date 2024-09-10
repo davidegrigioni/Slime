@@ -84,6 +84,7 @@ public class SlimeLoader {
         new InventoryListener().init(handler);
         new PlayerChatListener().init(handler);
         new PlayerSpawnListener(sidebarManager).init(handler);
+        new PlayerMoveListener(spawnManager).init(handler);
     }
 
     private void injectGuice() {

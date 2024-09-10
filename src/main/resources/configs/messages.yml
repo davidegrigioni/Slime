@@ -12,3 +12,11 @@ messages:
   gamemode-switch: "<green>Switched GameMode to <gamemode></green>"
   gamemode-switch-other: "<green>Your GameMode has been switched to <gamemode></green>"
   gamemode-switch-other-self: "<green>Switched the GameMode for <target> to <gamemode></green>"
+
+  lobby-not-found: "<red>Lobby not found!</red>"
+  already-in-lobby: "<red>You are already in this lobby!</red>"
+  failed-lobby-teleport: "<red>Failed to teleport. Please try again.</red>"
+  teleport-to-lobby: "<green>Teleported to <lobby></green>"
+  failed-teleport-main-lobby: "<red>Failed to teleport to the main lobby. Please try again.</red>"
+  teleport-to-main-lobby: "<green>Teleported to the main lobby.</green>"
+  already-in-main-lobby: "<red>You are already in the main lobby.</red>"

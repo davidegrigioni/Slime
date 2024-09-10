@@ -4,6 +4,7 @@ import cc.davyy.slime.managers.SpawnManager;
 import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -12,8 +13,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
-
+@Singleton
 public class SpawnCommand extends Command {
 
     private final SpawnManager spawnManager;
@@ -39,6 +39,7 @@ public class SpawnCommand extends Command {
         spawnManager.teleportToSpawn(player);
     }
 
+    @Singleton
     private static class SetSpawnCommand extends Command {
 
         private final SpawnManager spawnManager;

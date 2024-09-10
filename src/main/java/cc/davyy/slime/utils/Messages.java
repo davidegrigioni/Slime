@@ -22,6 +22,14 @@ public enum Messages implements ComponentLike {
     SPAWN_TELEPORT("messages.spawn-teleport"),
     SPAWN_SET("messages.spawn-set"),
 
+    LOBBY_NOT_FOUND("messages.lobby-not-found"),
+    ALREADY_IN_LOBBY("messages.already-in-lobby"),
+    FAILED_LOBBY_TELEPORT("messages.failed-lobby-teleport"),
+    TELEPORT_TO_LOBBY("messages.teleport-to-lobby"),
+    FAILED_TELEPORT_MAIN_LOBBY("messages.failed-teleport-main-lobby"),
+    TELEPORT_TO_MAIN_LOBBY("messages.teleport-to-main-lobby"),
+    ALREADY_IN_MAIN_LOBBY("messages.already-in-main-lobby"),
+
     GAMEMODE_SWITCH("messages.gamemode-switch"),
     GAMEMODE_SWITCH_OTHER_SELF("messages.gamemode-switch-other-self"),
     GAMEMODE_SWITCH_OTHER("messages.gamemode-switch-other");

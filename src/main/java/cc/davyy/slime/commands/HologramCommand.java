@@ -3,6 +3,7 @@ package cc.davyy.slime.commands;
 import cc.davyy.slime.managers.HologramManager;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 
+@Singleton
 public class HologramCommand extends Command {
 
     private final HologramManager hologramManager;
@@ -32,7 +34,7 @@ public class HologramCommand extends Command {
         final SlimePlayer player = (SlimePlayer) sender;
         final String text = context.get(textArg);
 
-        hologramManager.createHologram(player, of(text).build());
+        hologramManager.createHologram(player, of(text).parseLegacy().build());
     }
 
 }

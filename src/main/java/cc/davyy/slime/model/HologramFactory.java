@@ -2,10 +2,12 @@ package cc.davyy.slime.model;
 
 import cc.davyy.slime.entities.HologramEntity;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+@Singleton
 public final class HologramFactory {
 
     @Inject

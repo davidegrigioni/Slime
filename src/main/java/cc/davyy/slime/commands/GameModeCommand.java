@@ -2,6 +2,7 @@ package cc.davyy.slime.commands;
 
 import cc.davyy.slime.managers.GameModeManager;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -18,6 +19,7 @@ import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
 
+@Singleton
 public class GameModeCommand extends Command {
 
     // remember cooldown

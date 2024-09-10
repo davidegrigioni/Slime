@@ -2,9 +2,10 @@ package cc.davyy.slime.managers;
 
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.utils.Messages;
+import cc.davyy.slime.utils.TagConstants;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +16,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static net.minestom.server.MinecraftServer.LOGGER;
+import static cc.davyy.slime.utils.FileUtils.getConfig;
 
 @Singleton
 public class LobbyManager {
@@ -30,11 +31,12 @@ public class LobbyManager {
      * Initializes the LobbyManager and creates a primary InstanceContainer for the lobbies.
      */
     public LobbyManager() {
-        InstanceManager instanceManager = MinecraftServer.getInstanceManager();
+        final InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         this.mainLobbyContainer = instanceManager.createInstanceContainer();
         this.mainLobbyContainer.setChunkLoader(IChunkLoader.noop());
         this.mainLobbyContainer.setChunkSupplier(LightingChunk::new);
         this.mainLobbyContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 20, Block.GRASS_BLOCK));
+        this.mainLobbyContainer.setTag(TagConstants.DEATH_Y, getConfig().getInt("deathY"));
     }
 
     /**
@@ -51,6 +53,11 @@ public class LobbyManager {
 
         Lobby lobby = new Lobby(lobbyID, lobbyName, sharedInstance);
         lobbies.put(lobbyID, lobby);
+
+        sharedInstance.setTag(TagConstants.LOBBY_NAME_TAG, lobbyName);
+        sharedInstance.setTag(TagConstants.LOBBY_ID_TAG, lobbyID);
+        sharedInstance.setTag(TagConstants.DEATH_Y, getConfig().getInt("deathY"));
+
         return lobby;
     }
 
@@ -59,7 +66,7 @@ public class LobbyManager {
      *
      * @return The main lobby InstanceContainer.
      */
-    public InstanceContainer getMainLobbyContainer() { return mainLobbyContainer; }
+    public @NotNull InstanceContainer getMainLobbyContainer() { return mainLobbyContainer; }
 
     /**
      * Checks if the given instance is the main instance.
@@ -77,16 +84,15 @@ public class LobbyManager {
      * @param player The player to teleport.
      * @param lobbyID The id of the lobby to teleport to.
      */
-    public void teleportPlayerToLobby(@NotNull Player player, int lobbyID) {
+    public void teleportPlayerToLobby(@NotNull SlimePlayer player, int lobbyID) {
         if (lobbyID == 0) {
             if (player.getInstance() == mainLobbyContainer) {
-                player.sendMessage("You are already in the main lobby!");
+                player.sendMessage(Messages.ALREADY_IN_MAIN_LOBBY.asComponent());
                 return;
             }
-            player.setInstance(mainLobbyContainer).thenRun(() -> player.sendMessage("Teleported to the main lobby."))
+            player.setInstance(mainLobbyContainer).thenRun(() -> player.sendMessage(Messages.TELEPORT_TO_MAIN_LOBBY.asComponent()))
                     .exceptionally(ex -> {
-                        LOGGER.error("Failed to teleport player to the main lobby", ex);
-                        player.sendMessage("Failed to teleport to the main lobby. Please try again.");
+                        player.sendMessage(Messages.FAILED_TELEPORT_MAIN_LOBBY.asComponent());
                         return null;
                     });
             return;
@@ -95,21 +101,24 @@ public class LobbyManager {
         final Lobby lobby = lobbies.get(lobbyID);
 
         if (lobby == null) {
-            LOGGER.error("Lobby {} not found!", lobbyID);
-            player.sendMessage("Lobby not found!");
+            player.sendMessage(Messages.LOBBY_NOT_FOUND.asComponent());
             return;
         }
 
         if (player.getInstance() == lobby.sharedInstance()) {
-            player.sendMessage("You are already in this lobby!");
+            player.sendMessage(Messages.ALREADY_IN_LOBBY.asComponent());
             return;
         }
 
         player.setInstance(lobby.sharedInstance())
-                .thenRun(() -> player.sendMessage("Teleported to " + lobbyID))
+                .thenRun(() -> {
+                    player.setTag(TagConstants.PLAYER_LOBBY_ID_TAG, lobbyID);
+                    player.sendMessage(Messages.TELEPORT_TO_LOBBY
+                            .addPlaceholder("lobby", lobby.name())
+                            .asComponent());
+                })
                 .exceptionally(ex -> {
-                    LOGGER.error("Failed to teleport player to lobby {}", lobbyID, ex);
-                    player.sendMessage("Failed to teleport. Please try again.");
+                    player.sendMessage(Messages.FAILED_LOBBY_TELEPORT.asComponent());
                     return null;
                 });
     }
@@ -119,7 +128,7 @@ public class LobbyManager {
      *
      * @return a collection of lobby ids.
      */
-    public Collection<Integer> getAllLobbiesID() { return new ArrayList<>(lobbies.keySet()); }
+    public @NotNull Collection<Integer> getAllLobbiesID() { return new ArrayList<>(lobbies.keySet()); }
 
     /**
      * Gets the lobby where the player currently is.
@@ -128,20 +137,13 @@ public class LobbyManager {
      * @return The Lobby where the player is, or null if not in a lobby.
      */
     public Lobby getLobbyByPlayer(@NotNull SlimePlayer player) {
-        Instance playerInstance = player.getInstance();
-        if (playerInstance == null) {
-            LOGGER.error("Player's instance is null for player {}", player.getUsername());
+        Integer lobbyID = player.getTag(TagConstants.PLAYER_LOBBY_ID_TAG);
+
+        if (lobbyID == null) {
             return null;
         }
 
-        if (isMainInstance(playerInstance)) {
-            return null;
-        }
-
-        return lobbies.values().stream()
-                .filter(lobby -> lobby.sharedInstance().equals(playerInstance))
-                .findFirst()
-                .orElse(null);
+        return lobbies.get(lobbyID);
     }
 
 }

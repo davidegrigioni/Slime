@@ -40,7 +40,7 @@ test {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21)) // Minestom has a minimum Java version of 21
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -54,8 +54,10 @@ tasks {
     build {
         dependsOn(shadowJar)
     }
+
     shadowJar {
         mergeServiceFiles()
-        archiveClassifier.set("") // Prevent the -all suffix on the shadowjar file.
+        archiveClassifier.set("")
     }
+
 }

@@ -32,9 +32,4 @@ public class GameModeManager {
         return player.getGameMode();
     }
 
-    public void resetGameMode(@NotNull Player player) {
-        setGameMode(player, GameMode.SURVIVAL);
-        player.sendMessage("Your game mode has been reset to Survival.");
-    }
-
 }

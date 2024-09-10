@@ -87,3 +87,6 @@ title-settings:
   fadeOut:
     value: 2
     unit: seconds
+
+# MISC
+deathY: 20

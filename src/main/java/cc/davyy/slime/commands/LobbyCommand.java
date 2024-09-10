@@ -4,6 +4,7 @@ import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.command.CommandSender;
@@ -18,6 +19,7 @@ import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
 
+@Singleton
 public class LobbyCommand extends Command {
 
     private final LobbyManager lobbyManager;
