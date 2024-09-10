@@ -12,4 +12,7 @@ public final class TagConstants {
     // Player-specific tags for lobbies
     public static final Tag<Integer> PLAYER_LOBBY_ID_TAG = Tag.Integer("player-lobby-id");
 
+    // Hologram Tags
+    public static final Tag<Integer> HOLOGRAM_ID_TAG = Tag.Integer("hologram-id");
+
 }

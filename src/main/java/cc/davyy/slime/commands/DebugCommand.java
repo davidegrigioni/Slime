@@ -1,9 +1,14 @@
 package cc.davyy.slime.commands;
 
 import cc.davyy.slime.gui.ServerGUI;
+import cc.davyy.slime.managers.BossBarManager;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.SidebarManager;
+import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -20,12 +25,14 @@ import static cc.davyy.slime.utils.FileUtils.getConfig;
 // TODO: Remove this command
 public class DebugCommand extends Command {
 
+    private final BossBarManager bossBarManager;
     private final SidebarManager sidebarManager;
     private final LobbyManager lobbyManager;
 
     @Inject
-    public DebugCommand(SidebarManager sidebarManager, LobbyManager lobbyManager) {
+    public DebugCommand(BossBarManager bossBarManager, SidebarManager sidebarManager, LobbyManager lobbyManager) {
         super("debug");
+        this.bossBarManager = bossBarManager;
         this.sidebarManager = sidebarManager;
         this.lobbyManager = lobbyManager;
 
@@ -36,6 +43,8 @@ public class DebugCommand extends Command {
         addSyntax(this::checkAnimationStatus, ArgumentType.Literal("animationstatus"));
         addSyntax(this::listAnimationStyles, ArgumentType.Literal("animationstyles"));
         addSyntax(this::removeSidebar, ArgumentType.Literal("rsidebar"));
+        addSyntax(this::showBossBar, ArgumentType.Literal("show"));
+        addSyntax(this::hideBossBar, ArgumentType.Literal("hide"));
     }
 
     private void removeSidebar(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -78,6 +87,25 @@ public class DebugCommand extends Command {
         final Player player = (Player) sender;
         Collection<String> styles = getConfig().getStringList("branding.animation-styles");
         player.sendMessage(of("Animation Styles: " + String.join(", ", styles)).parseLegacy().build());
+    }
+
+    private void showBossBar(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        if (!(sender instanceof SlimePlayer player)) {
+            sender.sendMessage("Only players can execute this command.");
+            return;
+        }
+
+        Component title = Component.text("Example Boss Bar").color(TextColor.color(255, 0, 0));
+        bossBarManager.createBossBar(player, title, 1.0f, BossBar.Color.RED, BossBar.Overlay.PROGRESS);
+    }
+
+    private void hideBossBar(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        if (!(sender instanceof SlimePlayer player)) {
+            sender.sendMessage("Only players can execute this command.");
+            return;
+        }
+
+        bossBarManager.removeBossBar(player);
     }
 
 }

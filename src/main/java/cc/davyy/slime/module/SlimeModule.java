@@ -5,6 +5,8 @@ import cc.davyy.slime.commands.*;
 import cc.davyy.slime.managers.*;
 import cc.davyy.slime.model.HologramFactory;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 
 public class SlimeModule extends AbstractModule {
 
@@ -18,6 +20,8 @@ public class SlimeModule extends AbstractModule {
     protected void configure() {
         bind(SlimeLoader.class).toInstance(instance);
 
+        // Manager Binding
+        bind(BossBarManager.class);
         bind(BrandManager.class);
         bind(LobbyManager.class);
         bind(SidebarManager.class);
@@ -26,8 +30,7 @@ public class SlimeModule extends AbstractModule {
         bind(SpawnManager.class);
         bind(GameModeManager.class);
 
-        bind(HologramFactory.class);
-
+        // Command Binding
         bind(BroadCastCommand.class);
         bind(ConfigReloadCommand.class);
         bind(DebugCommand.class);
@@ -38,6 +41,12 @@ public class SlimeModule extends AbstractModule {
         bind(NPCCommand.class);
         bind(SpawnCommand.class);
         bind(StopCommand.class);
+    }
+
+    @Provides
+    @Singleton
+    public HologramFactory provideHologramFactory() {
+        return new HologramFactory();
     }
 
 }

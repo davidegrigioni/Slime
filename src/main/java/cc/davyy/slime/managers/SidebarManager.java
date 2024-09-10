@@ -59,14 +59,15 @@ public class SidebarManager {
                         .parseMMP("rank", player.getPrefix())
                         .parseMMP("playercount", String.valueOf(onlinePlayersSize))
                         .build());
-            } else {
-                sidebar.createLine(new Sidebar.ScoreboardLine(lineId,
-                        of(text)
-                                .parseMMP("lobby", lobbyName)
-                                .parseMMP("rank", player.getPrefix())
-                                .parseMMP("playercount", String.valueOf(onlinePlayersSize))
-                                .build(), score, Sidebar.NumberFormat.blank()));
+                return;
             }
+
+            sidebar.createLine(new Sidebar.ScoreboardLine(lineId,
+                    of(text)
+                            .parseMMP("lobby", lobbyName)
+                            .parseMMP("rank", player.getPrefix())
+                            .parseMMP("playercount", String.valueOf(onlinePlayersSize))
+                            .build(), score, Sidebar.NumberFormat.blank()));
         }
     }
 
@@ -83,9 +84,8 @@ public class SidebarManager {
     }
 
     public void removeSidebar(@NotNull Player player) {
-        final Sidebar sidebar = sidebarMap.get(player.getUuid());
+        final Sidebar sidebar = sidebarMap.remove(player.getUuid());
         if (sidebar != null) {
-            sidebarMap.remove(player.getUuid());
             sidebar.removeViewer(player);
         }
     }
