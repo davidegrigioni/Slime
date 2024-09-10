@@ -14,6 +14,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
+import static cc.davyy.slime.utils.FileUtils.getConfig;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -91,6 +92,20 @@ public final class SlimePlayer extends Player {
         String prefix = this.getLuckPermsMetaData().getPrefix();
         if (prefix == null) return Component.empty();
         return of(prefix).parseLegacy().build();
+    }
+
+    public @NotNull Component getChatFormat(@NotNull String message) {
+        final CachedMetaData metaData = this.getLuckPermsMetaData();
+        final String group = metaData.getPrimaryGroup();
+        final String format = getConfig().getString(getConfig().getString("group-formats." + group) != null ? "group-formats." + group : "chat-format");
+
+        return of(format)
+                .parseMMP("prefix", metaData.getPrefix() != null ? metaData.getPrefix() : "")
+                .parseMMP("message", message)
+                .parseMMP("name", this.getName())
+                .parseMMP("username-color", metaData.getMetaValue("username-color") != null ? metaData.getMetaValue("username-color") : "")
+                .parseMMP("message-color", metaData.getMetaValue("message-color") != null ? metaData.getMetaValue("message-color") : "")
+                .build();
     }
 
 }

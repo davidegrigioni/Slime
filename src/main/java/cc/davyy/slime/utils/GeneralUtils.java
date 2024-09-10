@@ -32,8 +32,11 @@ public final class GeneralUtils {
         return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 
-    public static Collection<Player> getOnlinePlayers() {
-        return MinecraftServer.getConnectionManager().getOnlinePlayers();
+    public static Collection<SlimePlayer> getOnlineSlimePlayers() {
+        return MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
+                .filter(player -> player instanceof SlimePlayer)
+                .map(player -> (SlimePlayer) player)
+                .toList();
     }
 
     public static TranslatableComponent translateComponent(@NotNull String key) {

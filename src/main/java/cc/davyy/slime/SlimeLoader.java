@@ -18,7 +18,7 @@ import java.util.Optional;
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.*;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
-import static cc.davyy.slime.utils.GeneralUtils.getOnlinePlayers;
+import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 
 public class SlimeLoader {
 
@@ -106,7 +106,7 @@ public class SlimeLoader {
     private void setupShutdownTask() {
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
             final String kickMessage = getMessages().getString("messages.kick");
-            getOnlinePlayers().forEach(player -> player.kick(of(kickMessage).build()));
+            getOnlineSlimePlayers().forEach(player -> player.kick(of(kickMessage).build()));
             //MinecraftServer.getInstanceManager().getInstances().forEach(Instance::saveChunksToStorage);
         });
     }

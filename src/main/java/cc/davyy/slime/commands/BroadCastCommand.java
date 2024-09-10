@@ -13,7 +13,7 @@ import net.minestom.server.command.builder.arguments.ArgumentStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import org.jetbrains.annotations.NotNull;
 
-import static cc.davyy.slime.utils.GeneralUtils.getOnlinePlayers;
+import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
@@ -67,7 +67,7 @@ public class BroadCastCommand extends Command {
         final SlimePlayer player = (SlimePlayer) sender;
         final String message = context.get(titleArg);
 
-        broadcastManager.broadcastTitle(player, message, getOnlinePlayers());
+        broadcastManager.broadcastTitle(player, message, getOnlineSlimePlayers());
     }
 
     private void executeBroadcastTitleSub(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -75,7 +75,7 @@ public class BroadCastCommand extends Command {
         final String message = context.get(titleArg);
         final String subTitle = context.get(subTitleArg);
 
-        broadcastManager.broadcastTitle(player, message, subTitle, getOnlinePlayers());
+        broadcastManager.broadcastTitle(player, message, subTitle, getOnlineSlimePlayers());
     }
 
     private void executeBroadcastTitleSubTime(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -83,7 +83,7 @@ public class BroadCastCommand extends Command {
         final String message = context.get(titleArg);
         final String subTitle = context.get(subTitleArg);
 
-        broadcastManager.broadcastTitleWithTimes(player, message, subTitle, getOnlinePlayers());
+        broadcastManager.broadcastTitleWithTimes(player, message, subTitle, getOnlineSlimePlayers());
     }
 
 }

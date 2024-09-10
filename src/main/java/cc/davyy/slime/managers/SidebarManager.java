@@ -1,6 +1,7 @@
 package cc.davyy.slime.managers;
 
 import cc.davyy.slime.model.Lobby;
+import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.ColorUtils.of;
-import static cc.davyy.slime.utils.GeneralUtils.getOnlinePlayers;
+import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 
 @Singleton
 public class SidebarManager {
@@ -46,21 +47,23 @@ public class SidebarManager {
 
     private void updateOrAddLine(@NotNull String text, int score) {
         final String lineId = "line-" + score;
-        final var onlinePlayersSize = getOnlinePlayers().size();
+        final var onlinePlayersSize = getOnlineSlimePlayers().size();
 
-        for (Player player : getOnlinePlayers()) {
+        for (SlimePlayer player : getOnlineSlimePlayers()) {
             final Lobby playerLobby = lobbyManager.getLobbyByPlayer(player);
             final String lobbyName = playerLobby != null ? playerLobby.name() : "Main Lobby";
 
             if (sidebar.getLine(lineId) != null) {
                 sidebar.updateLineContent(lineId, of(text)
                         .parseMMP("lobby", lobbyName)
+                        .parseMMP("rank", player.getPrefix())
                         .parseMMP("playercount", String.valueOf(onlinePlayersSize))
                         .build());
             } else {
                 sidebar.createLine(new Sidebar.ScoreboardLine(lineId,
                         of(text)
                                 .parseMMP("lobby", lobbyName)
+                                .parseMMP("rank", player.getPrefix())
                                 .parseMMP("playercount", String.valueOf(onlinePlayersSize))
                                 .build(), score, Sidebar.NumberFormat.blank()));
             }

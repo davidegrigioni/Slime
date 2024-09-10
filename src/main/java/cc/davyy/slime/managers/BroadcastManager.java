@@ -1,11 +1,11 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -33,7 +33,7 @@ public class BroadcastManager {
                 .build());
     }
 
-    public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull Collection<Player> players) {
+    public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull Collection<SlimePlayer> players) {
         if (titleText.isEmpty()) {
             sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
             return;
@@ -43,7 +43,7 @@ public class BroadcastManager {
         players.forEach(player -> player.showTitle(title));
     }
 
-    public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<Player> players) {
+    public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<SlimePlayer> players) {
         if (titleText.isEmpty()) {
             sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
             return;
@@ -53,7 +53,7 @@ public class BroadcastManager {
         players.forEach(player -> player.showTitle(title));
     }
 
-    public void broadcastTitleWithTimes(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<Player> players) {
+    public void broadcastTitleWithTimes(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<SlimePlayer> players) {
         if (titleText.isEmpty()) {
             sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
             return;

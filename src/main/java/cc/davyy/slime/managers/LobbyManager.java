@@ -1,6 +1,7 @@
 package cc.davyy.slime.managers;
 
 import cc.davyy.slime.model.Lobby;
+import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
@@ -126,22 +127,21 @@ public class LobbyManager {
      * @param player The player whose lobby needs to be found.
      * @return The Lobby where the player is, or null if not in a lobby.
      */
-    public Lobby getLobbyByPlayer(@NotNull Player player) {
+    public Lobby getLobbyByPlayer(@NotNull SlimePlayer player) {
         Instance playerInstance = player.getInstance();
         if (playerInstance == null) {
-            // Handle the null case, maybe return a default lobby or log an error
             LOGGER.error("Player's instance is null for player {}", player.getUsername());
             return null;
         }
 
         if (isMainInstance(playerInstance)) {
-            return null; // Player is in the main lobby, no specific lobby assigned
+            return null;
         }
 
         return lobbies.values().stream()
                 .filter(lobby -> lobby.sharedInstance().equals(playerInstance))
                 .findFirst()
-                .orElse(null); // Return null if no lobby matches
+                .orElse(null);
     }
 
 }

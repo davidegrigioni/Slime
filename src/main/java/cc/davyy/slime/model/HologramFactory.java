@@ -12,7 +12,7 @@ public final class HologramFactory {
     public HologramFactory() {}
 
     public HologramEntity createHologramEntity(@NotNull Player player, @NotNull Component text) {
-        var hologramPosition = player.getPosition().withY(player.getPosition().y() + 2);
+        var hologramPosition = player.getPosition().withY(player.getPosition().y() + 1.5);
         return new HologramEntity(text, player.getInstance(), hologramPosition);
     }
 
