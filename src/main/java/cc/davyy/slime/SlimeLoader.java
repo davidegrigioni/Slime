@@ -3,8 +3,6 @@ package cc.davyy.slime;
 import cc.davyy.slime.commands.*;
 import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.*;
-import cc.davyy.slime.entities.NPCManager;
-import cc.davyy.slime.managers.npc.NameTagManager;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
 import com.asintoto.minestomacr.MinestomACR;
@@ -14,10 +12,6 @@ import com.google.inject.Injector;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.velocity.VelocityProxy;
-import net.minestom.server.network.packet.server.play.TeamsPacket;
-import net.minestom.server.scoreboard.Team;
-import net.minestom.server.scoreboard.TeamBuilder;
-import net.minestom.server.scoreboard.TeamManager;
 
 import java.util.Optional;
 
@@ -38,8 +32,13 @@ public class SlimeLoader {
     @Inject private SpawnManager spawnManager;
     @Inject private GameModeManager gameModeManager;
 
-    private NPCManager npcManager;
-    private NameTagManager nameTagManager;
+    @Inject private BroadCastCommand broadcastCommand;
+    @Inject private DebugCommand debugCommand;
+    @Inject private GameModeCommand gameModeCommand;
+    @Inject private HologramCommand hologramCommand;
+    @Inject private LobbyCommand lobbyCommand;
+    @Inject private NPCCommand npcCommand;
+    @Inject private SpawnCommand spawnCommand;
 
     public void start() {
         LOGGER.info("Initializing Minecraft Server...");
@@ -72,13 +71,6 @@ public class SlimeLoader {
     private void registerListeners() {
         final var handler = MinecraftServer.getGlobalEventHandler();
 
-        npcManager = new NPCManager(handler);
-        final TeamManager teamManager = MinecraftServer.getTeamManager();
-        final Team nameTagTeam = new TeamBuilder("name-tags", teamManager)
-                .collisionRule(TeamsPacket.CollisionRule.NEVER)
-                .build();
-        nameTagManager = new NameTagManager(handler, entity -> nameTagTeam);
-
         /*handler.addListener(PlayerFlagEvent.class, e ->
                 e.player().sendMessage(Component
                         .text("You have been flagged for " + e.checkName() + " with a certainty of " + e.certainty())
@@ -91,7 +83,7 @@ public class SlimeLoader {
         new AsyncPlayerConfigurationListener(lobbyManager).init(handler);
         new InventoryListener().init(handler);
         new PlayerChatListener().init(handler);
-        new PlayerSpawnListener(nameTagManager, sidebarManager).init(handler);
+        new PlayerSpawnListener(sidebarManager).init(handler);
     }
 
     private void injectGuice() {
@@ -102,13 +94,13 @@ public class SlimeLoader {
 
     private void registerCommands() {
         final var commandManager = MinecraftServer.getCommandManager();
-        commandManager.register(new LobbyCommand(lobbyManager));
-        commandManager.register(new DebugCommand(sidebarManager, lobbyManager));
-        commandManager.register(new NPCCommand(npcManager, nameTagManager));
-        commandManager.register(new HologramCommand(hologramManager));
-        commandManager.register(new BroadCastCommand(broadcastManager));
-        commandManager.register(new SpawnCommand(spawnManager));
-        commandManager.register(new GameModeCommand(gameModeManager));
+        commandManager.register(broadcastCommand);
+        commandManager.register(debugCommand);
+        commandManager.register(gameModeCommand);
+        commandManager.register(hologramCommand);
+        commandManager.register(lobbyCommand);
+        commandManager.register(npcCommand);
+        commandManager.register(spawnCommand);
     }
 
     private void setupShutdownTask() {
