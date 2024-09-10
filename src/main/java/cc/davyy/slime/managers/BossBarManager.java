@@ -25,7 +25,7 @@ public class BossBarManager {
      * @param overlay the overlay type of the boss bar
      */
     public void createBossBar(@NotNull SlimePlayer player, @NotNull Component title, float progress, @NotNull BossBar.Color color, @NotNull BossBar.Overlay overlay) {
-        BossBar bossBar = BossBar.bossBar(title, progress, color, overlay);
+        final BossBar bossBar = BossBar.bossBar(title, progress, color, overlay);
         player.showBossBar(bossBar);
         playerBossBars.put(player.getUuid(), bossBar);
     }
@@ -38,7 +38,7 @@ public class BossBarManager {
      * @param progress the new progress (between 0.0 and 1.0)
      */
     public void updateBossBar(@NotNull SlimePlayer player, @NotNull Component title, float progress) {
-        BossBar bossBar = playerBossBars.get(player.getUuid());
+        final BossBar bossBar = playerBossBars.get(player.getUuid());
         if (bossBar != null) {
             BossBar updatedBossBar = bossBar.name(title).progress(progress);
             player.showBossBar(updatedBossBar);
@@ -51,10 +51,12 @@ public class BossBarManager {
      * @param player the player to remove the boss bar from
      */
     public void removeBossBar(@NotNull SlimePlayer player) {
-        BossBar bossBar = playerBossBars.remove(player.getUuid());
+        final BossBar bossBar = playerBossBars.remove(player.getUuid());
         if (bossBar != null) {
             player.hideBossBar(bossBar);
         }
     }
+
+    public Map<UUID, BossBar> getPlayerBossBars() { return playerBossBars; }
 
 }

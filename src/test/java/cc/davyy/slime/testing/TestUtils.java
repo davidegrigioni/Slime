@@ -1,4 +1,4 @@
-package cc.davyy.slime.utils;
+package cc.davyy.slime.testing;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.TagStringIOExt;
