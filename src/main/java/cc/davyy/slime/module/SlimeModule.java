@@ -21,6 +21,7 @@ public class SlimeModule extends AbstractModule {
         bind(SlimeLoader.class).toInstance(instance);
 
         // Manager Binding
+        bind(DisguiseManager.class);
         bind(BossBarManager.class);
         bind(BrandManager.class);
         bind(LobbyManager.class);

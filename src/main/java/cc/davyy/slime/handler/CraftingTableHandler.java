@@ -1,6 +1,5 @@
 package cc.davyy.slime.handler;
 
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;

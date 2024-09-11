@@ -2,6 +2,7 @@ package cc.davyy.slime.commands;
 
 import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.managers.BossBarManager;
+import cc.davyy.slime.managers.DisguiseManager;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.SidebarManager;
 import cc.davyy.slime.model.SlimePlayer;
@@ -13,7 +14,11 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,13 +33,17 @@ public class DebugCommand extends Command {
     private final BossBarManager bossBarManager;
     private final SidebarManager sidebarManager;
     private final LobbyManager lobbyManager;
+    private final DisguiseManager disguiseManager;
+
+    private final ArgumentEntityType entityTypeArgumentEnum = ArgumentType.EntityType("type");
 
     @Inject
-    public DebugCommand(BossBarManager bossBarManager, SidebarManager sidebarManager, LobbyManager lobbyManager) {
+    public DebugCommand(BossBarManager bossBarManager, SidebarManager sidebarManager, LobbyManager lobbyManager, DisguiseManager disguiseManager) {
         super("debug");
         this.bossBarManager = bossBarManager;
         this.sidebarManager = sidebarManager;
         this.lobbyManager = lobbyManager;
+        this.disguiseManager = disguiseManager;
 
         addSyntax(this::execute, ArgumentType.Literal("brandname"));
         addSyntax(this::executeInstances, ArgumentType.Literal("instances"));
@@ -45,6 +54,16 @@ public class DebugCommand extends Command {
         addSyntax(this::removeSidebar, ArgumentType.Literal("rsidebar"));
         addSyntax(this::showBossBar, ArgumentType.Literal("show"));
         addSyntax(this::hideBossBar, ArgumentType.Literal("hide"));
+        addSyntax(this::tryDisguise, ArgumentType.Literal("disguise"), entityTypeArgumentEnum);
+    }
+
+    private void tryDisguise(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final SlimePlayer player = (SlimePlayer) sender;
+        final EntityType type = context.get(entityTypeArgumentEnum);
+
+        player.switchEntityType(type);
+
+        player.sendMessage("set disguise to " + type.name());
     }
 
     private void removeSidebar(@NotNull CommandSender sender, @NotNull CommandContext context) {

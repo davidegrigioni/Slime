@@ -6,6 +6,8 @@ import com.google.inject.Inject;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.network.packet.server.common.ServerLinksPacket;
+import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.JoinUtils.applyJoinKit;
@@ -23,13 +25,10 @@ public class PlayerSpawnListener {
     public void init(GlobalEventHandler handler) {
         handler.addListener(PlayerSpawnEvent.class, event -> {
             final SlimePlayer player = (SlimePlayer) event.getPlayer();
-            final String header = getConfig().getString("header");
-            final String footer = getConfig().getString("footer");
 
-            player.sendPlayerListHeaderAndFooter(
-                    of(header).build(),
-                    of(footer).build()
-            );
+            sendHeaderFooter(player);
+
+            createServerLinks(player);
 
             sidebarManager.showSidebar(player);
 
@@ -40,6 +39,28 @@ public class PlayerSpawnListener {
 
             sidebarManager.removeSidebar(player);
         });
+    }
+
+    private void createServerLinks(@NotNull SlimePlayer player) {
+        final String newsLink = getConfig().getString("news-link");
+        final String bugsReportLink = getConfig().getString("bugs-report-link");
+        final String announcementLink = getConfig().getString("announcement-link");
+
+        player.sendPacket(new ServerLinksPacket(
+                new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.NEWS, newsLink),
+                new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.ANNOUNCEMENTS, announcementLink),
+                new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.BUG_REPORT, bugsReportLink)
+        ));
+    }
+
+    private void sendHeaderFooter(@NotNull SlimePlayer player) {
+        final String header = getConfig().getString("header");
+        final String footer = getConfig().getString("footer");
+
+        player.sendPlayerListHeaderAndFooter(
+                of(header).build(),
+                of(footer).build()
+        );
     }
 
 }

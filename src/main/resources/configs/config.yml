@@ -75,6 +75,11 @@ group-formats:
   default: "<name>: <message>"
   owner: "<prefix> <red><name><grey> >></grey> <dark_red><message>"
 
+# Server Links
+news-link: "test"
+bugs-report-link: "test"
+announcement-link: "test"
+
 # Broadcast
 broadcast: "<red>[ANNUNCIO]</red> <message>"
 title-settings:
