@@ -1,16 +1,17 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.utils.ColorUtils;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
+import static cc.davyy.slime.utils.ColorUtils.of;
 
 /**
  * Manages and animates the server's brand name.
@@ -79,7 +80,7 @@ public class BrandManager {
      */
     public void startAnimation() {
         MinecraftServer.getSchedulerManager().buildTask(this::updateBrandName)
-                .repeat(animationInterval, TimeUnit.MILLISECONDS.toChronoUnit())
+                .repeat(Duration.of(animationInterval, TimeUnit.SECONDS.toChronoUnit()))
                 .schedule();
     }
 
@@ -98,10 +99,12 @@ public class BrandManager {
         try {
             final String brandName = brandNameStyles.get(currentIndex);
 
-            final Component component = ColorUtils.of(brandName).build();
-            final String legacyBrandName = LegacyComponentSerializer.legacyAmpersand().serialize(component);
+            final Component brandComponent = of(brandName)
+                    .parseLegacy()
+                    .build();
+            final String serializedBrandComponent = GsonComponentSerializer.gson().serialize(brandComponent);
 
-            MinecraftServer.setBrandName(legacyBrandName);
+            MinecraftServer.setBrandName(serializedBrandComponent);
 
             currentIndex = (currentIndex + 1) % brandNameStyles.size();
         } catch (Exception ex) {
@@ -114,9 +117,12 @@ public class BrandManager {
      */
     private void setDefaultBrandName() {
         try {
-            final Component component = ColorUtils.of(defaultBrandName).parseLegacy().build();
-            final String legacyBrandName = LegacyComponentSerializer.legacyAmpersand().serialize(component);
-            MinecraftServer.setBrandName(legacyBrandName);
+            final Component brandComponent = of(defaultBrandName)
+                    .parseLegacy()
+                    .build();
+            final String serializedBrandComponent = GsonComponentSerializer.gson().serialize(brandComponent);
+
+            MinecraftServer.setBrandName(serializedBrandComponent);
 
             LOGGER.info("Animation disabled, setting default brand name: {}", defaultBrandName);
         } catch (Exception ex) {

@@ -6,12 +6,14 @@ import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.*;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
-import com.asintoto.minestomacr.MinestomACR;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.event.player.PlayerSwapItemEvent;
+import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.utils.NamespaceID;
 
@@ -41,6 +43,11 @@ public class SlimeLoader {
     @Inject private LobbyCommand lobbyCommand;
     @Inject private NPCCommand npcCommand;
     @Inject private SpawnCommand spawnCommand;
+    @Inject private TeleportCommand teleportCommand;
+    @Inject private ConfigReloadCommand configReloadCommand;
+    @Inject private ListCommandsCommand listCommandsCommand;
+    @Inject private SocialCommand socialCommand;
+    @Inject private StopCommand stopCommand;
 
     public void start() {
         LOGGER.info("Initializing Minecraft Server...");
@@ -56,9 +63,6 @@ public class SlimeLoader {
         LOGGER.info("Setting up console...");
         ConsoleUtils.setupConsole();
 
-        LOGGER.info("Initializing MinestomACR...");
-        MinestomACR.init();
-
         LOGGER.info("Registering commands...");
         registerCommands();
 
@@ -67,6 +71,7 @@ public class SlimeLoader {
 
         MinecraftServer.getBlockManager().registerHandler(NamespaceID.from("minecraft:craft"), CraftingTableHandler::new);
 
+        MojangAuth.init();
         //handleVelocityProxy();
 
         startServer(minecraftServer);
@@ -74,6 +79,27 @@ public class SlimeLoader {
 
     private void registerListeners() {
         final var handler = MinecraftServer.getGlobalEventHandler();
+
+        handler.addListener(PlayerBlockBreakEvent.class, event -> {
+            final boolean blockBreakEnabled = getConfig().getBoolean("protection.disable-build-protection");
+            final boolean messageEnabled = getConfig().getBoolean("protection.block-break-message.enable");
+
+            if (blockBreakEnabled) {
+                event.setCancelled(true);
+
+                if (messageEnabled) {
+                    final String message = getConfig().getString("protection.block-break-message.message");
+
+                    if (message != null && !message.isEmpty()) {
+                        event.getPlayer().sendMessage(of(message).build());
+                        return;
+                    }
+
+                    LOGGER.warn("Block break message is not configured properly.");
+                }
+            }
+        });
+        handler.addListener(PlayerSwapItemEvent.class, event -> event.setCancelled(true));
 
         /*handler.addListener(PlayerFlagEvent.class, e ->
                 e.player().sendMessage(Component
@@ -89,6 +115,7 @@ public class SlimeLoader {
         new PlayerChatListener().init(handler);
         new PlayerSpawnListener(sidebarManager).init(handler);
         new PlayerMoveListener(spawnManager).init(handler);
+        new PlayerInteractListener();
     }
 
     private void injectGuice() {
@@ -106,6 +133,11 @@ public class SlimeLoader {
         commandManager.register(lobbyCommand);
         commandManager.register(npcCommand);
         commandManager.register(spawnCommand);
+        commandManager.register(teleportCommand);
+        commandManager.register(configReloadCommand);
+        commandManager.register(listCommandsCommand);
+        commandManager.register(socialCommand);
+        commandManager.register(stopCommand);
     }
 
     private void setupShutdownTask() {

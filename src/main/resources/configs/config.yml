@@ -8,9 +8,9 @@ velocity-secret: "test"
 
 # Branding information
 branding:
-  brand-name: "<red>Powered by SLIME</red>"
+  brand-name: "&cPowered by SLIME"
   animate: false
-  animation-interval: 2
+  animation-interval: 20
   animation-styles:
     - "&c&lWelcome to &r&bSLIME"
     - "&a&lEnjoy &r&bSLIME"
@@ -95,3 +95,4 @@ title-settings:
 
 # MISC
 deathY: 20
+teleport-cooldown: 10

@@ -33,8 +33,8 @@ public class LobbyManager {
     public LobbyManager() {
         final InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         this.mainLobbyContainer = instanceManager.createInstanceContainer();
-        this.mainLobbyContainer.setChunkLoader(IChunkLoader.noop());
         this.mainLobbyContainer.setChunkSupplier(LightingChunk::new);
+        this.mainLobbyContainer.setChunkLoader(IChunkLoader.noop());
         this.mainLobbyContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 20, Block.GRASS_BLOCK));
         this.mainLobbyContainer.setTag(TagConstants.DEATH_Y, getConfig().getInt("deathY"));
     }
@@ -47,6 +47,7 @@ public class LobbyManager {
     public Lobby createNewLobby() {
         final String lobbyName = "Lobby " + lobbyCounter.getAndIncrement();
         final int lobbyID = lobbyIDCounter.getAndIncrement();
+        final int deathY = getConfig().getInt("deathY");
 
         final SharedInstance sharedInstance = MinecraftServer.getInstanceManager().createSharedInstance(mainLobbyContainer);
         sharedInstance.setChunkSupplier(LightingChunk::new);
@@ -56,7 +57,7 @@ public class LobbyManager {
 
         sharedInstance.setTag(TagConstants.LOBBY_NAME_TAG, lobbyName);
         sharedInstance.setTag(TagConstants.LOBBY_ID_TAG, lobbyID);
-        sharedInstance.setTag(TagConstants.DEATH_Y, getConfig().getInt("deathY"));
+        sharedInstance.setTag(TagConstants.DEATH_Y, deathY);
 
         return lobby;
     }

@@ -27,9 +27,4 @@ public class GameModeManager {
                 .asComponent());
     }
 
-    @NotNull
-    public GameMode getGameMode(@NotNull Player player) {
-        return player.getGameMode();
-    }
-
 }

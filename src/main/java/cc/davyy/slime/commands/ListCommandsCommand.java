@@ -1,7 +1,7 @@
 package cc.davyy.slime.commands;
 
 import cc.davyy.slime.model.SlimePlayer;
-import com.asintoto.minestomacr.annotations.AutoRegister;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
@@ -11,14 +11,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
-
-@AutoRegister
 @Singleton
 public class ListCommandsCommand extends Command {
 
     private final Set<Command> commands = MinecraftServer.getCommandManager().getCommands();
 
+    @Inject
     public ListCommandsCommand() {
         super("listcommands");
 

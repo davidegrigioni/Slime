@@ -11,6 +11,7 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ArgumentWord;
 import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
@@ -23,7 +24,9 @@ public class HologramCommand extends Command {
 
     private final HologramManager hologramManager;
 
-    private final ArgumentLiteral createArg = ArgumentType.Literal("create");
+    private final ArgumentWord argumentWord = ArgumentType.Word("args")
+            .from("create", "delete", "teleport");
+
     private final ArgumentString textArg = ArgumentType.String("text");
 
     @Inject
@@ -46,10 +49,10 @@ public class HologramCommand extends Command {
             commandSender.sendMessage(usageMessage);
         }));
 
-        addSyntax(this::createHolo, createArg, textArg);
+        addSyntax(this::execute, argumentWord);
     }
 
-    private void createHolo(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
         final String text = context.get(textArg);
 

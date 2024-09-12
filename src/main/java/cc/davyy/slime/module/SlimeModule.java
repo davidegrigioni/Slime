@@ -21,6 +21,7 @@ public class SlimeModule extends AbstractModule {
         bind(SlimeLoader.class).toInstance(instance);
 
         // Manager Binding
+        bind(TeleportManager.class);
         bind(DisguiseManager.class);
         bind(BossBarManager.class);
         bind(BrandManager.class);
@@ -42,6 +43,7 @@ public class SlimeModule extends AbstractModule {
         bind(NPCCommand.class);
         bind(SpawnCommand.class);
         bind(StopCommand.class);
+        bind(ListCommandsCommand.class);
     }
 
     @Provides

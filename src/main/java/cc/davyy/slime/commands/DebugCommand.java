@@ -15,11 +15,14 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
+import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -36,6 +39,7 @@ public class DebugCommand extends Command {
     private final DisguiseManager disguiseManager;
 
     private final ArgumentEntityType entityTypeArgumentEnum = ArgumentType.EntityType("type");
+    private final ArgumentString tagStringArg = ArgumentType.String("tag");
 
     @Inject
     public DebugCommand(BossBarManager bossBarManager, SidebarManager sidebarManager, LobbyManager lobbyManager, DisguiseManager disguiseManager) {
@@ -55,6 +59,22 @@ public class DebugCommand extends Command {
         addSyntax(this::showBossBar, ArgumentType.Literal("show"));
         addSyntax(this::hideBossBar, ArgumentType.Literal("hide"));
         addSyntax(this::tryDisguise, ArgumentType.Literal("disguise"), entityTypeArgumentEnum);
+        addSyntax(this::debugTags, ArgumentType.Literal("debugitem"), tagStringArg);
+    }
+
+    private void debugTags(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final SlimePlayer player = (SlimePlayer) sender;
+        final ItemStack itemStack = player.getItemInMainHand();
+        final String tag = context.get(tagStringArg);
+
+        String tagValue = itemStack.getTag(Tag.String(tag));
+
+        if (tagValue != null) {
+            player.sendMessage(Component.text("The item has the tag '" + tag + "' with value: " + tagValue));
+        } else {
+            player.sendMessage(Component.text("The item does NOT have the tag: " + tag));
+        }
+
     }
 
     private void tryDisguise(@NotNull CommandSender sender, @NotNull CommandContext context) {

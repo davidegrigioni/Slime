@@ -12,6 +12,7 @@ import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
@@ -52,11 +53,20 @@ public class BroadCastCommand extends Command {
             commandSender.sendMessage(usageMessage);
         }));
 
+        setArgumentCallback(this::onSyntaxError, messageArgumentArray);
+
         addSyntax(this::executeBroadcast, messageArgumentArray);
 
         addSyntax(this::executeBroadcastTitle, titleSubCommandArg, titleArg);
         addSyntax(this::executeBroadcastTitleSub, titleSubCommandArg, titleArg, subTitleArg);
         addSyntax(this::executeBroadcastTitleSubTime, titleSubCommandArg, titleArg, subTitleArg);
+    }
+
+    private void onSyntaxError(@NotNull CommandSender sender, @NotNull ArgumentSyntaxException exception) {
+        final SlimePlayer player = (SlimePlayer) sender;
+        final String input = exception.getInput();
+
+        player.sendMessage("Syntax ERROR " + input + " cannot be empty");
     }
 
     private void executeBroadcast(@NotNull CommandSender sender, @NotNull CommandContext context) {
