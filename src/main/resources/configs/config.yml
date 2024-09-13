@@ -10,7 +10,7 @@ velocity-secret: "test"
 branding:
   brand-name: "§cPowered by SLIME§r"
   animate: false
-  animation-interval: 20
+  animation-interval: 13
   animation-styles:
     - "§c§lWelcome to §r§bSLIME§r"
     - "§a§lEnjoy §r§bSLIME§r"
