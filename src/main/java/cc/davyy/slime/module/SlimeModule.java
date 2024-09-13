@@ -2,9 +2,12 @@ package cc.davyy.slime.module;
 
 import cc.davyy.slime.SlimeLoader;
 import cc.davyy.slime.commands.*;
+import cc.davyy.slime.gui.LobbyGUI;
+import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.listeners.EventsListener;
 import cc.davyy.slime.managers.*;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 
 public class SlimeModule extends AbstractModule {
 
@@ -44,6 +47,16 @@ public class SlimeModule extends AbstractModule {
         bind(ListCommandsCommand.class);
 
         bind(EventsListener.class);
+    }
+
+    @Provides
+    public LobbyGUI provideLobbyGUI(LobbyManager lobbyManager) {
+        return new LobbyGUI(lobbyManager);
+    }
+
+    @Provides
+    public ServerGUI provideServerGUI() {
+        return new ServerGUI();
     }
 
 }

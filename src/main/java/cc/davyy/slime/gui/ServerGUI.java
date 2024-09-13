@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static cc.davyy.slime.utils.ColorUtils.stringListToComponentList;
+import static cc.davyy.slime.utils.GeneralUtils.createItem;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.ColorUtils.of;
 
@@ -23,7 +24,6 @@ public class ServerGUI extends Inventory {
 
     public ServerGUI() {
         super(InventoryType.CHEST_3_ROW, of(GUI_TITLE).build());
-        addInventoryCondition(((players, slot, clickType, result) -> result.setCancel(true)));
         setupItems();
     }
 
@@ -54,14 +54,6 @@ public class ServerGUI extends Inventory {
                 //.set(ItemComponent.PROFILE, new HeadProfile(PlayerSkin.fromUsername("davideenoo")))
                 .build();
         this.setItemStack(PLAYER_MANAGEMENT_SLOT, playerManagement);
-    }
-
-    private @NotNull ItemStack createItem(@NotNull Material material, @NotNull String name, @NotNull List<String> lore) {
-        return ItemStack.builder(material)
-                .customName(of(name)
-                        .build())
-                .lore(stringListToComponentList(lore))
-                .build();
     }
 
 }

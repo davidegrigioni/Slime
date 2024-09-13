@@ -147,4 +147,6 @@ public class LobbyManager {
         return lobbies.get(lobbyID);
     }
 
+    public Collection<Lobby> getAllLobbies() { return lobbies.values(); }
+
 }

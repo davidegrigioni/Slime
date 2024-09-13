@@ -103,7 +103,6 @@ public class SlimeLoader {
             final String kickMessage = getMessages().getString("messages.kick");
             getOnlineSlimePlayers().forEach(player -> player.kick(of(kickMessage).build()));
             //MinecraftServer.getInstanceManager().getInstances().forEach(Instance::saveChunksToStorage);
-            System.exit(0);
         });
     }
 

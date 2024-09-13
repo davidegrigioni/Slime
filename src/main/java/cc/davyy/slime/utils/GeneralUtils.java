@@ -6,12 +6,15 @@ import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static cc.davyy.slime.utils.ColorUtils.txt;
+import static cc.davyy.slime.utils.ColorUtils.*;
 
 public final class GeneralUtils {
 
@@ -122,6 +125,14 @@ public final class GeneralUtils {
      */
     public static boolean hasPlayerPermission(@NotNull CommandSender sender, @NotNull String permission) {
         return sender instanceof SlimePlayer player && player.hasPermission(permission);
+    }
+
+    public static @NotNull ItemStack createItem(@NotNull Material material, @NotNull String name, @NotNull List<String> lore) {
+        return ItemStack.builder(material)
+                .customName(of(name)
+                        .build())
+                .lore(stringListToComponentList(lore))
+                .build();
     }
 
 }

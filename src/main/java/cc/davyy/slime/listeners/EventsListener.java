@@ -1,5 +1,6 @@
 package cc.davyy.slime.listeners;
 
+import cc.davyy.slime.gui.LobbyGUI;
 import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.SidebarManager;
@@ -8,6 +9,7 @@ import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.PosUtils;
 import cc.davyy.slime.utils.TagConstants;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
@@ -16,6 +18,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
@@ -37,6 +40,11 @@ public class EventsListener {
     private final LobbyManager lobbyManager;
     private final SidebarManager sidebarManager;
     private final SpawnManager spawnManager;
+
+    @Inject
+    private Provider<LobbyGUI> lobbyGUIProvider;
+    @Inject
+    private Provider<ServerGUI> serverGUIProvider;
 
     @Inject
     public EventsListener(LobbyManager lobbyManager, SidebarManager sidebarManager, SpawnManager spawnManager) {
@@ -79,10 +87,20 @@ public class EventsListener {
                 .addListener(PlayerUseItemEvent.class, event -> {
                     final SlimePlayer player = (SlimePlayer) event.getPlayer();
                     final ItemStack item = event.getItemStack();
-                    if ("lobbysl".equals(item.getTag(Tag.String("action")))) {
-                        new ServerGUI().open(player);
+
+                    switch (item.getTag(Tag.String("action"))) {
+                        case "lobbysl" -> {
+                            LobbyGUI lobbyGUI = lobbyGUIProvider.get();
+                            lobbyGUI.open(player);
+                        }
+                        case "serversl" -> {
+                            ServerGUI serverGUI = serverGUIProvider.get();
+                            serverGUI.open(player);
+                        }
+                        default -> {}
                     }
                 })
+                .addListener(ItemDropEvent.class, event -> event.setCancelled(true))
                 .addListener(PlayerSwapItemEvent.class, event -> event.setCancelled(true))
                 .addListener(PlayerBlockBreakEvent.class, event -> {
                     final boolean blockBreakEnabled = getConfig().getBoolean("protection.disable-build-protection");
