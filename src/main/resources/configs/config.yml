@@ -8,14 +8,14 @@ velocity-secret: "test"
 
 # Branding information
 branding:
-  brand-name: "&cPowered by SLIME"
+  brand-name: "§cPowered by SLIME§r"
   animate: false
   animation-interval: 20
   animation-styles:
-    - "&c&lWelcome to &r&bSLIME"
-    - "&a&lEnjoy &r&bSLIME"
-    - "&e&lHave a great time with &r&bSLIME"
-    - "&d&lExplore &r&bSLIME"
+    - "§c§lWelcome to §r§bSLIME§r"
+    - "§a§lEnjoy §r§bSLIME§r"
+    - "§e§lHave a great time with §r§bSLIME§r"
+    - "§d§lExplore §r§bSLIME§r"
 
 # Spawn settings
 spawn:

@@ -3,7 +3,7 @@ package cc.davyy.slime.managers;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.MinecraftServer;
 
 import java.time.Duration;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
-import static cc.davyy.slime.utils.ColorUtils.of;
+import static net.kyori.adventure.text.Component.text;
 
 /**
  * Manages and animates the server's brand name.
@@ -99,10 +99,8 @@ public class BrandManager {
         try {
             final String brandName = brandNameStyles.get(currentIndex);
 
-            final Component brandComponent = of(brandName)
-                    .parseLegacy()
-                    .build();
-            final String serializedBrandComponent = GsonComponentSerializer.gson().serialize(brandComponent);
+            final Component brandComponent = text(brandName);
+            final String serializedBrandComponent = LegacyComponentSerializer.legacySection().serialize(brandComponent);
 
             MinecraftServer.setBrandName(serializedBrandComponent);
 
@@ -117,10 +115,11 @@ public class BrandManager {
      */
     private void setDefaultBrandName() {
         try {
-            final Component brandComponent = of(defaultBrandName)
-                    .parseLegacy()
-                    .build();
-            final String serializedBrandComponent = GsonComponentSerializer.gson().serialize(brandComponent);
+
+            final Component brandComponent = text(defaultBrandName);
+            final String serializedBrandComponent = LegacyComponentSerializer
+                    .legacySection()
+                    .serialize(brandComponent);
 
             MinecraftServer.setBrandName(serializedBrandComponent);
 
