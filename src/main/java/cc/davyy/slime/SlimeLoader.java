@@ -1,11 +1,9 @@
 package cc.davyy.slime;
 
 import cc.davyy.slime.commands.*;
-import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.handler.CraftingTableHandler;
 import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.*;
-import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
 import com.google.inject.Guice;
@@ -13,13 +11,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.player.PlayerBlockBreakEvent;
-import net.minestom.server.event.player.PlayerSwapItemEvent;
-import net.minestom.server.event.player.PlayerUseItemEvent;
-import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.velocity.VelocityProxy;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
 
 import java.util.Optional;
@@ -54,6 +46,8 @@ public class SlimeLoader {
     @Inject private SocialCommand socialCommand;
     @Inject private StopCommand stopCommand;
 
+    @Inject private EventsListener eventsListener;
+
     public void start() {
         LOGGER.info("Initializing Minecraft Server...");
         final MinecraftServer minecraftServer = MinecraftServer.init();
@@ -63,7 +57,7 @@ public class SlimeLoader {
         injectGuice();
 
         LOGGER.info("Registering listeners...");
-        registerListeners();
+        eventsListener.init();
 
         LOGGER.info("Setting up console...");
         ConsoleUtils.setupConsole();
@@ -80,46 +74,6 @@ public class SlimeLoader {
         handleVelocityProxy();
 
         startServer(minecraftServer);
-    }
-
-    private void registerListeners() {
-        final var handler = MinecraftServer.getGlobalEventHandler();
-
-        handler.addListener(PlayerBlockBreakEvent.class, event -> {
-            final boolean blockBreakEnabled = getConfig().getBoolean("protection.disable-build-protection");
-            final boolean messageEnabled = getConfig().getBoolean("protection.block-break-message.enable");
-
-            if (blockBreakEnabled) {
-                event.setCancelled(true);
-
-                if (messageEnabled) {
-                    final String message = getConfig().getString("protection.block-break-message.message");
-
-                    if (message != null && !message.isEmpty()) {
-                        event.getPlayer().sendMessage(of(message).build());
-                        return;
-                    }
-
-                    LOGGER.warn("Block break message is not configured properly.");
-                }
-            }
-        });
-        handler.addListener(PlayerSwapItemEvent.class, event -> event.setCancelled(true));
-        handler.addListener(PlayerUseItemEvent.class, event -> {
-            final SlimePlayer player = (SlimePlayer) event.getPlayer();
-            final ItemStack item = event.getItemStack();
-
-            switch (item.getTag(Tag.String("action"))) {
-                case "lobbysl" -> new ServerGUI().open(player);
-                default -> {}
-            }
-        });
-
-        new AsyncPlayerConfigurationListener(lobbyManager).init(handler);
-        new InventoryListener().init(handler);
-        new PlayerChatListener().init(handler);
-        new PlayerSpawnListener(sidebarManager).init(handler);
-        new PlayerMoveListener(spawnManager).init(handler);
     }
 
     private void injectGuice() {
@@ -149,6 +103,7 @@ public class SlimeLoader {
             final String kickMessage = getMessages().getString("messages.kick");
             getOnlineSlimePlayers().forEach(player -> player.kick(of(kickMessage).build()));
             //MinecraftServer.getInstanceManager().getInstances().forEach(Instance::saveChunksToStorage);
+            System.exit(0);
         });
     }
 

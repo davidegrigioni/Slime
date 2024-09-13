@@ -2,11 +2,9 @@ package cc.davyy.slime.module;
 
 import cc.davyy.slime.SlimeLoader;
 import cc.davyy.slime.commands.*;
+import cc.davyy.slime.listeners.EventsListener;
 import cc.davyy.slime.managers.*;
-import cc.davyy.slime.model.HologramFactory;
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
 
 public class SlimeModule extends AbstractModule {
 
@@ -44,12 +42,8 @@ public class SlimeModule extends AbstractModule {
         bind(SpawnCommand.class);
         bind(StopCommand.class);
         bind(ListCommandsCommand.class);
-    }
 
-    @Provides
-    @Singleton
-    public HologramFactory provideHologramFactory() {
-        return new HologramFactory();
+        bind(EventsListener.class);
     }
 
 }
