@@ -1,9 +1,11 @@
 package cc.davyy.slime;
 
 import cc.davyy.slime.commands.*;
+import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.handler.CraftingTableHandler;
 import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.*;
+import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
 import com.google.inject.Guice;
@@ -13,8 +15,11 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
+import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.velocity.VelocityProxy;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
 
 import java.util.Optional;
@@ -71,8 +76,8 @@ public class SlimeLoader {
 
         MinecraftServer.getBlockManager().registerHandler(NamespaceID.from("minecraft:craft"), CraftingTableHandler::new);
 
-        MojangAuth.init();
-        //handleVelocityProxy();
+        //MojangAuth.init();
+        handleVelocityProxy();
 
         startServer(minecraftServer);
     }
@@ -100,22 +105,21 @@ public class SlimeLoader {
             }
         });
         handler.addListener(PlayerSwapItemEvent.class, event -> event.setCancelled(true));
+        handler.addListener(PlayerUseItemEvent.class, event -> {
+            final SlimePlayer player = (SlimePlayer) event.getPlayer();
+            final ItemStack item = event.getItemStack();
 
-        /*handler.addListener(PlayerFlagEvent.class, e ->
-                e.player().sendMessage(Component
-                        .text("You have been flagged for " + e.checkName() + " with a certainty of " + e.certainty())
-                        .color(NamedTextColor.RED)));
-
-        MangoAC.Config config = new MangoAC.Config(false, List.of(), List.of());
-        MangoAC ac = new MangoAC(config);
-        ac.start();*/
+            switch (item.getTag(Tag.String("action"))) {
+                case "lobbysl" -> new ServerGUI().open(player);
+                default -> {}
+            }
+        });
 
         new AsyncPlayerConfigurationListener(lobbyManager).init(handler);
         new InventoryListener().init(handler);
         new PlayerChatListener().init(handler);
         new PlayerSpawnListener(sidebarManager).init(handler);
         new PlayerMoveListener(spawnManager).init(handler);
-        new PlayerInteractListener();
     }
 
     private void injectGuice() {
