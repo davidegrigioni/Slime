@@ -10,6 +10,10 @@ public final class TagConstants {
     public static final Tag<Integer> DEATH_Y = Tag.Integer("deathY");
     public static final Tag<String> ACTION_TAG = Tag.String("action");
 
+    // Server GUI tags
+    public static final Tag<String> SKYWARS_SERVER_TAG = Tag.String("skywars-server");
+    public static final Tag<String> SERVER_SWITCH_TAG = Tag.String("server-switch");
+
     // Player-specific tags for lobbies
     public static final Tag<Integer> PLAYER_LOBBY_ID_TAG = Tag.Integer("player-lobby-id");
 

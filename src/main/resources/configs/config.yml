@@ -93,6 +93,10 @@ title-settings:
     value: 2
     unit: seconds
 
+# Servers
+servers:
+  skywars:
+
 # MISC
 deathY: 20
 teleport-cooldown: 10

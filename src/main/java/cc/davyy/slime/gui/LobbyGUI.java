@@ -30,6 +30,7 @@ public class LobbyGUI extends Inventory {
         this.lobbyManager = lobbyManager;
 
         updateGUI();
+        listenToEvents();
     }
 
     public void open(@NotNull SlimePlayer player) {
@@ -48,7 +49,6 @@ public class LobbyGUI extends Inventory {
             }
             ItemStack item = createLobbyItem(lobby);
             this.setItemStack(slot++, item);
-            listenToEvents();
         }
 
     }
@@ -59,22 +59,21 @@ public class LobbyGUI extends Inventory {
                 .addListener(InventoryClickEvent.class, event -> {
                     final SlimePlayer player = (SlimePlayer) event.getPlayer();
                     final ItemStack clickedItem = event.getClickedItem();
-                    final int clickedSlot = event.getSlot();
                     final Collection<Lobby> lobbies = lobbyManager.getAllLobbies();
-                    final int lobbyTag = clickedItem.getTag(TagConstants.LOBBY_ID_TAG);
+                    final Integer lobbyTag = clickedItem.getTag(TagConstants.LOBBY_ID_TAG);
 
-                    for (Lobby ignored : lobbies) {
-                        if (clickedSlot == lobbyTag) {
-                            lobbyManager.teleportPlayerToLobby(player, lobbyTag);
-                        }
+                    if (lobbyTag != null) {
+                        lobbies.stream()
+                                .filter(l -> l.id() == lobbyTag)
+                                .findFirst().ifPresent(lobby -> lobbyManager.teleportPlayerToLobby(player, lobbyTag));
                     }
-
                 });
         handler.addChild(lobbyGUINode);
     }
 
     private ItemStack createLobbyItem(@NotNull Lobby lobby) {
         return ItemStack.builder(Material.DIAMOND_BLOCK)
+                .set(TagConstants.LOBBY_ID_TAG, lobby.id())
                 .customName(Component.text(lobby.name()))
                 .lore(Component.text("Players: " + lobby.sharedInstance().getPlayers().size()))
                 .build();
