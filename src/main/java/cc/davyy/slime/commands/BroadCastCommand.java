@@ -2,9 +2,11 @@ package cc.davyy.slime.commands;
 
 import cc.davyy.slime.managers.BroadcastManager;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -12,13 +14,12 @@ import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
+import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.format.TextColor.color;
 
 @Singleton
 public class BroadCastCommand extends Command {
@@ -26,8 +27,8 @@ public class BroadCastCommand extends Command {
     private final BroadcastManager broadcastManager;
 
     private final ArgumentStringArray messageArgumentArray = ArgumentType.StringArray("message");
-    private final ArgumentString titleArg = ArgumentType.String("titleArg");
-    private final ArgumentString subTitleArg = ArgumentType.String("subtitleArg");
+    private final ArgumentString broadcastTitleArg = ArgumentType.String("titleArg");
+    private final ArgumentString broadcastSubtitleArg = ArgumentType.String("subtitleArg");
 
     private final ArgumentLiteral titleSubCommandArg = ArgumentType.Literal("title");
 
@@ -36,37 +37,31 @@ public class BroadCastCommand extends Command {
         super("broadcast");
         this.broadcastManager = broadcastManager;
 
-        //setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.broadcast")));
+        setCondition((sender, commandString) -> {
+            if (!hasPlayerPermission(sender, "slime.broadcast")) {
+                sender.sendMessage(Messages.NO_PERMS.asComponent());
+                return false;
+            }
+            return true;
+        });
 
-        setDefaultExecutor(((commandSender, commandContext) -> {
-            final String usage = """
-                    /broadcast [message]\s
-                    /broadcast title <title>\s
-                    /broadcast title <title> <subtitle>""";
-
-            final Component usageMessage = text("Usage Instructions:")
-                    .color(color(255, 0, 0))
-                    .append(newline())
-                    .append(text(usage)
-                            .color(color(255, 255, 255)));
-
-            commandSender.sendMessage(usageMessage);
-        }));
-
-        setArgumentCallback(this::onSyntaxError, messageArgumentArray);
+        setDefaultExecutor(this::showUsage);
 
         addSyntax(this::executeBroadcast, messageArgumentArray);
 
-        addSyntax(this::executeBroadcastTitle, titleSubCommandArg, titleArg);
-        addSyntax(this::executeBroadcastTitleSub, titleSubCommandArg, titleArg, subTitleArg);
-        addSyntax(this::executeBroadcastTitleSubTime, titleSubCommandArg, titleArg, subTitleArg);
+        addSyntax(this::executeBroadcastTitle, titleSubCommandArg, broadcastTitleArg);
+        addSyntax(this::executeBroadcastTitleSub, titleSubCommandArg, broadcastTitleArg, broadcastSubtitleArg);
+        addSyntax(this::executeBroadcastTitleSubTime, titleSubCommandArg, broadcastTitleArg, broadcastSubtitleArg);
     }
 
-    private void onSyntaxError(@NotNull CommandSender sender, @NotNull ArgumentSyntaxException exception) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final String input = exception.getInput();
-
-        player.sendMessage("Syntax ERROR " + input + " cannot be empty");
+    private void showUsage(@NotNull CommandSender commandSender, @NotNull CommandContext context) {
+        final Component usageMessage = text("Usage Instructions:")
+                .color(NamedTextColor.RED)
+                .append(newline())
+                .append(text("/broadcast [message]\n").color(NamedTextColor.WHITE))
+                .append(text("/broadcast title <title>\n").color(NamedTextColor.WHITE))
+                .append(text("/broadcast title <title> <subtitle>").color(NamedTextColor.WHITE));
+        commandSender.sendMessage(usageMessage);
     }
 
     private void executeBroadcast(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -77,23 +72,23 @@ public class BroadCastCommand extends Command {
 
     private void executeBroadcastTitle(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
-        final String message = context.get(titleArg);
+        final String message = context.get(broadcastTitleArg);
 
         broadcastManager.broadcastTitle(player, message, getOnlineSlimePlayers());
     }
 
     private void executeBroadcastTitleSub(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
-        final String message = context.get(titleArg);
-        final String subTitle = context.get(subTitleArg);
+        final String message = context.get(broadcastTitleArg);
+        final String subTitle = context.get(broadcastSubtitleArg);
 
         broadcastManager.broadcastTitle(player, message, subTitle, getOnlineSlimePlayers());
     }
 
     private void executeBroadcastTitleSubTime(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
-        final String message = context.get(titleArg);
-        final String subTitle = context.get(subTitleArg);
+        final String message = context.get(broadcastTitleArg);
+        final String subTitle = context.get(broadcastSubtitleArg);
 
         broadcastManager.broadcastTitleWithTimes(player, message, subTitle, getOnlineSlimePlayers());
     }

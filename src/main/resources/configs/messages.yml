@@ -5,6 +5,9 @@ messages:
   reload: "<gradient:#00FF00:#007700>Reloaded config successfully!</gradient>"
   kick: "<gradient:#FF0000:#AA0000>Server closing...</gradient>"
   message-empty: "<gradient:#FF0000:#AA0000>Message cannot be empty.</gradient>"
+  no-permission: "<red>You do not have permission to use this command.</red>"
+  target-player-not-found: "<red>Target player not found or invalid.</red>"
+
   hologram: "<gradient:#00FF00:#007700>Hologram of type <hologramtype> created!</gradient>"
 
   cannot-execute-console: "<gradient:#FF0000:#AA0000>You can not execute this command from console</gradient>"

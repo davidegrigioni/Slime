@@ -13,6 +13,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
+
 @Singleton
 public class SpawnCommand extends Command {
 
@@ -23,7 +25,13 @@ public class SpawnCommand extends Command {
         super("spawn");
         this.spawnManager = spawnManager;
 
-        //setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.spawn")));
+        setCondition((sender, commandString) -> {
+            if (!hasPlayerPermission(sender, "slime.spawn")) {
+                sender.sendMessage(Messages.NO_PERMS.asComponent());
+                return false;
+            }
+            return true;
+        });
 
         setDefaultExecutor(this::spawn);
 
@@ -49,7 +57,13 @@ public class SpawnCommand extends Command {
             super("setspawn");
             this.spawnManager = spawnManager;
 
-            //setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.setspawn")));
+            setCondition((sender, commandString) -> {
+                if (!hasPlayerPermission(sender, "slime.setspawn")) {
+                    sender.sendMessage(Messages.NO_PERMS.asComponent());
+                    return false;
+                }
+                return true;
+            });
 
             setDefaultExecutor(this::setSpawn);
         }

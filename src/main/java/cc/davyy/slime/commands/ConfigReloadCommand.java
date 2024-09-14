@@ -9,6 +9,7 @@ import net.minestom.server.command.builder.CommandContext;
 import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.FileUtils.reloadConfig;
+import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 
 @Singleton
 public class ConfigReloadCommand extends Command {
@@ -16,7 +17,13 @@ public class ConfigReloadCommand extends Command {
     public ConfigReloadCommand() {
         super("creload");
 
-        //setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.config")));
+        setCondition((sender, commandString) -> {
+            if (!hasPlayerPermission(sender, "slime.reload")) {
+                sender.sendMessage(Messages.NO_PERMS.asComponent());
+                return false;
+            }
+            return true;
+        });
 
         setDefaultExecutor(this::reload);
     }

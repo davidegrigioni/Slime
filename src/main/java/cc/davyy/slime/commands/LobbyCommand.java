@@ -3,18 +3,21 @@ package cc.davyy.slime.commands;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import org.jetbrains.annotations.NotNull;
 
+import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
@@ -24,8 +27,9 @@ public class LobbyCommand extends Command {
 
     private final LobbyManager lobbyManager;
 
-    private final ArgumentLiteral createArg = ArgumentType.Literal("create");
-    private final ArgumentLiteral teleportArg = ArgumentType.Literal("teleport");
+    private final ArgumentWord actionArgument = ArgumentType.Word("action")
+            .from("create", "teleport");
+
     private final ArgumentInteger lobbyIDArg = ArgumentType.Integer("id");
 
     @Inject
@@ -33,37 +37,55 @@ public class LobbyCommand extends Command {
         super("lobby");
         this.lobbyManager = lobbyManager;
 
-        //setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.lobby")));
+        setCondition((sender, commandString) -> {
+            if (!hasPlayerPermission(sender, "slime.lobby")) {
+                sender.sendMessage(Messages.NO_PERMS.asComponent());
+                return false;
+            }
+            return true;
+        });
 
-        setDefaultExecutor(((commandSender, commandContext) -> {
-            final Component usageMessage = text("Usage Instructions:")
-                    .color(color(255, 0, 0))
-                    .append(newline())
-                    .append(text("/lobby create")
-                            .color(color(255, 255, 255))
-                            .append(text(" - Creates a new lobby.")))
-                    .append(newline())
-                    .append(text("/lobby teleport <id>")
-                            .color(color(255, 255, 255))
-                            .append(text(" - Teleports you to the lobby with the specified ID.")))
-                    .append(newline())
-                    .append(text("Example usage: /lobby teleport 1")
-                            .color(color(100, 200, 100))
-                            .decorate(TextDecoration.ITALIC));
+        setDefaultExecutor(this::showUsage);
 
-            commandSender.sendMessage(usageMessage);
-        }));
-
-        addSyntax(this::execute, createArg);
-        addSyntax(this::teleport, teleportArg, lobbyIDArg);
+        addSyntax(this::handleCommand, actionArgument);
+        addSyntax(this::handleTeleport, actionArgument, lobbyIDArg);
     }
 
-    private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    private void showUsage(@NotNull CommandSender commandSender, @NotNull CommandContext context) {
+        final Component usageMessage = text("Usage Instructions:")
+                .color(color(255, 0, 0))
+                .append(newline())
+                .append(text("/lobby create")
+                        .color(color(255, 255, 255))
+                        .append(text(" - Creates a new lobby.")))
+                .append(newline())
+                .append(text("/lobby teleport <id>")
+                        .color(color(255, 255, 255))
+                        .append(text(" - Teleports you to the lobby with the specified ID.")))
+                .append(newline())
+                .append(text("Example usage: /lobby teleport 1")
+                        .color(color(100, 200, 100))
+                        .decorate(TextDecoration.ITALIC));
+
+        commandSender.sendMessage(usageMessage);
+    }
+
+    private void handleCommand(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final String action = context.get(actionArgument);
+
+        switch (action) {
+            case "create" -> createLobby(sender);
+            case "teleport" -> handleTeleport(sender, context);
+        }
+    }
+
+    private void createLobby(@NotNull CommandSender sender) {
         final Lobby lobby = lobbyManager.createNewLobby();
-        sender.sendMessage("Created new lobby " + lobby.name());
+        sender.sendMessage(Component.text("Created new lobby with name: " + lobby.name())
+                .color(NamedTextColor.GREEN));
     }
 
-    private void teleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    private void handleTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
         final int lobbyID = context.get(lobbyIDArg);
 

@@ -22,28 +22,28 @@ public class SlimeModule extends AbstractModule {
         bind(SlimeLoader.class).toInstance(instance);
 
         // Manager Binding
-        bind(TeleportManager.class);
         bind(BossBarManager.class);
         bind(BrandManager.class);
+        bind(BroadcastManager.class);
+        bind(GameModeManager.class);
+        bind(HologramManager.class);
         bind(LobbyManager.class);
         bind(SidebarManager.class);
-        bind(HologramManager.class);
-        bind(BroadcastManager.class);
         bind(SpawnManager.class);
-        bind(GameModeManager.class);
+        bind(TeleportManager.class);
 
         // Command Binding
         bind(BroadCastCommand.class);
         bind(ConfigReloadCommand.class);
-        bind(DebugCommand.class);
         bind(GameModeCommand.class);
         bind(HologramCommand.class);
         bind(ListCommandsCommand.class);
         bind(LobbyCommand.class);
         bind(NPCCommand.class);
+        bind(SocialCommand.class);
         bind(SpawnCommand.class);
         bind(StopCommand.class);
-        bind(ListCommandsCommand.class);
+        bind(TeleportCommand.class);
 
         bind(EventsListener.class);
     }

@@ -18,6 +18,8 @@ public enum Messages implements ComponentLike {
 
     RELOAD_CONFIG("messages.reload"),
     MESSAGE_EMPTY("messages.message-empty"),
+    NO_PERMS("messages.no-permission"),
+    TARGET_PLAYER_NOT_FOUND("messages.target-player-not-found"),
 
     SPAWN_TELEPORT("messages.spawn-teleport"),
     SPAWN_SET("messages.spawn-set"),

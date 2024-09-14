@@ -33,18 +33,16 @@ public class DebugCommand extends Command {
     private final BossBarManager bossBarManager;
     private final SidebarManager sidebarManager;
     private final LobbyManager lobbyManager;
-    private final DisguiseManager disguiseManager;
 
     private final ArgumentEntityType entityTypeArgumentEnum = ArgumentType.EntityType("type");
     private final ArgumentString tagStringArg = ArgumentType.String("tag");
 
     @Inject
-    public DebugCommand(BossBarManager bossBarManager, SidebarManager sidebarManager, LobbyManager lobbyManager, DisguiseManager disguiseManager) {
+    public DebugCommand(BossBarManager bossBarManager, SidebarManager sidebarManager, LobbyManager lobbyManager) {
         super("debug");
         this.bossBarManager = bossBarManager;
         this.sidebarManager = sidebarManager;
         this.lobbyManager = lobbyManager;
-        this.disguiseManager = disguiseManager;
 
         addSyntax(this::execute, ArgumentType.Literal("brandname"));
         addSyntax(this::executeInstances, ArgumentType.Literal("instances"));

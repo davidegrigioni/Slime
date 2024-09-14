@@ -24,6 +24,8 @@ public class LobbyManager {
     private static final AtomicInteger lobbyIDCounter = new AtomicInteger(1);
     private static final AtomicInteger lobbyCounter = new AtomicInteger(1);
 
+    private final int deathY = getConfig().getInt("deathY");
+
     private final InstanceContainer mainLobbyContainer;
     private final Map<Integer, Lobby> lobbies = new ConcurrentHashMap<>();
 
@@ -32,11 +34,11 @@ public class LobbyManager {
      */
     public LobbyManager() {
         final InstanceManager instanceManager = MinecraftServer.getInstanceManager();
+
         this.mainLobbyContainer = instanceManager.createInstanceContainer();
         this.mainLobbyContainer.setChunkSupplier(LightingChunk::new);
-        this.mainLobbyContainer.setChunkLoader(IChunkLoader.noop());
         this.mainLobbyContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 20, Block.GRASS_BLOCK));
-        this.mainLobbyContainer.setTag(TagConstants.DEATH_Y, getConfig().getInt("deathY"));
+        this.mainLobbyContainer.setTag(TagConstants.DEATH_Y, deathY);
     }
 
     /**
@@ -47,12 +49,11 @@ public class LobbyManager {
     public Lobby createNewLobby() {
         final String lobbyName = "Lobby " + lobbyCounter.getAndIncrement();
         final int lobbyID = lobbyIDCounter.getAndIncrement();
-        final int deathY = getConfig().getInt("deathY");
-
         final SharedInstance sharedInstance = MinecraftServer.getInstanceManager().createSharedInstance(mainLobbyContainer);
+
         sharedInstance.setChunkSupplier(LightingChunk::new);
 
-        Lobby lobby = new Lobby(lobbyID, lobbyName, sharedInstance);
+        final Lobby lobby = new Lobby(lobbyID, lobbyName, sharedInstance);
         lobbies.put(lobbyID, lobby);
 
         sharedInstance.setTag(TagConstants.LOBBY_NAME_TAG, lobbyName);

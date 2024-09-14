@@ -1,6 +1,7 @@
 package cc.davyy.slime.commands;
 
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
@@ -11,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
+import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
+
 @Singleton
 public class ListCommandsCommand extends Command {
 
@@ -20,7 +23,13 @@ public class ListCommandsCommand extends Command {
     public ListCommandsCommand() {
         super("listcommands");
 
-        //setCondition(((sender, commandString) -> hasPlayerPermission(sender, "slime.listcommands")));
+        setCondition((sender, commandString) -> {
+            if (!hasPlayerPermission(sender, "slime.listcommands")) {
+                sender.sendMessage(Messages.NO_PERMS.asComponent());
+                return false;
+            }
+            return true;
+        });
 
         setDefaultExecutor(this::execute);
     }

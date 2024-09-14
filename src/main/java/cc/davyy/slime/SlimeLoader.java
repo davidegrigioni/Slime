@@ -1,7 +1,6 @@
 package cc.davyy.slime;
 
 import cc.davyy.slime.commands.*;
-import cc.davyy.slime.handler.CraftingTableHandler;
 import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.*;
 import cc.davyy.slime.module.SlimeModule;
@@ -12,7 +11,6 @@ import com.google.inject.Injector;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.velocity.VelocityProxy;
-import net.minestom.server.utils.NamespaceID;
 
 import java.util.Optional;
 
@@ -68,10 +66,8 @@ public class SlimeLoader {
         LOGGER.info("Setting up shutdown tasks...");
         setupShutdownTask();
 
-        MinecraftServer.getBlockManager().registerHandler(NamespaceID.from("minecraft:craft"), CraftingTableHandler::new);
-
         //MojangAuth.init();
-        handleVelocityProxy();
+        //handleVelocityProxy();
 
         startServer(minecraftServer);
     }
