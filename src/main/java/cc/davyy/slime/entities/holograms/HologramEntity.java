@@ -1,4 +1,4 @@
-package cc.davyy.slime.entities;
+package cc.davyy.slime.entities.holograms;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;

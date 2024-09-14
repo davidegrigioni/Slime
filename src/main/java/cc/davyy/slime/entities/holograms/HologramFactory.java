@@ -1,6 +1,5 @@
-package cc.davyy.slime.misc;
+package cc.davyy.slime.entities.holograms;
 
-import cc.davyy.slime.entities.HologramEntity;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;

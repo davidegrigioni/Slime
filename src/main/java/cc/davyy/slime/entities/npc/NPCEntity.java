@@ -1,4 +1,4 @@
-package cc.davyy.slime.entities;
+package cc.davyy.slime.entities.npc;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.*;

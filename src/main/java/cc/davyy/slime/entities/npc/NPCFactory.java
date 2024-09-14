@@ -1,6 +1,5 @@
-package cc.davyy.slime.misc;
+package cc.davyy.slime.entities.npc;
 
-import cc.davyy.slime.entities.NPCEntity;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.instance.Instance;

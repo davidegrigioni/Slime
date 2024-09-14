@@ -1,6 +1,6 @@
 package cc.davyy.slime.interfaces;
 
-import cc.davyy.slime.entities.HologramEntity;
+import cc.davyy.slime.entities.holograms.HologramEntity;
 import cc.davyy.slime.model.SlimePlayer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
