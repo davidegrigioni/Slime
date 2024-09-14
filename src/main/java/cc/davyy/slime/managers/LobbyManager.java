@@ -1,5 +1,6 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.interfaces.ILobby;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
@@ -19,13 +20,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 
 @Singleton
-public class LobbyManager {
+public class LobbyManager implements ILobby {
 
     private static final AtomicInteger lobbyIDCounter = new AtomicInteger(1);
     private static final AtomicInteger lobbyCounter = new AtomicInteger(1);
 
     private final int deathY = getConfig().getInt("deathY");
-
     private final InstanceContainer mainLobbyContainer;
     private final Map<Integer, Lobby> lobbies = new ConcurrentHashMap<>();
 
@@ -41,12 +41,8 @@ public class LobbyManager {
         this.mainLobbyContainer.setTag(TagConstants.DEATH_Y, deathY);
     }
 
-    /**
-     * Creates a new shared lobby instance with a unique name like "lobby1", "lobby2", etc.
-     *
-     * @return The newly created Lobby.
-     */
-    public Lobby createNewLobby() {
+    @Override
+    public @NotNull Lobby createNewLobby() {
         final String lobbyName = "Lobby " + lobbyCounter.getAndIncrement();
         final int lobbyID = lobbyIDCounter.getAndIncrement();
         final SharedInstance sharedInstance = MinecraftServer.getInstanceManager().createSharedInstance(mainLobbyContainer);
@@ -63,29 +59,15 @@ public class LobbyManager {
         return lobby;
     }
 
-    /**
-     * Gets the main instance container that all shared lobbies are based on.
-     *
-     * @return The main lobby InstanceContainer.
-     */
+    @Override
     public @NotNull InstanceContainer getMainLobbyContainer() { return mainLobbyContainer; }
 
-    /**
-     * Checks if the given instance is the main instance.
-     *
-     * @param instance The instance to check.
-     * @return true if the instance is the main one, false otherwise.
-     */
+    @Override
     public boolean isMainInstance(@NotNull Instance instance) {
         return instance.equals(mainLobbyContainer);
     }
 
-    /**
-     * Teleports the player to the specified lobby.
-     *
-     * @param player The player to teleport.
-     * @param lobbyID The id of the lobby to teleport to.
-     */
+    @Override
     public void teleportPlayerToLobby(@NotNull SlimePlayer player, int lobbyID) {
         if (lobbyID == 0) {
             if (player.getInstance() == mainLobbyContainer) {
@@ -125,19 +107,10 @@ public class LobbyManager {
                 });
     }
 
-    /**
-     * Lists all available lobbies.
-     *
-     * @return a collection of lobby ids.
-     */
+    @Override
     public @NotNull Collection<Integer> getAllLobbiesID() { return new ArrayList<>(lobbies.keySet()); }
 
-    /**
-     * Gets the lobby where the player currently is.
-     *
-     * @param player The player whose lobby needs to be found.
-     * @return The Lobby where the player is, or null if not in a lobby.
-     */
+    @Override
     public Lobby getLobbyByPlayer(@NotNull SlimePlayer player) {
         Integer lobbyID = player.getTag(TagConstants.PLAYER_LOBBY_ID_TAG);
 
@@ -148,6 +121,7 @@ public class LobbyManager {
         return lobbies.get(lobbyID);
     }
 
+    @Override
     public Collection<Lobby> getAllLobbies() { return lobbies.values(); }
 
 }

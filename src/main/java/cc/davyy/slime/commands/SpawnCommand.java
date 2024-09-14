@@ -1,6 +1,7 @@
 package cc.davyy.slime.commands;
 
 import cc.davyy.slime.managers.SpawnManager;
+import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import com.google.inject.Inject;
@@ -9,7 +10,6 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +39,7 @@ public class SpawnCommand extends Command {
     }
 
     private void spawn(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final Player player = (Player) sender;
+        final SlimePlayer player = (SlimePlayer) sender;
 
         final Pos spawnPos = spawnManager.getSpawnPosition();
         Check.notNull(spawnPos, "Position cannot be null, check your config!");
@@ -69,7 +69,7 @@ public class SpawnCommand extends Command {
         }
 
         private void setSpawn(@NotNull CommandSender sender, @NotNull CommandContext context) {
-            final Player player = (Player) sender;
+            final SlimePlayer player = (SlimePlayer) sender;
             final Pos pos = player.getPosition();
 
             spawnManager.setSpawnPosition(pos);

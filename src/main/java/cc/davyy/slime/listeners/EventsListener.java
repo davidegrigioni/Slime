@@ -81,7 +81,7 @@ public class EventsListener {
                         spawnManager.teleportToSpawn(player); // No issue with spawnManager now
                     }
                 })
-                .addListener(PlayerDisconnectEvent.class, event -> sidebarManager.removeSidebar(event.getPlayer()))
+                .addListener(PlayerDisconnectEvent.class, event -> sidebarManager.removeSidebar((SlimePlayer) event.getPlayer()))
                 .addListener(PlayerSpawnEvent.class, event -> {
                     final SlimePlayer player = (SlimePlayer) event.getPlayer();
 

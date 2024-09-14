@@ -1,22 +1,25 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.interfaces.IGameMode;
+import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Singleton;
 import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class GameModeManager {
+public class GameModeManager implements IGameMode {
 
-    public void setGameMode(@NotNull Player player, @NotNull GameMode gameMode) {
+    @Override
+    public void setGameMode(@NotNull SlimePlayer player, @NotNull GameMode gameMode) {
         player.setGameMode(gameMode);
         player.sendMessage(Messages.GAMEMODE_SWITCH
                 .addPlaceholder("gamemode", gameMode.name())
                 .asComponent());
     }
 
-    public void setGameMode(@NotNull Player player, @NotNull GameMode gameMode, @NotNull Player target) {
+    @Override
+    public void setGameMode(@NotNull SlimePlayer player, @NotNull GameMode gameMode, @NotNull SlimePlayer target) {
         target.setGameMode(gameMode);
         player.sendMessage(Messages.GAMEMODE_SWITCH_OTHER_SELF
                 .addPlaceholder("target", target.getName())

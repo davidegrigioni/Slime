@@ -4,6 +4,7 @@ import cc.davyy.slime.SlimeLoader;
 import cc.davyy.slime.commands.*;
 import cc.davyy.slime.gui.LobbyGUI;
 import cc.davyy.slime.gui.ServerGUI;
+import cc.davyy.slime.interfaces.*;
 import cc.davyy.slime.listeners.EventsListener;
 import cc.davyy.slime.managers.*;
 import com.google.inject.AbstractModule;
@@ -28,9 +29,22 @@ public class SlimeModule extends AbstractModule {
         bind(GameModeManager.class);
         bind(HologramManager.class);
         bind(LobbyManager.class);
+        bind(NPCManager.class);
         bind(SidebarManager.class);
         bind(SpawnManager.class);
         bind(TeleportManager.class);
+
+        // Interface Binding
+        bind(IBossBar.class).to(BossBarManager.class);
+        bind(IBrand.class).to(BrandManager.class);
+        bind(IBroadcast.class).to(BroadcastManager.class);
+        bind(IGameMode.class).to(GameModeManager.class);
+        bind(IHologram.class).to(HologramManager.class);
+        bind(ILobby.class).to(LobbyManager.class);
+        bind(INPC.class).to(NPCManager.class);
+        bind(ISidebar.class).to(SidebarManager.class);
+        bind(ISpawn.class).to(SpawnManager.class);
+        bind(ITeleport.class).to(TeleportManager.class);
 
         // Command Binding
         bind(BroadCastCommand.class);

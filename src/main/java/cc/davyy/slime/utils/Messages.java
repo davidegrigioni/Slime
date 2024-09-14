@@ -21,6 +21,11 @@ public enum Messages implements ComponentLike {
     NO_PERMS("messages.no-permission"),
     TARGET_PLAYER_NOT_FOUND("messages.target-player-not-found"),
 
+    HOLOGRAM_CREATED("messages.hologram-created"),
+    HOLOGRAM_DOES_NOT_EXISTS("messages.hologram-does-not-exists"),
+    HOLOGRAM_DELETED("messages.hologram-deleted"),
+    HOLOGRAM_MOVED("messages.hologram-moved"),
+
     SPAWN_TELEPORT("messages.spawn-teleport"),
     SPAWN_SET("messages.spawn-set"),
 

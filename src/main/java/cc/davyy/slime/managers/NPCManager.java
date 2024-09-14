@@ -1,6 +1,7 @@
 package cc.davyy.slime.managers;
 
 import cc.davyy.slime.entities.NPCEntity;
+import cc.davyy.slime.interfaces.INPC;
 import cc.davyy.slime.misc.NPCFactory;
 import cc.davyy.slime.misc.TagConstants;
 import cc.davyy.slime.model.SlimePlayer;
@@ -17,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static net.kyori.adventure.text.Component.text;
 
 @Singleton
-public class NPCManager {
+public class NPCManager implements INPC {
 
     private static final AtomicInteger entityIdCounter = new AtomicInteger(1);
     private final NPCFactory npcFactory;
@@ -28,13 +29,7 @@ public class NPCManager {
         this.npcFactory = npcFactory;
     }
 
-    /**
-     * Creates a new NPC and assigns it a unique ID.
-     *
-     * @param name   the name of the NPC
-     * @param skin   the skin for the NPC
-     * @param player the player for reference (for instance and position)
-     */
+    @Override
     public void createNPC(@NotNull String name, @NotNull PlayerSkin skin, @NotNull SlimePlayer player) {
         final int npcId = entityIdCounter.getAndIncrement();
         NPCEntity npcEntity = npcFactory.createNPCEntity(name, skin, player.getInstance(), player.getPosition());
@@ -46,12 +41,7 @@ public class NPCManager {
                 .color(NamedTextColor.GREEN));
     }
 
-    /**
-     * Moves an NPC to the player's position if it exists.
-     *
-     * @param id       the ID of the NPC to move
-     * @param player   the player to move the NPC to
-     */
+    @Override
     public void moveNPC(int id, @NotNull SlimePlayer player) {
         final NPCEntity npcEntity = npcEntityMap.get(id);
 
@@ -66,12 +56,7 @@ public class NPCManager {
                 .color(NamedTextColor.RED));
     }
 
-    /**
-     * Deletes an NPC by its ID if it exists.
-     *
-     * @param id     the ID of the NPC to delete
-     * @param player the player to send feedback to
-     */
+    @Override
     public void deleteNPC(int id, @NotNull SlimePlayer player) {
         final NPCEntity npcEntity = npcEntityMap.get(id);
 
@@ -87,28 +72,17 @@ public class NPCManager {
                 .color(NamedTextColor.RED));
     }
 
-    /**
-     * Retrieves an NPC by its ID.
-     *
-     * @param id The NPC's ID.
-     * @return The NPC entity, or null if not found.
-     */
+    @Override
     public NPCEntity getNPCById(int id) {
         return npcEntityMap.get(id);
     }
 
-    /**
-     * Retrieves all NPC entities.
-     *
-     * @return A map of all NPC entities.
-     */
+    @Override
     public Map<Integer, NPCEntity> getAllNPCEntities() {
         return new ConcurrentHashMap<>(npcEntityMap);
     }
 
-    /**
-     * Clears all NPCs from the instance and removes them from the map.
-     */
+    @Override
     public void clearNPCs() {
         npcEntityMap.values().forEach(NPCEntity::remove);
         npcEntityMap.clear();

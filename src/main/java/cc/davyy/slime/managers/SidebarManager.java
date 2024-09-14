@@ -1,11 +1,11 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.interfaces.ISidebar;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 
 @Singleton
-public class SidebarManager {
+public class SidebarManager implements ISidebar {
 
     private final Sidebar sidebar;
     private final LobbyManager lobbyManager;
@@ -35,6 +35,28 @@ public class SidebarManager {
         final List<String> lines = getConfig().getStringList("scoreboard.lines");
         MinecraftServer.getSchedulerManager().buildTask(() -> updateSidebarLines(lines))
                 .repeat(1, TimeUnit.SECONDS.toChronoUnit()).schedule();
+    }
+
+    @Override
+    public void showSidebar(@NotNull SlimePlayer player) {
+        if (!sidebarMap.containsKey(player.getUuid())) {
+            sidebar.addViewer(player);
+            sidebarMap.put(player.getUuid(), sidebar);
+        }
+    }
+
+    @Override
+    public void toggleSidebar(@NotNull SlimePlayer player) {
+        if (sidebar.getViewers().contains(player)) sidebar.removeViewer(player);
+        else sidebar.addViewer(player);
+    }
+
+    @Override
+    public void removeSidebar(@NotNull SlimePlayer player) {
+        final Sidebar sidebar = sidebarMap.remove(player.getUuid());
+        if (sidebar != null) {
+            sidebar.removeViewer(player);
+        }
     }
 
     private void updateSidebarLines(@NotNull List<String> lines) {
@@ -68,25 +90,6 @@ public class SidebarManager {
                             .parseMMP("rank", player.getPrefix())
                             .parseMMP("playercount", String.valueOf(onlinePlayersSize))
                             .build(), score, Sidebar.NumberFormat.blank()));
-        }
-    }
-
-    public void showSidebar(@NotNull Player player) {
-        if (!sidebarMap.containsKey(player.getUuid())) {
-            sidebar.addViewer(player);
-            sidebarMap.put(player.getUuid(), sidebar);
-        }
-    }
-
-    public void toggleSidebar(@NotNull Player player) {
-        if (sidebar.getViewers().contains(player)) sidebar.removeViewer(player);
-        else sidebar.addViewer(player);
-    }
-
-    public void removeSidebar(@NotNull Player player) {
-        final Sidebar sidebar = sidebarMap.remove(player.getUuid());
-        if (sidebar != null) {
-            sidebar.removeViewer(player);
         }
     }
 

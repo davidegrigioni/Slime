@@ -1,5 +1,6 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.interfaces.IBroadcast;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Singleton;
@@ -17,8 +18,9 @@ import static cc.davyy.slime.utils.GeneralUtils.broadcastAllInstances;
 import static cc.davyy.slime.utils.GeneralUtils.sendComponent;
 
 @Singleton
-public class BroadcastManager {
+public class BroadcastManager implements IBroadcast {
 
+    @Override
     public void broadcastMessage(@NotNull CommandSender sender, @NotNull String message) {
         final String configMessage = getConfig().getString("broadcast");
 
@@ -33,6 +35,7 @@ public class BroadcastManager {
                 .build());
     }
 
+    @Override
     public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull Collection<SlimePlayer> players) {
         if (titleText.isEmpty()) {
             sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
@@ -43,6 +46,7 @@ public class BroadcastManager {
         players.forEach(player -> player.showTitle(title));
     }
 
+    @Override
     public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<SlimePlayer> players) {
         if (titleText.isEmpty()) {
             sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
@@ -53,6 +57,7 @@ public class BroadcastManager {
         players.forEach(player -> player.showTitle(title));
     }
 
+    @Override
     public void broadcastTitleWithTimes(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<SlimePlayer> players) {
         if (titleText.isEmpty()) {
             sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());

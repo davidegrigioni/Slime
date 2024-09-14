@@ -135,7 +135,7 @@ public class DebugCommand extends Command {
 
     private void removeSidebar(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final Player player = (Player) sender;
-        sidebarManager.toggleSidebar(player);
+        sidebarManager.toggleSidebar((SlimePlayer) player);
     }
 
     private void gui(@NotNull CommandSender sender, @NotNull CommandContext context) {

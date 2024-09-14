@@ -1,5 +1,6 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.interfaces.IBrand;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -20,7 +21,7 @@ import static net.kyori.adventure.text.Component.text;
  * defined in the configuration. The animation interval and styles are configured through YAML configuration files.
  */
 @Singleton
-public class BrandManager {
+public class BrandManager implements IBrand {
 
     /**
      * Logger for the BrandManager class.
@@ -73,11 +74,7 @@ public class BrandManager {
         startAnimation();
     }
 
-    /**
-     * Starts the brand name animation task.
-     * <p>
-     * Schedules a repeating task that updates the brand name at the interval specified in the configuration.
-     */
+    @Override
     public void startAnimation() {
         MinecraftServer.getSchedulerManager().buildTask(this::updateBrandName)
                 .repeat(Duration.of(animationInterval, TimeUnit.SECONDS.toChronoUnit()))

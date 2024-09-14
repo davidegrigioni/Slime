@@ -1,17 +1,18 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.interfaces.ISpawn;
+import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import com.google.inject.Singleton;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 
 @Singleton
-public class SpawnManager {
+public class SpawnManager implements ISpawn {
 
     private Pos spawnPosition;
 
@@ -22,17 +23,19 @@ public class SpawnManager {
         }
     }
 
+    @Override
     public void setSpawnPosition(@NotNull Pos pos) {
         spawnPosition = pos;
         getConfig().set("spawn.position", PosUtils.toString(pos));
     }
 
-    @Nullable
-    public Pos getSpawnPosition() {
+    @Override
+    public @Nullable Pos getSpawnPosition() {
         return spawnPosition;
     }
 
-    public void teleportToSpawn(@NotNull Player player) {
+    @Override
+    public void teleportToSpawn(@NotNull SlimePlayer player) {
         if (spawnPosition == null) {
             throw new IllegalStateException("Spawn position is not set.");
         }

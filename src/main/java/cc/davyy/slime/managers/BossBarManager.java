@@ -1,5 +1,6 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.interfaces.IBossBar;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Singleton;
 import net.kyori.adventure.bossbar.BossBar;
@@ -11,32 +12,20 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
-public class BossBarManager {
+public class BossBarManager implements IBossBar {
 
     private final Map<UUID, BossBar> playerBossBars = new ConcurrentHashMap<>();
 
-    /**
-     * Creates and displays a boss bar for the specified player.
-     *
-     * @param player the player to show the boss bar to
-     * @param title the title of the boss bar
-     * @param progress the progress (between 0.0 and 1.0)
-     * @param color the color of the boss bar
-     * @param overlay the overlay type of the boss bar
-     */
-    public void createBossBar(@NotNull SlimePlayer player, @NotNull Component title, float progress, @NotNull BossBar.Color color, @NotNull BossBar.Overlay overlay) {
+    @Override
+    public void createBossBar(@NotNull SlimePlayer player, @NotNull Component title,
+                              float progress, @NotNull BossBar.Color color,
+                              @NotNull BossBar.Overlay overlay) {
         final BossBar bossBar = BossBar.bossBar(title, progress, color, overlay);
         player.showBossBar(bossBar);
         playerBossBars.put(player.getUuid(), bossBar);
     }
 
-    /**
-     * Updates the boss bar of the specified player.
-     *
-     * @param player the player whose boss bar will be updated
-     * @param title the new title of the boss bar
-     * @param progress the new progress (between 0.0 and 1.0)
-     */
+    @Override
     public void updateBossBar(@NotNull SlimePlayer player, @NotNull Component title, float progress) {
         final BossBar bossBar = playerBossBars.get(player.getUuid());
         if (bossBar != null) {
@@ -45,11 +34,7 @@ public class BossBarManager {
         }
     }
 
-    /**
-     * Removes the boss bar from the specified player.
-     *
-     * @param player the player to remove the boss bar from
-     */
+    @Override
     public void removeBossBar(@NotNull SlimePlayer player) {
         final BossBar bossBar = playerBossBars.remove(player.getUuid());
         if (bossBar != null) {
@@ -57,6 +42,7 @@ public class BossBarManager {
         }
     }
 
+    @Override
     public Map<UUID, BossBar> getPlayerBossBars() { return playerBossBars; }
 
 }
