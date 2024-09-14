@@ -3,7 +3,7 @@ package cc.davyy.slime.gui;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.misc.TagConstants;
+import cc.davyy.slime.constants.TagConstants;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;

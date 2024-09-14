@@ -4,7 +4,7 @@ import cc.davyy.slime.entities.holograms.HologramEntity;
 import cc.davyy.slime.interfaces.IHologram;
 import cc.davyy.slime.entities.holograms.HologramFactory;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.misc.TagConstants;
+import cc.davyy.slime.constants.TagConstants;
 import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import com.google.inject.Inject;

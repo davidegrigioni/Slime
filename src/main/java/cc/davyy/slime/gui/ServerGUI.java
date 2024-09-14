@@ -1,8 +1,8 @@
 package cc.davyy.slime.gui;
 
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.misc.InventoryConstants;
-import cc.davyy.slime.misc.TagConstants;
+import cc.davyy.slime.constants.InventoryConstants;
+import cc.davyy.slime.constants.TagConstants;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.google.inject.Singleton;

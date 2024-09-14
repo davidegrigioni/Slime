@@ -4,7 +4,7 @@ import cc.davyy.slime.interfaces.ILobby;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
-import cc.davyy.slime.misc.TagConstants;
+import cc.davyy.slime.constants.TagConstants;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.*;

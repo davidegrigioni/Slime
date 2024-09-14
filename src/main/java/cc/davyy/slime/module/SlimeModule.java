@@ -26,6 +26,7 @@ public class SlimeModule extends AbstractModule {
         bind(BossBarManager.class);
         bind(BrandManager.class);
         bind(BroadcastManager.class);
+        bind(CosmeticManager.class);
         bind(GameModeManager.class);
         bind(HologramManager.class);
         bind(LobbyManager.class);
@@ -38,6 +39,7 @@ public class SlimeModule extends AbstractModule {
         bind(IBossBar.class).to(BossBarManager.class);
         bind(IBrand.class).to(BrandManager.class);
         bind(IBroadcast.class).to(BroadcastManager.class);
+        bind(ICosmetics.class).to(CosmeticManager.class);
         bind(IGameMode.class).to(GameModeManager.class);
         bind(IHologram.class).to(HologramManager.class);
         bind(ILobby.class).to(LobbyManager.class);

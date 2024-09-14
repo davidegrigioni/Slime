@@ -1,4 +1,4 @@
-package cc.davyy.slime.misc;
+package cc.davyy.slime.constants;
 
 import net.minestom.server.tag.Tag;
 
@@ -12,6 +12,10 @@ public final class TagConstants {
 
     // NPC Related tags
     public static final Tag<Integer> NPC_ID_TAG = Tag.Integer("npc-id");
+
+    // Cosmetic Related tags
+    public static final Tag<Integer> COSMETIC_ID_TAG = Tag.Integer("cosmetic-id");
+    public static final Tag<String> COSMETIC_NAME_TAG = Tag.String("cosmetic-name");
 
     // Server GUI tags
     public static final Tag<String> SKYWARS_SERVER_TAG = Tag.String("skywars-server");

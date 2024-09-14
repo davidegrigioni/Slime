@@ -1,34 +1,42 @@
 package cc.davyy.slime.commands;
 
+import cc.davyy.slime.constants.TagConstants;
 import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.managers.BossBarManager;
+import cc.davyy.slime.managers.CosmeticManager;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.SidebarManager;
+import cc.davyy.slime.model.Cosmetic;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentString;
-import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.ArgumentWord;
+import net.minestom.server.command.builder.arguments.*;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentItemStack;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
+import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
+import static cc.davyy.slime.utils.ColorUtils.stringListToComponentList;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
+import static net.kyori.adventure.text.Component.text;
 
 // TODO: Remove this command
 public class DebugCommand extends Command {
@@ -36,20 +44,25 @@ public class DebugCommand extends Command {
     private final BossBarManager bossBarManager;
     private final SidebarManager sidebarManager;
     private final LobbyManager lobbyManager;
+    private final CosmeticManager cosmeticManager;
 
     private final ArgumentEntityType entityTypeArgumentEnum = ArgumentType.EntityType("type");
     private final ArgumentString tagStringArg = ArgumentType.String("tag");
 
     private final ArgumentWord modeArg = ArgumentType.Word("mode").from("set", "add");
+    private final ArgumentString cosmeticNameArg = ArgumentType.String("cosmeticName");
+    private final ArgumentEnum<Cosmetic.CosmeticType> cosmeticTypeArgumentEnum = ArgumentType.Enum("cosmeticType", Cosmetic.CosmeticType.class);
 
     private final ArgumentNumber<Integer> valueArg = ArgumentType.Integer("value").between(0, 100);
+    private final ArgumentInteger cosmeticIDArg = ArgumentType.Integer("cosmeticID");
 
     @Inject
-    public DebugCommand(BossBarManager bossBarManager, SidebarManager sidebarManager, LobbyManager lobbyManager) {
+    public DebugCommand(BossBarManager bossBarManager, SidebarManager sidebarManager, LobbyManager lobbyManager, CosmeticManager cosmeticManager) {
         super("debug");
         this.bossBarManager = bossBarManager;
         this.sidebarManager = sidebarManager;
         this.lobbyManager = lobbyManager;
+        this.cosmeticManager = cosmeticManager;
 
         setArgumentCallback(this::onModeError, modeArg);
         setArgumentCallback(this::onValueError, valueArg);
@@ -65,13 +78,31 @@ public class DebugCommand extends Command {
         addSyntax(this::hideBossBar, ArgumentType.Literal("hide"));
         addSyntax(this::tryDisguise, ArgumentType.Literal("disguise"), entityTypeArgumentEnum);
         addSyntax(this::debugTags, ArgumentType.Literal("debugitem"), tagStringArg);
+        addSyntax(this::debugCosmetics, ArgumentType.Literal("debugcosmetics"), ArgumentType.Literal("create"), cosmeticNameArg);
 
         addSyntax(this::sendSuggestionMessage, ArgumentType.Literal("healthtest"), modeArg);
         addSyntax(this::onHealthCommand, ArgumentType.Literal("healthtest"), modeArg, valueArg);
     }
 
+    private void debugCosmetics(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        String cosmeticName = context.get(cosmeticNameArg);
+        Material material = Material.SPRUCE_WOOD;
+        Cosmetic.CosmeticType type = context.get(cosmeticTypeArgumentEnum);
+        List<String> description = List.of("Shiny", "Epic", "Unbreakable");
+
+        // Using the createCosmeticItem method
+        ItemStack itemStack = createCosmeticItem(material, cosmeticName, description);
+
+        // Create the cosmetic in the manager
+        cosmeticManager.createCosmetic(cosmeticName, "This is a test cosmetic",
+                itemStack, type);
+
+        sender.sendMessage(text("Created new cosmetic: " + cosmeticName)
+                .color(NamedTextColor.GREEN));
+    }
+
     private void onModeError(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'set' or 'add'"));
+        sender.sendMessage(text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'set' or 'add'"));
     }
 
     private void onValueError(CommandSender sender, ArgumentSyntaxException exception) {
@@ -79,17 +110,17 @@ public class DebugCommand extends Command {
         final String input = exception.getInput();
         switch (error) {
             case ArgumentNumber.NOT_NUMBER_ERROR:
-                sender.sendMessage(Component.text("SYNTAX ERROR: '" + input + "' isn't a number!"));
+                sender.sendMessage(text("SYNTAX ERROR: '" + input + "' isn't a number!"));
                 break;
             case ArgumentNumber.TOO_LOW_ERROR:
             case ArgumentNumber.TOO_HIGH_ERROR:
-                sender.sendMessage(Component.text("SYNTAX ERROR: " + input + " is not between 0 and 100"));
+                sender.sendMessage(text("SYNTAX ERROR: " + input + " is not between 0 and 100"));
                 break;
         }
     }
 
     private void sendSuggestionMessage(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Component.text("/health " + context.get("mode") + " [Integer]"));
+        sender.sendMessage(text("/health " + context.get("mode") + " [Integer]"));
     }
 
     private void onHealthCommand(CommandSender sender, CommandContext context) {
@@ -106,7 +137,7 @@ public class DebugCommand extends Command {
                 break;
         }
 
-        player.sendMessage(Component.text("You have now " + player.getHealth() + " health"));
+        player.sendMessage(text("You have now " + player.getHealth() + " health"));
     }
 
     private void debugTags(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -117,9 +148,9 @@ public class DebugCommand extends Command {
         String tagValue = itemStack.getTag(Tag.String(tag));
 
         if (tagValue != null) {
-            player.sendMessage(Component.text("The item has the tag '" + tag + "' with value: " + tagValue));
+            player.sendMessage(text("The item has the tag '" + tag + "' with value: " + tagValue));
         } else {
-            player.sendMessage(Component.text("The item does NOT have the tag: " + tag));
+            player.sendMessage(text("The item does NOT have the tag: " + tag));
         }
 
     }
@@ -181,7 +212,7 @@ public class DebugCommand extends Command {
             return;
         }
 
-        Component title = Component.text("Example Boss Bar").color(TextColor.color(255, 0, 0));
+        Component title = text("Example Boss Bar").color(TextColor.color(255, 0, 0));
         bossBarManager.createBossBar(player, title, 1.0f, BossBar.Color.RED, BossBar.Overlay.PROGRESS);
     }
 
@@ -192,6 +223,16 @@ public class DebugCommand extends Command {
         }
 
         bossBarManager.removeBossBar(player);
+    }
+
+    private @NotNull ItemStack createCosmeticItem(@NotNull Material cosmeticMaterial, @NotNull String cosmeticName,
+                                                  @NotNull List<String> cosmeticDescription) {
+        return ItemStack.builder(cosmeticMaterial)
+                .customName(of(cosmeticName)
+                        .build())
+                .lore(stringListToComponentList(cosmeticDescription))
+                .set(TagConstants.COSMETIC_NAME_TAG, cosmeticName)
+                .build();
     }
 
 }

@@ -1,6 +1,6 @@
 package cc.davyy.slime.utils;
 
-import cc.davyy.slime.misc.TagConstants;
+import cc.davyy.slime.constants.TagConstants;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -9,10 +9,12 @@ import org.jetbrains.annotations.NotNull;
 
 public final class JoinUtils {
 
-    private static final ItemStack COMPASS = ItemStack.of(Material.COMPASS)
-            .withTag(TagConstants.ACTION_TAG, "serversl");
-    private static final ItemStack LOBBY_SELECTOR = ItemStack.of(Material.NETHER_STAR)
-            .withTag(TagConstants.ACTION_TAG, "lobbysl");
+    private static final ItemStack COMPASS = ItemStack.builder(Material.COMPASS)
+            .set(TagConstants.ACTION_TAG, "serversl")
+            .build();
+    private static final ItemStack LOBBY_SELECTOR = ItemStack.builder(Material.NETHER_STAR)
+            .set(TagConstants.ACTION_TAG, "lobbysl")
+            .build();
 
     private JoinUtils() {}
 

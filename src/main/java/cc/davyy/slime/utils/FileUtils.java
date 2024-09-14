@@ -1,6 +1,6 @@
 package cc.davyy.slime.utils;
 
-import cc.davyy.slime.misc.HoconConfigurationAdapter;
+import cc.davyy.slime.config.HoconConfigurationAdapter;
 import cc.davyy.slime.model.SlimePlayer;
 import de.leonhard.storage.SimplixBuilder;
 import de.leonhard.storage.Yaml;

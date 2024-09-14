@@ -1,4 +1,4 @@
-package cc.davyy.slime.misc;
+package cc.davyy.slime.config;
 
 import java.io.IOException;
 import java.io.InputStream;

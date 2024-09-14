@@ -3,7 +3,7 @@ package cc.davyy.slime.managers;
 import cc.davyy.slime.entities.npc.NPCEntity;
 import cc.davyy.slime.interfaces.INPC;
 import cc.davyy.slime.entities.npc.NPCFactory;
-import cc.davyy.slime.misc.TagConstants;
+import cc.davyy.slime.constants.TagConstants;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
