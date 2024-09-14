@@ -5,6 +5,7 @@ import cc.davyy.slime.misc.InventoryConstants;
 import cc.davyy.slime.misc.TagConstants;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
@@ -23,6 +24,7 @@ import static cc.davyy.slime.utils.GeneralUtils.createItem;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.ColorUtils.of;
 
+@Singleton
 public class ServerGUI extends Inventory {
 
     private static final int NAVIGATOR_SLOT = 13;

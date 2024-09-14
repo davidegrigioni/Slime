@@ -30,6 +30,7 @@ protection:
 
 # Items
 server-gui-title: "<gradient:#ff007f:#7f00ff>XenooCC Server</gradient>"
+lobby-gui-title: "<red>Lobbies</red>"
 
 compass-item:
   name: "<gradient:#ff4500:#ff7f50>Compass</gradient>"

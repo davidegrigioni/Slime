@@ -19,14 +19,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
+import static cc.davyy.slime.utils.FileUtils.getConfig;
+import static cc.davyy.slime.utils.ColorUtils.of;
+
 @Singleton
 public class LobbyGUI extends Inventory {
 
     private final LobbyManager lobbyManager;
 
+    private static final String LOBBY_GUI_TITLE = getConfig().getString("lobby-gui-title");
+
     @Inject
     public LobbyGUI(LobbyManager lobbyManager) {
-        super(InventoryType.CHEST_1_ROW, "Lobbies");
+        super(InventoryType.CHEST_1_ROW, of(LOBBY_GUI_TITLE).build());
         this.lobbyManager = lobbyManager;
 
         updateGUI();
