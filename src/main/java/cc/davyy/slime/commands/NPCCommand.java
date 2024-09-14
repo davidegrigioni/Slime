@@ -10,14 +10,12 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.entity.PlayerSkin;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
@@ -27,8 +25,9 @@ public class NPCCommand extends Command {
 
     private final NPCManager npcManager;
 
-    private final ArgumentWord actionArgument = ArgumentType.Word("action")
-            .from("create", "move", "delete");
+    private final ArgumentLiteral createArg = ArgumentType.Literal("create");
+    private final ArgumentLiteral moveArg = ArgumentType.Literal("move");
+    private final ArgumentLiteral deleteArg = ArgumentType.Literal("delete");
 
     private final ArgumentString nameArg = ArgumentType.String("name");
     private final ArgumentInteger idArg = ArgumentType.Integer("id");
@@ -42,7 +41,9 @@ public class NPCCommand extends Command {
 
         setDefaultExecutor(this::showUsage);
 
-        addSyntax(this::handleCommand, actionArgument, nameArg, idArg);
+        addSyntax(this::handleCreate, createArg, nameArg);
+        addSyntax(this::handleDelete, deleteArg, idArg);
+        addSyntax(this::handleMove, moveArg, idArg);
     }
 
     private void showUsage(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -68,30 +69,18 @@ public class NPCCommand extends Command {
         sender.sendMessage(usageMessage);
     }
 
-    private void handleCommand(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final String action = context.get(actionArgument);
-
-        switch (action.toLowerCase()) {
-            case "create" -> handleCreate(sender, context);
-            case "move" -> handleMove(sender, context);
-            case "delete" -> handleDelete(sender, context);
-            default -> sender.sendMessage(Component.text("Invalid action. Use /npc help for usage instructions.")
-                    .color(NamedTextColor.RED));
-        }
-    }
-
     private void handleDelete(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
         final int npcID = context.get(idArg);
 
-        npcManager.deleteNPC(npcID);
+        npcManager.deleteNPC(npcID, player);
     }
 
     private void handleMove(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
         final int npcID = context.get(idArg);
 
-        npcManager.moveNPC(npcID, player.getPosition());
+        npcManager.moveNPC(npcID, player);
     }
 
     private void handleCreate(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -99,7 +88,7 @@ public class NPCCommand extends Command {
         final String name = context.get(nameArg);
         final String skin = context.get(skinArg);
 
-        npcManager.createNPC(name, Objects.requireNonNull(PlayerSkin.fromUsername(skin)), player.getInstance(), player.getPosition(), null);
+        npcManager.createNPC(name, PlayerSkin.fromUsername(skin), player);
     }
 
 }

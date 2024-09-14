@@ -14,7 +14,6 @@ import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
-import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
@@ -51,9 +50,9 @@ public class HologramCommand extends Command {
             final Component usageMessage = text("Usage Instructions:")
                     .color(NamedTextColor.RED)
                     .append(newline())
-                    .append(text("/hologram create <text>")
+                    .append(text("/hologram create <text>\n")
                             .color(NamedTextColor.WHITE))
-                    .append(text("/hologram move <id>")
+                    .append(text("/hologram move <id>\n")
                             .color(NamedTextColor.WHITE))
                     .append(text("/hologram delete <id>")
                             .color(NamedTextColor.WHITE));
@@ -70,19 +69,14 @@ public class HologramCommand extends Command {
         final SlimePlayer player = (SlimePlayer) sender;
         final int id = context.get(idArg);
 
-        hologramManager.deleteHologram(id);
-        player.sendMessage(text("Hologram " + id + " deleted.")
-                .color(NamedTextColor.GREEN));
+        hologramManager.deleteHologram(id, player);
     }
 
     private void handleMove(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
         final int id = context.get(idArg);
-        final Pos newPosition = player.getPosition();
 
-        hologramManager.moveHologram(id, newPosition);
-        player.sendMessage(text("Hologram " + id + " moved to position: " + newPosition)
-                .color(NamedTextColor.GREEN));
+        hologramManager.moveHologram(id, player);
     }
 
     private void handleCreate(@NotNull CommandSender sender, @NotNull CommandContext context) {

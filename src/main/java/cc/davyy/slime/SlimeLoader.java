@@ -67,7 +67,7 @@ public class SlimeLoader {
         setupShutdownTask();
 
         //MojangAuth.init();
-        //handleVelocityProxy();
+        handleVelocityProxy();
 
         startServer(minecraftServer);
     }
