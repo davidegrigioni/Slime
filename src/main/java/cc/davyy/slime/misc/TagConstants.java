@@ -1,4 +1,4 @@
-package cc.davyy.slime.utils;
+package cc.davyy.slime.misc;
 
 import net.minestom.server.tag.Tag;
 

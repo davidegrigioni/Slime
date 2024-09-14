@@ -23,7 +23,6 @@ public class SlimeModule extends AbstractModule {
 
         // Manager Binding
         bind(TeleportManager.class);
-        bind(DisguiseManager.class);
         bind(BossBarManager.class);
         bind(BrandManager.class);
         bind(LobbyManager.class);

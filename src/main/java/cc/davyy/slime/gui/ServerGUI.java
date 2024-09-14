@@ -1,8 +1,8 @@
 package cc.davyy.slime.gui;
 
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.InventoryConstants;
-import cc.davyy.slime.utils.TagConstants;
+import cc.davyy.slime.misc.InventoryConstants;
+import cc.davyy.slime.misc.TagConstants;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.minestom.server.MinecraftServer;

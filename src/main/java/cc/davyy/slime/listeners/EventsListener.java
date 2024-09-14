@@ -7,7 +7,7 @@ import cc.davyy.slime.managers.SidebarManager;
 import cc.davyy.slime.managers.SpawnManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.PosUtils;
-import cc.davyy.slime.utils.TagConstants;
+import cc.davyy.slime.misc.TagConstants;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;

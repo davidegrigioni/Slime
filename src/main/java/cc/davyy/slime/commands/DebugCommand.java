@@ -2,7 +2,6 @@ package cc.davyy.slime.commands;
 
 import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.managers.BossBarManager;
-import cc.davyy.slime.managers.DisguiseManager;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.SidebarManager;
 import cc.davyy.slime.model.SlimePlayer;

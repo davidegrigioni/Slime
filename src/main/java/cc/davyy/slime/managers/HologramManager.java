@@ -1,9 +1,9 @@
 package cc.davyy.slime.managers;
 
 import cc.davyy.slime.entities.HologramEntity;
-import cc.davyy.slime.model.HologramFactory;
+import cc.davyy.slime.misc.HologramFactory;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.TagConstants;
+import cc.davyy.slime.misc.TagConstants;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;

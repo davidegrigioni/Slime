@@ -1,4 +1,4 @@
-package cc.davyy.slime.model;
+package cc.davyy.slime.misc;
 
 import cc.davyy.slime.entities.HologramEntity;
 import net.kyori.adventure.text.Component;
