@@ -78,7 +78,7 @@ public class NPCManager implements NPCService {
     }
 
     @Override
-    public Map<Integer, NPCEntity> getAllNPCEntities() {
+    public @NotNull Map<Integer, NPCEntity> getAllNPCEntities() {
         return new ConcurrentHashMap<>(npcEntityMap);
     }
 

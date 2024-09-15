@@ -122,6 +122,6 @@ public class LobbyManager implements LobbyService {
     }
 
     @Override
-    public Collection<Lobby> getAllLobbies() { return lobbies.values(); }
+    public @NotNull Collection<Lobby> getAllLobbies() { return lobbies.values(); }
 
 }

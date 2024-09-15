@@ -20,8 +20,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static net.minestom.server.MinecraftServer.LOGGER;
-
 /**
  * Utility class for handling color and text formatting using Adventure's MiniMessage and ANSI serialization.
  */
