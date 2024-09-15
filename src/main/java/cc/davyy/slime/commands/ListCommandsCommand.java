@@ -19,7 +19,6 @@ public class ListCommandsCommand extends Command {
 
     private final Set<Command> commands = MinecraftServer.getCommandManager().getCommands();
 
-    @Inject
     public ListCommandsCommand() {
         super("listcommands");
 

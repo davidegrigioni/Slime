@@ -1,6 +1,5 @@
 package cc.davyy.slime.commands;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -16,7 +15,6 @@ import static net.kyori.adventure.text.Component.text;
 @Singleton
 public class SocialCommand extends Command {
 
-    @Inject
     public SocialCommand() {
         super("social");
 
