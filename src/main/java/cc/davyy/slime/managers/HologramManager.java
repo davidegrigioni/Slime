@@ -1,7 +1,7 @@
 package cc.davyy.slime.managers;
 
 import cc.davyy.slime.entities.holograms.HologramEntity;
-import cc.davyy.slime.interfaces.IHologram;
+import cc.davyy.slime.services.HologramService;
 import cc.davyy.slime.entities.holograms.HologramFactory;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.constants.TagConstants;
@@ -18,9 +18,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Singleton
-public class HologramManager implements IHologram {
+public class HologramManager implements HologramService {
 
     private static final AtomicInteger entityIdCounter = new AtomicInteger(1);
+
     private final HologramFactory hologramFactory;
     private final Map<Integer, HologramEntity> hologramEntityMap = new ConcurrentHashMap<>();
 

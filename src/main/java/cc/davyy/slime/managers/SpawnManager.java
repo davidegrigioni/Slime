@@ -1,6 +1,6 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.interfaces.ISpawn;
+import cc.davyy.slime.services.SpawnService;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 
 @Singleton
-public class SpawnManager implements ISpawn {
+public class SpawnManager implements SpawnService {
 
     private Pos spawnPosition;
 

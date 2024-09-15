@@ -1,4 +1,4 @@
-package cc.davyy.slime.interfaces;
+package cc.davyy.slime.services;
 
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public interface ILobby {
+public interface LobbyService {
 
     /**
      * Creates a new shared lobby instance with a unique name like "lobby1", "lobby2", etc.

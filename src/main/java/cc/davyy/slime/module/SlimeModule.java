@@ -2,13 +2,21 @@ package cc.davyy.slime.module;
 
 import cc.davyy.slime.SlimeLoader;
 import cc.davyy.slime.commands.*;
+import cc.davyy.slime.cosmetics.CosmeticService;
+import cc.davyy.slime.cosmetics.managers.ItemCosmeticManager;
+import cc.davyy.slime.entities.holograms.HologramFactory;
+import cc.davyy.slime.entities.npc.NPCFactory;
 import cc.davyy.slime.gui.LobbyGUI;
 import cc.davyy.slime.gui.ServerGUI;
-import cc.davyy.slime.interfaces.*;
+import cc.davyy.slime.services.*;
 import cc.davyy.slime.listeners.EventsListener;
 import cc.davyy.slime.managers.*;
+import cc.davyy.slime.cosmetics.CosmeticFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.TypeLiteral;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.item.ItemStack;
 
 public class SlimeModule extends AbstractModule {
 
@@ -26,7 +34,6 @@ public class SlimeModule extends AbstractModule {
         bind(BossBarManager.class);
         bind(BrandManager.class);
         bind(BroadcastManager.class);
-        bind(CosmeticManager.class);
         bind(GameModeManager.class);
         bind(HologramManager.class);
         bind(LobbyManager.class);
@@ -34,23 +41,24 @@ public class SlimeModule extends AbstractModule {
         bind(SidebarManager.class);
         bind(SpawnManager.class);
         bind(TeleportManager.class);
+        bind(ItemCosmeticManager.class);
 
         // Interface Binding
-        bind(IBossBar.class).to(BossBarManager.class);
-        bind(IBrand.class).to(BrandManager.class);
-        bind(IBroadcast.class).to(BroadcastManager.class);
-        bind(ICosmetics.class).to(CosmeticManager.class);
-        bind(IGameMode.class).to(GameModeManager.class);
-        bind(IHologram.class).to(HologramManager.class);
-        bind(ILobby.class).to(LobbyManager.class);
-        bind(INPC.class).to(NPCManager.class);
-        bind(ISidebar.class).to(SidebarManager.class);
-        bind(ISpawn.class).to(SpawnManager.class);
-        bind(ITeleport.class).to(TeleportManager.class);
+        bind(BossBarService.class).to(BossBarManager.class);
+        bind(BrandService.class).to(BrandManager.class);
+        bind(BroadcastService.class).to(BroadcastManager.class);
+        bind(GameModeService.class).to(GameModeManager.class);
+        bind(HologramService.class).to(HologramManager.class);
+        bind(LobbyService.class).to(LobbyManager.class);
+        bind(NPCService.class).to(NPCManager.class);
+        bind(SidebarService.class).to(SidebarManager.class);
+        bind(SpawnService.class).to(SpawnManager.class);
+        bind(TeleportService.class).to(TeleportManager.class);
 
         // Command Binding
         bind(BroadCastCommand.class);
         bind(ConfigReloadCommand.class);
+        bind(CosmeticCommand.class);
         bind(GameModeCommand.class);
         bind(HologramCommand.class);
         bind(ListCommandsCommand.class);
@@ -62,6 +70,13 @@ public class SlimeModule extends AbstractModule {
         bind(TeleportCommand.class);
 
         bind(EventsListener.class);
+
+        bind(CosmeticFactory.class);
+        bind(HologramFactory.class);
+        bind(NPCFactory.class);
+
+        bind(new TypeLiteral<CosmeticService<ItemStack>>() {})
+                .to(ItemCosmeticManager.class);
     }
 
     @Provides

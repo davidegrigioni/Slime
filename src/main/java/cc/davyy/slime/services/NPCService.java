@@ -1,4 +1,4 @@
-package cc.davyy.slime.interfaces;
+package cc.davyy.slime.services;
 
 import cc.davyy.slime.entities.npc.NPCEntity;
 import cc.davyy.slime.model.SlimePlayer;
@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public interface INPC {
+public interface NPCService {
 
     /**
      * Creates a new NPC and assigns it a unique ID.

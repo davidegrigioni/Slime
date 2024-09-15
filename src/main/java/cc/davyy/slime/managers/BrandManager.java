@@ -1,6 +1,6 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.interfaces.IBrand;
+import cc.davyy.slime.services.BrandService;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -21,7 +21,7 @@ import static net.kyori.adventure.text.Component.text;
  * defined in the configuration. The animation interval and styles are configured through YAML configuration files.
  */
 @Singleton
-public class BrandManager implements IBrand {
+public class BrandManager implements BrandService {
 
     /**
      * Logger for the BrandManager class.

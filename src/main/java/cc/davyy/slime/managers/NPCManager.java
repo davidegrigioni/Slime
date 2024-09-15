@@ -1,7 +1,7 @@
 package cc.davyy.slime.managers;
 
 import cc.davyy.slime.entities.npc.NPCEntity;
-import cc.davyy.slime.interfaces.INPC;
+import cc.davyy.slime.services.NPCService;
 import cc.davyy.slime.entities.npc.NPCFactory;
 import cc.davyy.slime.constants.TagConstants;
 import cc.davyy.slime.model.SlimePlayer;
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static net.kyori.adventure.text.Component.text;
 
 @Singleton
-public class NPCManager implements INPC {
+public class NPCManager implements NPCService {
 
     private static final AtomicInteger entityIdCounter = new AtomicInteger(1);
     private final NPCFactory npcFactory;

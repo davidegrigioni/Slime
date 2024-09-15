@@ -1,4 +1,4 @@
-package cc.davyy.slime.interfaces;
+package cc.davyy.slime.services;
 
 import cc.davyy.slime.model.SlimePlayer;
 import net.kyori.adventure.bossbar.BossBar;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 import java.util.UUID;
 
-public interface IBossBar {
+public interface BossBarService {
 
     /**
      * Creates and displays a boss bar for the specified player.

@@ -1,4 +1,4 @@
-package cc.davyy.slime.interfaces;
+package cc.davyy.slime.services;
 
 import cc.davyy.slime.entities.holograms.HologramEntity;
 import cc.davyy.slime.model.SlimePlayer;
@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public interface IHologram {
+public interface HologramService {
 
     /**
      * Creates a hologram at the player's position with the given text.

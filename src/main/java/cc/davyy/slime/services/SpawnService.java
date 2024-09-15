@@ -1,11 +1,11 @@
-package cc.davyy.slime.interfaces;
+package cc.davyy.slime.services;
 
 import cc.davyy.slime.model.SlimePlayer;
 import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface ISpawn {
+public interface SpawnService {
 
     void setSpawnPosition(@NotNull Pos pos);
 

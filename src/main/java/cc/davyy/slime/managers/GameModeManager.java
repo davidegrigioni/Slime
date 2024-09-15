@@ -1,6 +1,6 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.interfaces.IGameMode;
+import cc.davyy.slime.services.GameModeService;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Singleton;
@@ -8,7 +8,7 @@ import net.minestom.server.entity.GameMode;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
-public class GameModeManager implements IGameMode {
+public class GameModeManager implements GameModeService {
 
     @Override
     public void setGameMode(@NotNull SlimePlayer player, @NotNull GameMode gameMode) {

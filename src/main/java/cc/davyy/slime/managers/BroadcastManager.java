@@ -1,6 +1,6 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.interfaces.IBroadcast;
+import cc.davyy.slime.services.BroadcastService;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Singleton;
@@ -18,7 +18,7 @@ import static cc.davyy.slime.utils.GeneralUtils.broadcastAllInstances;
 import static cc.davyy.slime.utils.GeneralUtils.sendComponent;
 
 @Singleton
-public class BroadcastManager implements IBroadcast {
+public class BroadcastManager implements BroadcastService {
 
     @Override
     public void broadcastMessage(@NotNull CommandSender sender, @NotNull String message) {

@@ -1,9 +1,9 @@
-package cc.davyy.slime.interfaces;
+package cc.davyy.slime.services;
 
 import cc.davyy.slime.model.SlimePlayer;
 import org.jetbrains.annotations.NotNull;
 
-public interface ISidebar {
+public interface SidebarService {
 
     void showSidebar(@NotNull SlimePlayer player);
 

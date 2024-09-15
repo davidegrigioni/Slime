@@ -1,6 +1,6 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.interfaces.ISidebar;
+import cc.davyy.slime.services.SidebarService;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
@@ -20,7 +20,7 @@ import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 
 @Singleton
-public class SidebarManager implements ISidebar {
+public class SidebarManager implements SidebarService {
 
     private final Sidebar sidebar;
     private final LobbyManager lobbyManager;

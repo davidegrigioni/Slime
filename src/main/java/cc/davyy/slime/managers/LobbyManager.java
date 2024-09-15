@@ -1,6 +1,6 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.interfaces.ILobby;
+import cc.davyy.slime.services.LobbyService;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 
 @Singleton
-public class LobbyManager implements ILobby {
+public class LobbyManager implements LobbyService {
 
     private static final AtomicInteger lobbyIDCounter = new AtomicInteger(1);
     private static final AtomicInteger lobbyCounter = new AtomicInteger(1);

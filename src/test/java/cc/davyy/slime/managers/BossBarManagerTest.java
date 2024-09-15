@@ -1,14 +1,7 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.testing.Env;
 import cc.davyy.slime.testing.EnvTest;
-import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.text.Component;
-import net.minestom.server.coordinate.Pos;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 class BossBarManagerTest {

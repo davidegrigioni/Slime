@@ -1,4 +1,4 @@
-package cc.davyy.slime.interfaces;
+package cc.davyy.slime.services;
 
 import cc.davyy.slime.model.SlimePlayer;
 import net.minestom.server.command.CommandSender;
@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public interface IBroadcast {
+public interface BroadcastService {
 
     void broadcastMessage(@NotNull CommandSender sender, @NotNull String message);
 

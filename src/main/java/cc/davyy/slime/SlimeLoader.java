@@ -43,6 +43,7 @@ public class SlimeLoader {
     @Inject private ListCommandsCommand listCommandsCommand;
     @Inject private SocialCommand socialCommand;
     @Inject private StopCommand stopCommand;
+    @Inject private CosmeticCommand cosmeticCommand;
 
     @Inject private EventsListener eventsListener;
 
@@ -67,7 +68,7 @@ public class SlimeLoader {
         setupShutdownTask();
 
         //MojangAuth.init();
-        handleVelocityProxy();
+        //handleVelocityProxy();
 
         startServer(minecraftServer);
     }
@@ -92,6 +93,10 @@ public class SlimeLoader {
         commandManager.register(listCommandsCommand);
         commandManager.register(socialCommand);
         commandManager.register(stopCommand);
+        commandManager.register(cosmeticCommand);
+
+        commandManager.register(new ExecuteCommand());
+        commandManager.register(new SayCommand());
     }
 
     private void setupShutdownTask() {

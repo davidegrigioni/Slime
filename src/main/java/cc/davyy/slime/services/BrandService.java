@@ -1,6 +1,6 @@
-package cc.davyy.slime.interfaces;
+package cc.davyy.slime.services;
 
-public interface IBrand {
+public interface BrandService {
 
     /**
      * Starts the brand name animation task.

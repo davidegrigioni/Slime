@@ -1,6 +1,6 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.interfaces.ITeleport;
+import cc.davyy.slime.services.TeleportService;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
-public class TeleportManager implements ITeleport {
+public class TeleportManager implements TeleportService {
 
     private final Map<UUID, Long> teleportCooldowns = new ConcurrentHashMap<>();
     private static final long TELEPORT_COOLDOWN_MILLIS = 5000;

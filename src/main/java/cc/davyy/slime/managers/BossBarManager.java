@@ -1,6 +1,6 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.interfaces.IBossBar;
+import cc.davyy.slime.services.BossBarService;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Singleton;
 import net.kyori.adventure.bossbar.BossBar;
@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
-public class BossBarManager implements IBossBar {
+public class BossBarManager implements BossBarService {
 
     private final Map<UUID, BossBar> playerBossBars = new ConcurrentHashMap<>();
 
