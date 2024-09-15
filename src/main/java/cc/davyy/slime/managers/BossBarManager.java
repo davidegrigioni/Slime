@@ -43,6 +43,6 @@ public class BossBarManager implements BossBarService {
     }
 
     @Override
-    public Map<UUID, BossBar> getPlayerBossBars() { return playerBossBars; }
+    public @NotNull Map<UUID, BossBar> getPlayerBossBars() { return playerBossBars; }
 
 }

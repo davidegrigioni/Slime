@@ -81,12 +81,12 @@ public class HologramManager implements HologramService {
     }
 
     @Override
-    public HologramEntity getHologramById(int id) {
+    public @NotNull HologramEntity getHologramById(int id) {
         return hologramEntityMap.get(id);
     }
 
     @Override
-    public Map<Integer, HologramEntity> getAllHologramEntities() {
+    public @NotNull Map<Integer, HologramEntity> getAllHologramEntities() {
         return new ConcurrentHashMap<>(hologramEntityMap);
     }
 

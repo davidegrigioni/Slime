@@ -44,7 +44,7 @@ public class ItemCosmeticManager implements CosmeticService<ItemStack> {
     }
 
     @Override
-    public Optional<Cosmetic<ItemStack>> getCosmeticByID(int id) {
+    public @NotNull Optional<Cosmetic<ItemStack>> getCosmeticByID(int id) {
         return Optional.ofNullable(itemCosmeticMap.get(id));
     }
 
