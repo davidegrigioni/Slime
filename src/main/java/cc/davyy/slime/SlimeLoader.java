@@ -83,21 +83,22 @@ public class SlimeLoader {
 
     private void registerCommands() {
         final var commandManager = MinecraftServer.getCommandManager();
+
         commandManager.register(broadcastCommand);
+        commandManager.register(configReloadCommand);
+        commandManager.register(cosmeticCommand);
         commandManager.register(debugCommand);
+        commandManager.register(executeCommand);
         commandManager.register(gameModeCommand);
         commandManager.register(hologramCommand);
+        commandManager.register(listCommandsCommand);
         commandManager.register(lobbyCommand);
         commandManager.register(npcCommand);
-        commandManager.register(spawnCommand);
-        commandManager.register(teleportCommand);
-        commandManager.register(configReloadCommand);
-        commandManager.register(listCommandsCommand);
-        commandManager.register(socialCommand);
-        commandManager.register(stopCommand);
-        commandManager.register(cosmeticCommand);
-        commandManager.register(executeCommand);
         commandManager.register(sayCommand);
+        commandManager.register(socialCommand);
+        commandManager.register(spawnCommand);
+        commandManager.register(stopCommand);
+        commandManager.register(teleportCommand);
     }
 
     private void setupShutdownTask() {
