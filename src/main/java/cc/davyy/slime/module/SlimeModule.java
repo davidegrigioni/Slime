@@ -15,7 +15,6 @@ import cc.davyy.slime.cosmetics.CosmeticFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.ItemStack;
 
 public class SlimeModule extends AbstractModule {
@@ -28,9 +27,10 @@ public class SlimeModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        // Bind instances
         bind(SlimeLoader.class).toInstance(instance);
 
-        // Manager Binding
+        // Manager Bindings
         bind(BossBarManager.class);
         bind(BrandManager.class);
         bind(BroadcastManager.class);
@@ -43,7 +43,7 @@ public class SlimeModule extends AbstractModule {
         bind(TeleportManager.class);
         bind(ItemCosmeticManager.class);
 
-        // Interface Binding
+        // Interface Bindings
         bind(BossBarService.class).to(BossBarManager.class);
         bind(BrandService.class).to(BrandManager.class);
         bind(BroadcastService.class).to(BroadcastManager.class);
@@ -55,7 +55,7 @@ public class SlimeModule extends AbstractModule {
         bind(SpawnService.class).to(SpawnManager.class);
         bind(TeleportService.class).to(TeleportManager.class);
 
-        // Command Binding
+        // Command Bindings
         bind(BroadCastCommand.class);
         bind(ConfigReloadCommand.class);
         bind(CosmeticCommand.class);
@@ -69,12 +69,15 @@ public class SlimeModule extends AbstractModule {
         bind(StopCommand.class);
         bind(TeleportCommand.class);
 
+        // Listener Bindings
         bind(EventsListener.class);
 
+        // Factory Bindings
         bind(CosmeticFactory.class);
         bind(HologramFactory.class);
         bind(NPCFactory.class);
 
+        // Binding CosmeticService for ItemStack
         bind(new TypeLiteral<CosmeticService<ItemStack>>() {})
                 .to(ItemCosmeticManager.class);
     }

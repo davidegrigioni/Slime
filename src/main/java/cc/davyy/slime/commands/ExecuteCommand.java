@@ -2,6 +2,7 @@ package cc.davyy.slime.commands;
 
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
+import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 
+@Singleton
 public class ExecuteCommand extends Command {
 
     private final ArgumentEntity playerArg = ArgumentType.Entity("player").onlyPlayers(true);

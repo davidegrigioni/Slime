@@ -32,18 +32,20 @@ public class SlimeLoader {
     @Inject private GameModeManager gameModeManager;
 
     @Inject private BroadCastCommand broadcastCommand;
+    @Inject private ConfigReloadCommand configReloadCommand;
+    @Inject private CosmeticCommand cosmeticCommand;
     @Inject private DebugCommand debugCommand;
+    @Inject private ExecuteCommand executeCommand;
     @Inject private GameModeCommand gameModeCommand;
     @Inject private HologramCommand hologramCommand;
+    @Inject private ListCommandsCommand listCommandsCommand;
     @Inject private LobbyCommand lobbyCommand;
     @Inject private NPCCommand npcCommand;
-    @Inject private SpawnCommand spawnCommand;
-    @Inject private TeleportCommand teleportCommand;
-    @Inject private ConfigReloadCommand configReloadCommand;
-    @Inject private ListCommandsCommand listCommandsCommand;
+    @Inject private SayCommand sayCommand;
     @Inject private SocialCommand socialCommand;
+    @Inject private SpawnCommand spawnCommand;
     @Inject private StopCommand stopCommand;
-    @Inject private CosmeticCommand cosmeticCommand;
+    @Inject private TeleportCommand teleportCommand;
 
     @Inject private EventsListener eventsListener;
 
@@ -94,9 +96,8 @@ public class SlimeLoader {
         commandManager.register(socialCommand);
         commandManager.register(stopCommand);
         commandManager.register(cosmeticCommand);
-
-        commandManager.register(new ExecuteCommand());
-        commandManager.register(new SayCommand());
+        commandManager.register(executeCommand);
+        commandManager.register(sayCommand);
     }
 
     private void setupShutdownTask() {
