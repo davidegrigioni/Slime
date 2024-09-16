@@ -3,12 +3,16 @@ package cc.davyy.slime.module;
 import cc.davyy.slime.SlimeLoader;
 import cc.davyy.slime.commands.*;
 import cc.davyy.slime.commands.cosmetic.CosmeticCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.ArmorCosmeticSubCommand;
 import cc.davyy.slime.commands.cosmetic.subcommands.HatCosmeticSubCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.ParticleCosmeticSubCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.PetCosmeticSubCommand;
+import cc.davyy.slime.cosmetics.ArmorCosmeticService;
+import cc.davyy.slime.cosmetics.ParticleCosmeticService;
+import cc.davyy.slime.cosmetics.managers.ArmorCosmeticManager;
 import cc.davyy.slime.cosmetics.managers.HatCosmeticManager;
+import cc.davyy.slime.cosmetics.managers.ParticleCosmeticManager;
 import cc.davyy.slime.cosmetics.managers.PetCosmeticManager;
-import cc.davyy.slime.cosmetics.model.Cosmetic;
-import cc.davyy.slime.cosmetics.model.HatCosmetic;
-import cc.davyy.slime.cosmetics.model.PetCosmetic;
 import cc.davyy.slime.entities.holograms.HologramFactory;
 import cc.davyy.slime.entities.npc.NPCFactory;
 import cc.davyy.slime.gui.LobbyGUI;
@@ -44,8 +48,11 @@ public class SlimeModule extends AbstractModule {
         bind(SidebarManager.class);
         bind(SpawnManager.class);
         bind(TeleportManager.class);
-        bind(PetCosmeticManager.class);
+
+        bind(ArmorCosmeticManager.class);
         bind(HatCosmeticManager.class);
+        bind(ParticleCosmeticManager.class);
+        bind(PetCosmeticManager.class);
 
         // Interface Bindings
         bind(BossBarService.class).to(BossBarManager.class);
@@ -59,11 +66,19 @@ public class SlimeModule extends AbstractModule {
         bind(SpawnService.class).to(SpawnManager.class);
         bind(TeleportService.class).to(TeleportManager.class);
 
+        bind(ArmorCosmeticService.class).to(ArmorCosmeticManager.class);
+        bind(ParticleCosmeticService.class).to(ParticleCosmeticManager.class);
+
         // Command Bindings
         bind(BroadCastCommand.class);
         bind(ConfigReloadCommand.class);
+
         bind(CosmeticCommand.class);
+        bind(ArmorCosmeticSubCommand.class);
         bind(HatCosmeticSubCommand.class);
+        bind(ParticleCosmeticSubCommand.class);
+        bind(PetCosmeticSubCommand.class);
+
         bind(GameModeCommand.class);
         bind(HologramCommand.class);
         bind(ListCommandsCommand.class);
