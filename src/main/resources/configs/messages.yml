@@ -2,6 +2,12 @@ messages:
   spawn-set: "<gradient:#00FF00:#007700>Set spawn to <pos></gradient>"
   spawn-teleport: "<gradient:#00FF00:#007700>You got teleported to spawn</gradient>"
 
+  pet-cosmetic-created: "<green>Successfully created pet cosmetic: <name> with entity type <entity></green>"
+  item-cosmetic-created: "<green>Successfully created cosmetic: <name> with item type <itemtype></green>"
+  cosmetic-id-not-found: "<red>Cosmetic with id <id> not found</red>"
+  cosmetic-applied: "<green>Successfully applied cosmetic: <cosmeticname></green>"
+  cosmetic-removed: "<red>Successfully removed cosmetic: <cosmeticname></red>"
+
   reload: "<gradient:#00FF00:#007700>Reloaded config successfully!</gradient>"
   kick: "<gradient:#FF0000:#AA0000>Server closing...</gradient>"
   message-empty: "<gradient:#FF0000:#AA0000>Message cannot be empty.</gradient>"

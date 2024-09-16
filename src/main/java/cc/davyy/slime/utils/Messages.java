@@ -21,6 +21,12 @@ public enum Messages implements ComponentLike {
     NO_PERMS("messages.no-permission"),
     TARGET_PLAYER_NOT_FOUND("messages.target-player-not-found"),
 
+    PET_COSMETIC_CREATED("messages.pet-cosmetic-created"),
+    ITEM_COSMETIC_CREATED("messages.item-cosmetic-created"),
+    COSMETIC_ID_NOT_FOUND("messages.cosmetic-id-not-found"),
+    COSMETIC_APPLIED("messages.cosmetic-applied"),
+    COSMETIC_REMOVED("messages.cosmetic-removed"),
+
     HOLOGRAM_CREATED("messages.hologram-created"),
     HOLOGRAM_DOES_NOT_EXISTS("messages.hologram-does-not-exists"),
     HOLOGRAM_DELETED("messages.hologram-deleted"),

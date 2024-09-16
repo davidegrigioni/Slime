@@ -1,10 +1,9 @@
 package cc.davyy.slime.cosmetics;
 
-import cc.davyy.slime.cosmetics.model.Cosmetic;
-import cc.davyy.slime.cosmetics.model.ItemCosmetic;
-import cc.davyy.slime.cosmetics.model.MobCosmetic;
-import cc.davyy.slime.cosmetics.model.ParticleCosmetic;
+import cc.davyy.slime.cosmetics.model.*;
 import com.google.inject.Singleton;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
@@ -13,16 +12,25 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public final class CosmeticFactory {
 
-    public ItemCosmetic createItemCosmetic(int id, @NotNull String name, @NotNull ItemStack item, @NotNull Cosmetic.CosmeticType type) {
-        return new ItemCosmetic(id, name, item, type);
+    public HatCosmetic createHatCosmetic(int id, @NotNull Component name,
+                                         @NotNull ItemStack itemStack) {
+        return new HatCosmetic(id, name, itemStack);
     }
 
-    public ParticleCosmetic createParticleCosmetic(int id, @NotNull String name, @NotNull Particle particleType) {
-        return new ParticleCosmetic(id, name, particleType);
+    public PetCosmetic createPetCosmetic(int id, @NotNull Component name,
+                                         @NotNull EntityType entityType) {
+        return new PetCosmetic(id, name, entityType);
     }
 
-    public MobCosmetic createMobCosmetic(int id, @NotNull String name, @NotNull EntityType entityType) {
-        return new MobCosmetic(id, name, entityType);
+    public ParticleCosmetic createParticleCosmetic(int id, @NotNull Component name,
+                                                   @NotNull Particle particle,
+                                                   @NotNull Pos pos, @NotNull Pos posOffset, int maxSpeed,
+                                                   int particleCount) {
+        return new ParticleCosmetic(id, name, particle, pos, posOffset, maxSpeed, particleCount);
+    }
+
+    public ArmorCosmetic createArmorCosmetic(int id, @NotNull Component name, @NotNull ArmorData armorData) {
+        return new ArmorCosmetic(id, name, armorData);
     }
 
 }

@@ -1,6 +1,10 @@
 package cc.davyy.slime;
 
 import cc.davyy.slime.commands.*;
+import cc.davyy.slime.commands.cosmetic.CosmeticCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.ArmorCosmeticSubCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.HatCosmeticSubCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.ParticleCosmeticSubCommand;
 import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.*;
 import cc.davyy.slime.module.SlimeModule;

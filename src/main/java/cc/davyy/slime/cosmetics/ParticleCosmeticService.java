@@ -1,26 +1,21 @@
 package cc.davyy.slime.cosmetics;
 
-import cc.davyy.slime.cosmetics.model.Cosmetic;
+import cc.davyy.slime.cosmetics.model.ParticleCosmetic;
 import cc.davyy.slime.model.SlimePlayer;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.particle.Particle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Service interface for managing cosmetics in the game.
- *
- */
-public interface CosmeticService<T extends Cosmetic> {
+public interface ParticleCosmeticService {
 
-    /**
-     * Creates a cosmetic and registers it in the system.
-     *
-     * @param name The name of the cosmetic.
-     * @param data The specific data related to the cosmetic (e.g., ItemStack or EntityType).
-     */
-    void createCosmetic(@NotNull Component name, @NotNull Object data);
+    void createCosmetic(@NotNull Component name,
+                        @NotNull Particle particle,
+                        @NotNull Pos pos, @NotNull Pos posOffset, int maxSpeed,
+                        int particleCount);
 
     /**
      * Applies the cosmetic to the given player.
@@ -45,7 +40,7 @@ public interface CosmeticService<T extends Cosmetic> {
      * @return An optional containing the cosmetic if found.
      */
     @NotNull
-    Optional<T> getCosmeticByID(int id);
+    Optional<ParticleCosmetic> getCosmeticByID(int id);
 
     /**
      * Returns a list of all available cosmetics.
@@ -53,6 +48,6 @@ public interface CosmeticService<T extends Cosmetic> {
      * @return A list of all available cosmetics.
      */
     @NotNull
-    List<T> getAvailableCosmetics();
+    List<ParticleCosmetic> getAvailableCosmetics();
 
 }
