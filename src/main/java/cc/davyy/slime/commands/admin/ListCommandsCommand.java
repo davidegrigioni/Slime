@@ -1,8 +1,7 @@
-package cc.davyy.slime.commands;
+package cc.davyy.slime.commands.admin;
 
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;

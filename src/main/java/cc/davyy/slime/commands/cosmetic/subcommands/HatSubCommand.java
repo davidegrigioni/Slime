@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import static cc.davyy.slime.utils.ColorUtils.of;
 
 @Singleton
-public class HatCosmeticSubCommand extends Command {
+public class HatSubCommand extends Command {
 
     private final HatCosmeticManager hatCosmeticManager;
 
@@ -32,7 +32,7 @@ public class HatCosmeticSubCommand extends Command {
     private final ArgumentInteger idArg = ArgumentType.Integer("id");
 
     @Inject
-    public HatCosmeticSubCommand(HatCosmeticManager hatCosmeticManager) {
+    public HatSubCommand(HatCosmeticManager hatCosmeticManager) {
         super("item");
         this.hatCosmeticManager = hatCosmeticManager;
 

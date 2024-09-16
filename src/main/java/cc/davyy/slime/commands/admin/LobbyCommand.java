@@ -1,4 +1,4 @@
-package cc.davyy.slime.commands;
+package cc.davyy.slime.commands.admin;
 
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.model.Lobby;

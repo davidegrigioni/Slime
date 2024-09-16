@@ -1,12 +1,15 @@
 package cc.davyy.slime.module;
 
 import cc.davyy.slime.SlimeLoader;
-import cc.davyy.slime.commands.*;
+import cc.davyy.slime.commands.admin.*;
 import cc.davyy.slime.commands.cosmetic.CosmeticCommand;
-import cc.davyy.slime.commands.cosmetic.subcommands.ArmorCosmeticSubCommand;
-import cc.davyy.slime.commands.cosmetic.subcommands.HatCosmeticSubCommand;
-import cc.davyy.slime.commands.cosmetic.subcommands.ParticleCosmeticSubCommand;
-import cc.davyy.slime.commands.cosmetic.subcommands.PetCosmeticSubCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.ArmorSubCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.HatSubCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.ParticleSubCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.PetSubCommand;
+import cc.davyy.slime.commands.player.SocialCommand;
+import cc.davyy.slime.commands.player.SpawnCommand;
+import cc.davyy.slime.commands.player.TeleportCommand;
 import cc.davyy.slime.cosmetics.ArmorCosmeticService;
 import cc.davyy.slime.cosmetics.ParticleCosmeticService;
 import cc.davyy.slime.cosmetics.managers.ArmorCosmeticManager;
@@ -74,10 +77,10 @@ public class SlimeModule extends AbstractModule {
         bind(ConfigReloadCommand.class);
 
         bind(CosmeticCommand.class);
-        bind(ArmorCosmeticSubCommand.class);
-        bind(HatCosmeticSubCommand.class);
-        bind(ParticleCosmeticSubCommand.class);
-        bind(PetCosmeticSubCommand.class);
+        bind(ArmorSubCommand.class);
+        bind(HatSubCommand.class);
+        bind(ParticleSubCommand.class);
+        bind(PetSubCommand.class);
 
         bind(GameModeCommand.class);
         bind(HologramCommand.class);

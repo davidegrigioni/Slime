@@ -1,4 +1,4 @@
-package cc.davyy.slime.commands;
+package cc.davyy.slime.commands.admin;
 
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;

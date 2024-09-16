@@ -1,4 +1,4 @@
-package cc.davyy.slime.commands;
+package cc.davyy.slime.commands.player;
 
 import cc.davyy.slime.managers.TeleportManager;
 import cc.davyy.slime.model.SlimePlayer;

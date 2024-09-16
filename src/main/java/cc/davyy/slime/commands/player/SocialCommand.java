@@ -1,4 +1,4 @@
-package cc.davyy.slime.commands;
+package cc.davyy.slime.commands.player;
 
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;

@@ -3,7 +3,6 @@ package cc.davyy.slime.commands.cosmetic.subcommands;
 import cc.davyy.slime.cosmetics.managers.ArmorCosmeticManager;
 import cc.davyy.slime.cosmetics.model.ArmorData;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;
@@ -20,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import static cc.davyy.slime.utils.ColorUtils.of;
 
 @Singleton
-public class ArmorCosmeticSubCommand extends Command {
+public class ArmorSubCommand extends Command {
 
     private final ArmorCosmeticManager armorCosmeticManager;
 
@@ -36,7 +35,7 @@ public class ArmorCosmeticSubCommand extends Command {
     private final ArgumentInteger idArg = ArgumentType.Integer("id");
 
     @Inject
-    public ArmorCosmeticSubCommand(ArmorCosmeticManager armorCosmeticManager) {
+    public ArmorSubCommand(ArmorCosmeticManager armorCosmeticManager) {
         super("armor");
         this.armorCosmeticManager = armorCosmeticManager;
 

@@ -1,4 +1,4 @@
-package cc.davyy.slime.commands;
+package cc.davyy.slime.commands.admin;
 
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
