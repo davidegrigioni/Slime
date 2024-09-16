@@ -2,10 +2,9 @@ package cc.davyy.slime.commands.cosmetic.subcommands;
 
 import cc.davyy.slime.cosmetics.managers.HatCosmeticManager;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -16,6 +15,8 @@ import net.minestom.server.command.builder.arguments.minecraft.ArgumentItemStack
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import static cc.davyy.slime.utils.ColorUtils.of;
 
 @Singleton
 public class HatCosmeticSubCommand extends Command {
@@ -52,21 +53,21 @@ public class HatCosmeticSubCommand extends Command {
         final int id = context.get(idArg);
 
         hatCosmeticManager.applyCosmetic(player, id);
-        player.sendMessage("successfully created cosmetic " + id);
     }
 
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final SlimePlayer player = (SlimePlayer) sender;
         final String name = context.get(nameArg);
         final ItemStack item = context.get(itemStackArg);
 
-        hatCosmeticManager.createCosmetic(name, item);
+        hatCosmeticManager.createCosmetic(of(name)
+                .parseLegacy()
+                .build(), item);
 
-        sender.sendMessage(Component.text("Successfully created cosmetic: ")
-                .append(Component.text(name).color(NamedTextColor.GREEN))
-                .append(Component.text(" with an item of type: "))
-                .append(Component.text(item.material().name()).color(NamedTextColor.YELLOW))
-                .append(Component.text(".")
-                        .color(NamedTextColor.WHITE)));
+        player.sendMessage(Messages.ITEM_COSMETIC_CREATED
+                .addPlaceholder("name", name)
+                .addPlaceholder("item", item.material().name())
+                .asComponent());
     }
 
 }

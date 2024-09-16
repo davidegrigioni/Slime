@@ -1,10 +1,11 @@
 package cc.davyy.slime.cosmetics.model;
 
 import cc.davyy.slime.model.SlimePlayer;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public record HatCosmetic(int id, @NotNull String name, @NotNull ItemStack hat) implements Cosmetic {
+public record HatCosmetic(int id, @NotNull Component name, @NotNull ItemStack hat) implements Cosmetic {
 
     @Override
     public CosmeticType type() {

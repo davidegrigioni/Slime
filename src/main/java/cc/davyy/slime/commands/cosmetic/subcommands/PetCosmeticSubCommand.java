@@ -2,6 +2,7 @@ package cc.davyy.slime.commands.cosmetic.subcommands;
 
 import cc.davyy.slime.cosmetics.managers.PetCosmeticManager;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;
@@ -14,6 +15,8 @@ import net.minestom.server.command.builder.arguments.minecraft.registry.Argument
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
+
+import static cc.davyy.slime.utils.ColorUtils.of;
 
 @Singleton
 public class PetCosmeticSubCommand extends Command {
@@ -53,10 +56,18 @@ public class PetCosmeticSubCommand extends Command {
     }
 
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final SlimePlayer player = (SlimePlayer) sender;
         final String name = context.get(nameArg);
         final EntityType entityType = context.get(entityArg);
 
-        petCosmeticManager.createCosmetic(name, entityType);
+        petCosmeticManager.createCosmetic(of(name)
+                .parseLegacy()
+                .build(), entityType);
+
+        player.sendMessage(Messages.PET_COSMETIC_CREATED
+                .addPlaceholder("name", name)
+                .addPlaceholder("entity", entityType.name())
+                .asComponent());
     }
 
 }

@@ -4,10 +4,10 @@ import cc.davyy.slime.cosmetics.CosmeticFactory;
 import cc.davyy.slime.cosmetics.CosmeticService;
 import cc.davyy.slime.cosmetics.model.HatCosmetic;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +37,7 @@ public class HatCosmeticManager implements CosmeticService<HatCosmetic> {
      * @param itemStack The ItemStack associated with this cosmetic.
      */
     @Override
-    public void createCosmetic(@NotNull String name, @NotNull Object itemStack) {
+    public void createCosmetic(@NotNull Component name, @NotNull Object itemStack) {
         if (!(itemStack instanceof ItemStack)) {
             throw new IllegalArgumentException("Invalid data type for item cosmetic. Expected ItemStack.");
         }
@@ -59,18 +59,16 @@ public class HatCosmeticManager implements CosmeticService<HatCosmetic> {
         final HatCosmetic cosmetic = hatCosmeticMap.get(id);
 
         if (cosmetic == null) {
-            player.sendMessage(Component.text("Cosmetic not found with ID: " + id)
-                    .color(NamedTextColor.RED)
-                    .append(Component.text(" Please check the ID and try again.")
-                            .color(NamedTextColor.GRAY)));
+            player.sendMessage(Messages.COSMETIC_ID_NOT_FOUND
+                    .addPlaceholder("id", String.valueOf(id))
+                    .asComponent());
             return;
         }
 
         cosmetic.apply(player);
-        player.sendMessage(Component.text("Successfully applied cosmetic: ")
-                .color(NamedTextColor.GREEN)
-                .append(Component.text(cosmetic.name())
-                        .color(NamedTextColor.GOLD)));
+        player.sendMessage(Messages.COSMETIC_APPLIED
+                .addPlaceholder("cosmeticname", cosmetic.name())
+                .asComponent());
     }
 
     /**
@@ -84,18 +82,16 @@ public class HatCosmeticManager implements CosmeticService<HatCosmetic> {
         final HatCosmetic cosmetic = hatCosmeticMap.get(id);
 
         if (cosmetic == null) {
-            player.sendMessage(Component.text("Cosmetic not found with ID: " + id)
-                    .color(NamedTextColor.RED)
-                    .append(Component.text(" Please check the ID and try again.")
-                            .color(NamedTextColor.GRAY)));
+            player.sendMessage(Messages.COSMETIC_ID_NOT_FOUND
+                    .addPlaceholder("id", String.valueOf(id))
+                    .asComponent());
             return;
         }
 
         cosmetic.remove(player);
-        player.sendMessage(Component.text("Successfully removed cosmetic: ")
-                .color(NamedTextColor.RED)
-                .append(Component.text(cosmetic.name())
-                        .color(NamedTextColor.GRAY)));
+        player.sendMessage(Messages.COSMETIC_REMOVED
+                .addPlaceholder("cosmeticname", cosmetic.name())
+                .asComponent());
     }
 
     /**

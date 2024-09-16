@@ -2,6 +2,7 @@ package cc.davyy.slime.cosmetics;
 
 import cc.davyy.slime.cosmetics.model.Cosmetic;
 import cc.davyy.slime.model.SlimePlayer;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface CosmeticService<T extends Cosmetic> {
      * @param name The name of the cosmetic.
      * @param data The specific data related to the cosmetic (e.g., ItemStack or EntityType).
      */
-    void createCosmetic(@NotNull String name, @NotNull Object data);
+    void createCosmetic(@NotNull Component name, @NotNull Object data);
 
     /**
      * Applies the cosmetic to the given player.
