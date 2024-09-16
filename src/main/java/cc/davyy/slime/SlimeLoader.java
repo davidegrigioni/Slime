@@ -3,6 +3,7 @@ package cc.davyy.slime;
 import cc.davyy.slime.commands.*;
 import cc.davyy.slime.commands.cosmetic.CosmeticCommand;
 import cc.davyy.slime.commands.cosmetic.subcommands.HatCosmeticSubCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.ParticleCosmeticSubCommand;
 import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.*;
 import cc.davyy.slime.module.SlimeModule;
@@ -34,6 +35,7 @@ public class SlimeLoader {
     @Inject private GameModeManager gameModeManager;
 
     @Inject private HatCosmeticSubCommand hatCosmeticSubCommand;
+    @Inject private ParticleCosmeticSubCommand particleCosmeticSubCommand;
 
     @Inject private BroadCastCommand broadcastCommand;
     @Inject private ConfigReloadCommand configReloadCommand;
@@ -96,6 +98,7 @@ public class SlimeLoader {
         TEMP FIX NEED TO UNDERSTAND HOW TO IMPLEMENT CORRECTLY
          */
         commandManager.register(hatCosmeticSubCommand);
+        commandManager.register(particleCosmeticSubCommand);
 
         commandManager.register(debugCommand);
         commandManager.register(executeCommand);
