@@ -35,10 +35,6 @@ public class SlimeLoader {
     @Inject private SpawnManager spawnManager;
     @Inject private GameModeManager gameModeManager;
 
-    @Inject private HatCosmeticSubCommand hatCosmeticSubCommand;
-    @Inject private ParticleCosmeticSubCommand particleCosmeticSubCommand;
-    @Inject private ArmorCosmeticSubCommand armorCosmeticSubCommand;
-
     @Inject private BroadCastCommand broadcastCommand;
     @Inject private ConfigReloadCommand configReloadCommand;
     @Inject private CosmeticCommand cosmeticCommand;
@@ -95,13 +91,6 @@ public class SlimeLoader {
         commandManager.register(broadcastCommand);
         commandManager.register(configReloadCommand);
         commandManager.register(cosmeticCommand);
-
-        /*
-        TEMP FIX NEED TO UNDERSTAND HOW TO IMPLEMENT CORRECTLY
-         */
-        commandManager.register(hatCosmeticSubCommand);
-        commandManager.register(particleCosmeticSubCommand);
-
         commandManager.register(debugCommand);
         commandManager.register(executeCommand);
         commandManager.register(gameModeCommand);

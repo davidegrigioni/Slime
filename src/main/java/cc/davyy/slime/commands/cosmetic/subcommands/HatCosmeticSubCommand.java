@@ -28,7 +28,7 @@ public class HatCosmeticSubCommand extends Command {
     private final ArgumentLiteral deleteArg = ArgumentType.Literal("delete");
 
     private final ArgumentString nameArg = ArgumentType.String("name");
-    private final ArgumentItemStack itemStackArg = ArgumentType.ItemStack("item");
+    private final ArgumentItemStack itemArg = ArgumentType.ItemStack("itemmodel");
     private final ArgumentInteger idArg = ArgumentType.Integer("id");
 
     @Inject
@@ -36,7 +36,7 @@ public class HatCosmeticSubCommand extends Command {
         super("item");
         this.hatCosmeticManager = hatCosmeticManager;
 
-        addSyntax(this::execute, createArg, nameArg, itemStackArg);
+        addSyntax(this::execute, createArg, nameArg, itemArg);
         addSyntax(this::apply, applyArg, idArg);
         addSyntax(this::delete, deleteArg, idArg);
     }
@@ -58,15 +58,15 @@ public class HatCosmeticSubCommand extends Command {
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
         final String name = context.get(nameArg);
-        final ItemStack item = context.get(itemStackArg);
+        final ItemStack modelItem = context.get(itemArg);
 
         hatCosmeticManager.createCosmetic(of(name)
                 .parseLegacy()
-                .build(), item);
+                .build(), modelItem);
 
         player.sendMessage(Messages.ITEM_COSMETIC_CREATED
                 .addPlaceholder("name", name)
-                .addPlaceholder("item", item.material().name())
+                .addPlaceholder("itemtype", modelItem.material().name())
                 .asComponent());
     }
 

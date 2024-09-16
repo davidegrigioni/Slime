@@ -28,7 +28,7 @@ public class ParticleCosmeticSubCommand extends Command {
 
     private final ArgumentString nameArg = ArgumentType.String("name");
     private final ArgumentInteger idArg = ArgumentType.Integer("id");
-    private final ArgumentParticle particleArg = ArgumentType.Particle("particle");
+    private final ArgumentParticle particleModelArg = ArgumentType.Particle("particlemodel");
     private final ArgumentInteger maxSpeedArg = ArgumentType.Integer("maxSpeed");
     private final ArgumentInteger particleCountArg = ArgumentType.Integer("particlecount");
 
@@ -37,7 +37,7 @@ public class ParticleCosmeticSubCommand extends Command {
         super("particle");
         this.particleCosmeticManager = particleCosmeticManager;
 
-        addSyntax(this::execute, createArg, nameArg, particleArg, maxSpeedArg, particleCountArg);
+        addSyntax(this::execute, createArg, nameArg, particleModelArg, maxSpeedArg, particleCountArg);
         addSyntax(this::apply, applyArg, idArg);
         addSyntax(this::delete, deleteArg, idArg);
     }
@@ -59,13 +59,13 @@ public class ParticleCosmeticSubCommand extends Command {
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
         final String name = context.get(nameArg);
-        final Particle particle = context.get(particleArg);
+        final Particle modelParticle = context.get(particleModelArg);
         final int maxSpeed = context.get(maxSpeedArg);
         final int particleCount = context.get(particleCountArg);
 
         particleCosmeticManager.createCosmetic(of(name)
                 .parseLegacy()
-                .build(), particle, player.getPosition(), player.getPosition(), maxSpeed, particleCount);
+                .build(), modelParticle, player.getPosition(), player.getPosition(), maxSpeed, particleCount);
 
         player.sendMessage("created particle cosmetic");
     }
