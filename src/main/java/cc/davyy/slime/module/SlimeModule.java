@@ -2,8 +2,13 @@ package cc.davyy.slime.module;
 
 import cc.davyy.slime.SlimeLoader;
 import cc.davyy.slime.commands.*;
-import cc.davyy.slime.cosmetics.CosmeticService;
-import cc.davyy.slime.cosmetics.managers.ItemCosmeticManager;
+import cc.davyy.slime.commands.cosmetic.CosmeticCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.HatCosmeticSubCommand;
+import cc.davyy.slime.cosmetics.managers.HatCosmeticManager;
+import cc.davyy.slime.cosmetics.managers.PetCosmeticManager;
+import cc.davyy.slime.cosmetics.model.Cosmetic;
+import cc.davyy.slime.cosmetics.model.HatCosmetic;
+import cc.davyy.slime.cosmetics.model.PetCosmetic;
 import cc.davyy.slime.entities.holograms.HologramFactory;
 import cc.davyy.slime.entities.npc.NPCFactory;
 import cc.davyy.slime.gui.LobbyGUI;
@@ -14,8 +19,6 @@ import cc.davyy.slime.managers.*;
 import cc.davyy.slime.cosmetics.CosmeticFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.TypeLiteral;
-import net.minestom.server.item.ItemStack;
 
 public class SlimeModule extends AbstractModule {
 
@@ -41,7 +44,8 @@ public class SlimeModule extends AbstractModule {
         bind(SidebarManager.class);
         bind(SpawnManager.class);
         bind(TeleportManager.class);
-        bind(ItemCosmeticManager.class);
+        bind(PetCosmeticManager.class);
+        bind(HatCosmeticManager.class);
 
         // Interface Bindings
         bind(BossBarService.class).to(BossBarManager.class);
@@ -59,6 +63,7 @@ public class SlimeModule extends AbstractModule {
         bind(BroadCastCommand.class);
         bind(ConfigReloadCommand.class);
         bind(CosmeticCommand.class);
+        bind(HatCosmeticSubCommand.class);
         bind(GameModeCommand.class);
         bind(HologramCommand.class);
         bind(ListCommandsCommand.class);
@@ -76,10 +81,6 @@ public class SlimeModule extends AbstractModule {
         bind(CosmeticFactory.class);
         bind(HologramFactory.class);
         bind(NPCFactory.class);
-
-        // Binding CosmeticService for ItemStack
-        bind(new TypeLiteral<CosmeticService<ItemStack>>() {})
-                .to(ItemCosmeticManager.class);
     }
 
     @Provides
