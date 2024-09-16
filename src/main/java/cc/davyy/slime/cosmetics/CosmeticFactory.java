@@ -1,8 +1,6 @@
 package cc.davyy.slime.cosmetics;
 
-import cc.davyy.slime.cosmetics.model.HatCosmetic;
-import cc.davyy.slime.cosmetics.model.ParticleCosmetic;
-import cc.davyy.slime.cosmetics.model.PetCosmetic;
+import cc.davyy.slime.cosmetics.model.*;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
@@ -29,6 +27,10 @@ public final class CosmeticFactory {
                                                    @NotNull Pos pos, @NotNull Pos posOffset, int maxSpeed,
                                                    int particleCount) {
         return new ParticleCosmetic(id, name, particle, pos, posOffset, maxSpeed, particleCount);
+    }
+
+    public ArmorCosmetic createArmorCosmetic(int id, @NotNull Component name, @NotNull ArmorData armorData) {
+        return new ArmorCosmetic(id, name, armorData);
     }
 
 }

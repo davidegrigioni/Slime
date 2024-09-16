@@ -44,8 +44,10 @@ public class ParticleCosmeticManager implements ParticleCosmeticService {
     public void applyCosmetic(@NotNull SlimePlayer player, int id) {
         final ParticleCosmetic particleCosmetic = particleCosmeticMap.get(id);
 
-        ParticlePacket particlePacket = new ParticlePacket(particleCosmetic.particle(), particleCosmetic.pos(), particleCosmetic.posOffset(), particleCosmetic.maxSpeed(), particleCosmetic.particleCount());
-        PacketUtils.broadcastPlayPacket(particlePacket);
+        ParticlePacket particlePacket = new ParticlePacket(particleCosmetic.particle(),
+                particleCosmetic.pos(), particleCosmetic.posOffset(),
+                particleCosmetic.maxSpeed(), particleCosmetic.particleCount());
+        PacketUtils.sendPacket(player, particlePacket);
 
         player.sendMessage("sended particles");
     }

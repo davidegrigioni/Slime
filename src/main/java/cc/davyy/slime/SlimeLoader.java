@@ -2,6 +2,7 @@ package cc.davyy.slime;
 
 import cc.davyy.slime.commands.*;
 import cc.davyy.slime.commands.cosmetic.CosmeticCommand;
+import cc.davyy.slime.commands.cosmetic.subcommands.ArmorCosmeticSubCommand;
 import cc.davyy.slime.commands.cosmetic.subcommands.HatCosmeticSubCommand;
 import cc.davyy.slime.commands.cosmetic.subcommands.ParticleCosmeticSubCommand;
 import cc.davyy.slime.listeners.*;
@@ -36,6 +37,7 @@ public class SlimeLoader {
 
     @Inject private HatCosmeticSubCommand hatCosmeticSubCommand;
     @Inject private ParticleCosmeticSubCommand particleCosmeticSubCommand;
+    @Inject private ArmorCosmeticSubCommand armorCosmeticSubCommand;
 
     @Inject private BroadCastCommand broadcastCommand;
     @Inject private ConfigReloadCommand configReloadCommand;

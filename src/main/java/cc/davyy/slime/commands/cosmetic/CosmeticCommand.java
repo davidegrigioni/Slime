@@ -1,7 +1,9 @@
 package cc.davyy.slime.commands.cosmetic;
 
+import cc.davyy.slime.commands.cosmetic.subcommands.ArmorCosmeticSubCommand;
 import cc.davyy.slime.commands.cosmetic.subcommands.ParticleCosmeticSubCommand;
 import cc.davyy.slime.commands.cosmetic.subcommands.PetCosmeticSubCommand;
+import cc.davyy.slime.cosmetics.managers.ArmorCosmeticManager;
 import cc.davyy.slime.cosmetics.managers.ParticleCosmeticManager;
 import cc.davyy.slime.cosmetics.managers.PetCosmeticManager;
 import com.google.inject.Inject;
@@ -12,10 +14,11 @@ import net.minestom.server.command.builder.Command;
 public class CosmeticCommand extends Command {
 
     @Inject
-    public CosmeticCommand(PetCosmeticManager petCosmeticManager, ParticleCosmeticManager particleCosmeticManager) {
+    public CosmeticCommand(PetCosmeticManager petCosmeticManager, ParticleCosmeticManager particleCosmeticManager, ArmorCosmeticManager armorCosmeticManager) {
         super("cosmetic");
 
         addSubcommand(new PetCosmeticSubCommand(petCosmeticManager));
+        addSubcommand(new ArmorCosmeticSubCommand(armorCosmeticManager));
     }
 
 }
