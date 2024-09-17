@@ -5,6 +5,7 @@ import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.SidebarManager;
 import cc.davyy.slime.managers.SpawnManager;
+import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.PosUtils;
 import cc.davyy.slime.constants.TagConstants;
@@ -113,9 +114,14 @@ public class EventsListener {
                 })
                 .addListener(InventoryPreClickEvent.class, event -> event.setCancelled(true))
                 .addListener(AsyncPlayerConfigurationEvent.class, event -> {
-                    final Player player = event.getPlayer();
+                    final SlimePlayer player = (SlimePlayer) event.getPlayer();
                     final String posString = getConfig().getString("spawn.position");
                     final Pos pos = PosUtils.fromString(posString);
+
+                    /*
+                    TEMP FIX TROVARE SOLUZIONE MIGLIORE
+                     */
+                    player.setLobbyID(0);
 
                     event.setSpawningInstance(lobbyManager.getMainLobbyContainer());
                     Check.notNull(pos, "Position cannot be null, Check your Config!");

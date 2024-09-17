@@ -22,15 +22,15 @@ import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 @Singleton
 public class SidebarManager implements SidebarService {
 
-    private final Sidebar sidebar;
+    private static final String SIDEBAR_TITLE = getConfig().getString("scoreboard.title");
+
+    private final Sidebar sidebar = new Sidebar(of(SIDEBAR_TITLE).build());
     private final LobbyManager lobbyManager;
     private final Map<UUID, Sidebar> sidebarMap = new ConcurrentHashMap<>();
 
     @Inject
     public SidebarManager(LobbyManager lobbyManager) {
         this.lobbyManager = lobbyManager;
-        final String sidebarTitle = getConfig().getString("scoreboard.title");
-        this.sidebar = new Sidebar(of(sidebarTitle).build());
 
         final List<String> lines = getConfig().getStringList("scoreboard.lines");
         MinecraftServer.getSchedulerManager().buildTask(() -> updateSidebarLines(lines))
@@ -47,36 +47,46 @@ public class SidebarManager implements SidebarService {
 
     @Override
     public void toggleSidebar(@NotNull SlimePlayer player) {
-        if (sidebar.getViewers().contains(player)) sidebar.removeViewer(player);
-        else sidebar.addViewer(player);
+        final Sidebar playerSidebar = sidebarMap.get(player.getUuid());
+
+        if (playerSidebar != null && playerSidebar.getViewers().contains(player)) {
+            playerSidebar.removeViewer(player);
+            return;
+        }
+
+        showSidebar(player);
     }
 
     @Override
     public void removeSidebar(@NotNull SlimePlayer player) {
         final Sidebar sidebar = sidebarMap.remove(player.getUuid());
+
         if (sidebar != null) {
             sidebar.removeViewer(player);
         }
     }
 
     private void updateSidebarLines(@NotNull List<String> lines) {
-        for (int i = 0; i < lines.size(); i++) {
-            String text = lines.get(i);
-            int score = lines.size() - i;
-            updateOrAddLine(text, score);
+        for (SlimePlayer player : getOnlineSlimePlayers()) {
+            for (int i = 0; i < lines.size(); i++) {
+                String text = lines.get(i);
+                int score = lines.size() - i;
+                updateOrAddLine(text, score, player);
+            }
         }
     }
 
-    private void updateOrAddLine(@NotNull String text, int score) {
+    private void updateOrAddLine(@NotNull String text, int score, @NotNull SlimePlayer player) {
         final String lineId = "line-" + score;
-        final var onlinePlayersSize = getOnlineSlimePlayers().size();
+        final Sidebar playerSidebar = sidebarMap.get(player.getUuid());
+        final int onlinePlayersSize = getOnlineSlimePlayers().size();
 
-        for (SlimePlayer player : getOnlineSlimePlayers()) {
+        if (playerSidebar != null) {
             final Lobby playerLobby = lobbyManager.getLobbyByPlayer(player);
             final String lobbyName = playerLobby != null ? playerLobby.name() : "Main Lobby";
 
-            if (sidebar.getLine(lineId) != null) {
-                sidebar.updateLineContent(lineId, of(text)
+            if (playerSidebar.getLine(lineId) != null) {
+                playerSidebar.updateLineContent(lineId, of(text)
                         .parseMMP("lobby", lobbyName)
                         .parseMMP("rank", player.getPrefix())
                         .parseMMP("playercount", String.valueOf(onlinePlayersSize))
@@ -84,12 +94,14 @@ public class SidebarManager implements SidebarService {
                 return;
             }
 
-            sidebar.createLine(new Sidebar.ScoreboardLine(lineId,
+            final Sidebar.ScoreboardLine scoreboardLine = new Sidebar.ScoreboardLine(lineId,
                     of(text)
                             .parseMMP("lobby", lobbyName)
                             .parseMMP("rank", player.getPrefix())
                             .parseMMP("playercount", String.valueOf(onlinePlayersSize))
-                            .build(), score, Sidebar.NumberFormat.blank()));
+                            .build(), score, Sidebar.NumberFormat.blank());
+
+            playerSidebar.createLine(scoreboardLine);
         }
     }
 
