@@ -1,5 +1,6 @@
 package cc.davyy.slime.model;
 
+import cc.davyy.slime.constants.TagConstants;
 import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;
@@ -106,6 +107,40 @@ public final class SlimePlayer extends Player {
                 .parseMMP("username-color", metaData.getMetaValue("username-color") != null ? metaData.getMetaValue("username-color") : "")
                 .parseMMP("message-color", metaData.getMetaValue("message-color") != null ? metaData.getMetaValue("message-color") : "")
                 .build();
+    }
+
+    public void setLobbyID(int lobbyID) { setTag(TagConstants.PLAYER_LOBBY_ID_TAG, lobbyID); }
+
+    public void removeLobbyID() { removeTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
+
+    public boolean hasLobbyID() { return hasTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
+
+    public int getLobbyID() { return getTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
+
+    public void setParkourCourse(int courseID) { setTag(TagConstants.PARKOUR_COURSE_ID_TAG, courseID); }
+
+    public int getParkourCourse() { return getTag(TagConstants.PARKOUR_COURSE_ID_TAG); }
+
+    public void setCheckpoint(int checkpointID) { setTag(TagConstants.PARKOUR_CHECKPOINT_TAG, checkpointID); }
+
+    public int getCheckpoint() { return getTag(TagConstants.PARKOUR_CHECKPOINT_TAG); }
+
+    public void setParkourCompletionStatus(boolean status) { setTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG, status); }
+
+    public boolean hasParkourCompleted() { return hasTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG); }
+
+    public boolean getParkourCompletionStatus() { return getTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG); }
+
+    public void setParkourStartTime(long startTime) { setTag(TagConstants.PARKOUR_START_TIME_TAG, startTime); }
+
+    public long getParkourStartTime() { return getTag(TagConstants.PARKOUR_START_TIME_TAG); }
+
+    public void removeFromParkourCourse() {
+        removeTag(TagConstants.PARKOUR_COURSE_ID_TAG);
+    }
+
+    public boolean isInParkourCourse() {
+        return hasTag(TagConstants.PARKOUR_COURSE_ID_TAG);
     }
 
 }

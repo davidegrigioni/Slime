@@ -1,7 +1,7 @@
 package cc.davyy.slime.cosmetics.managers;
 
 import cc.davyy.slime.cosmetics.ArmorCosmeticService;
-import cc.davyy.slime.cosmetics.CosmeticFactory;
+import cc.davyy.slime.factories.CosmeticFactory;
 import cc.davyy.slime.cosmetics.model.ArmorCosmetic;
 import cc.davyy.slime.cosmetics.model.ArmorData;
 import cc.davyy.slime.model.SlimePlayer;

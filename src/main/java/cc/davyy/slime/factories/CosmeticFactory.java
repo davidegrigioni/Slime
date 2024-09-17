@@ -1,4 +1,4 @@
-package cc.davyy.slime.cosmetics;
+package cc.davyy.slime.factories;
 
 import cc.davyy.slime.cosmetics.model.*;
 import com.google.inject.Singleton;

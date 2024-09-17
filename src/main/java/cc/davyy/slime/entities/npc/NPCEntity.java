@@ -1,5 +1,6 @@
 package cc.davyy.slime.entities.npc;
 
+import cc.davyy.slime.constants.TagConstants;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.metadata.PlayerMeta;
@@ -48,6 +49,10 @@ public final class NPCEntity extends EntityCreature {
         );
 
         super.updateNewViewer(player);
+    }
+
+    public void setNpcID(int npcID) {
+        setTag(TagConstants.NPC_ID_TAG, npcID);
     }
 
 }
