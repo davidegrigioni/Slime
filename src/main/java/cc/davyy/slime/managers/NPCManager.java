@@ -34,7 +34,7 @@ public class NPCManager implements NPCService {
         final int npcId = entityIdCounter.getAndIncrement();
         NPCEntity npcEntity = npcFactory.createNPCEntity(name, skin, player.getInstance(), player.getPosition());
 
-        npcEntity.setTag(TagConstants.NPC_ID_TAG, npcId);
+        npcEntity.setNpcID(npcId);
         npcEntityMap.put(npcId, npcEntity);
 
         player.sendMessage(text("NPC created with ID: " + npcId)

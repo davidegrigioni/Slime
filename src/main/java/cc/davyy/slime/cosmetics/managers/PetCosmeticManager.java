@@ -1,6 +1,6 @@
 package cc.davyy.slime.cosmetics.managers;
 
-import cc.davyy.slime.cosmetics.CosmeticFactory;
+import cc.davyy.slime.factories.CosmeticFactory;
 import cc.davyy.slime.cosmetics.CosmeticService;
 import cc.davyy.slime.cosmetics.model.PetCosmetic;
 import cc.davyy.slime.model.SlimePlayer;

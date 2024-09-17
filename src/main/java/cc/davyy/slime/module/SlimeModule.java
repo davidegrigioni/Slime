@@ -23,7 +23,7 @@ import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.services.*;
 import cc.davyy.slime.listeners.EventsListener;
 import cc.davyy.slime.managers.*;
-import cc.davyy.slime.cosmetics.CosmeticFactory;
+import cc.davyy.slime.factories.CosmeticFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
@@ -56,6 +56,8 @@ public class SlimeModule extends AbstractModule {
         bind(HatCosmeticManager.class);
         bind(ParticleCosmeticManager.class);
         bind(PetCosmeticManager.class);
+
+        bind(ParkourManager.class);
 
         // Interface Bindings
         bind(BossBarService.class).to(BossBarManager.class);

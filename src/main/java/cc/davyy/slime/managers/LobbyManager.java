@@ -96,7 +96,7 @@ public class LobbyManager implements LobbyService {
 
         player.setInstance(lobby.sharedInstance())
                 .thenRun(() -> {
-                    player.setTag(TagConstants.PLAYER_LOBBY_ID_TAG, lobbyID);
+                    player.setLobbyID(lobbyID);
                     player.sendMessage(Messages.TELEPORT_TO_LOBBY
                             .addPlaceholder("lobby", lobby.name())
                             .asComponent());
@@ -112,11 +112,7 @@ public class LobbyManager implements LobbyService {
 
     @Override
     public Lobby getLobbyByPlayer(@NotNull SlimePlayer player) {
-        Integer lobbyID = player.getTag(TagConstants.PLAYER_LOBBY_ID_TAG);
-
-        if (lobbyID == null) {
-            return null;
-        }
+        final int lobbyID = player.getLobbyID();
 
         return lobbies.get(lobbyID);
     }
