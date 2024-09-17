@@ -49,11 +49,6 @@ player-item:
   lore:
     - "<gradient:#00ff00:#7fff00>Manage player options</gradient>"
 
-# MOTD
-motd:
-  description: "test"
-  players-hidden: true
-
 # Scoreboard
 scoreboard:
   title: "<gradient:#ff007f:#7f00ff>XenooCC</gradient>"
