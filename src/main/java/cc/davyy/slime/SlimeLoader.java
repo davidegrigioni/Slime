@@ -75,7 +75,7 @@ public class SlimeLoader {
         setupShutdownTask();
 
         //MojangAuth.init();
-        //handleVelocityProxy();
+        handleVelocityProxy();
 
         startServer(minecraftServer);
     }
@@ -89,21 +89,21 @@ public class SlimeLoader {
     private void registerCommands() {
         final var commandManager = MinecraftServer.getCommandManager();
 
-        commandManager.register(broadcastCommand);
-        commandManager.register(configReloadCommand);
-        commandManager.register(cosmeticCommand);
-        commandManager.register(debugCommand);
-        commandManager.register(executeCommand);
-        commandManager.register(gameModeCommand);
-        commandManager.register(hologramCommand);
-        commandManager.register(listCommandsCommand);
-        commandManager.register(lobbyCommand);
-        commandManager.register(npcCommand);
-        commandManager.register(sayCommand);
-        commandManager.register(socialCommand);
-        commandManager.register(spawnCommand);
-        commandManager.register(stopCommand);
-        commandManager.register(teleportCommand);
+        commandManager.register(broadcastCommand,
+                configReloadCommand,
+                cosmeticCommand,
+                debugCommand,
+                executeCommand,
+                gameModeCommand,
+                hologramCommand,
+                listCommandsCommand,
+                lobbyCommand,
+                npcCommand,
+                sayCommand,
+                socialCommand,
+                spawnCommand,
+                stopCommand,
+                teleportCommand);
     }
 
     private void setupShutdownTask() {

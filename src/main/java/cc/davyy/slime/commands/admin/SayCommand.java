@@ -41,7 +41,7 @@ public class SayCommand extends Command {
         final SlimePlayer target = (SlimePlayer) finder.findFirstPlayer(player);
         final String finalMessage = String.join(" ", context.get(messageArray));
 
-        target.sendMessage(Component.text(target.getChatFormat(finalMessage) + finalMessage));
+        target.sendMessage(target.getChatFormat(finalMessage) + finalMessage);
     }
 
 }

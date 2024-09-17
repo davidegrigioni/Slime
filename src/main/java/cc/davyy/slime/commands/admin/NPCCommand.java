@@ -44,6 +44,11 @@ public class NPCCommand extends Command {
         addSyntax(this::handleCreate, createArg, nameArg);
         addSyntax(this::handleDelete, deleteArg, idArg);
         addSyntax(this::handleMove, moveArg, idArg);
+        addSyntax(this::id);
+    }
+
+    private void id(@NotNull CommandSender sender, @NotNull CommandContext context) {
+
     }
 
     private void showUsage(@NotNull CommandSender sender, @NotNull CommandContext context) {
