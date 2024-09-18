@@ -1,7 +1,6 @@
-package cc.davyy.slime.cosmetics;
+package cc.davyy.slime.services.cosmetics;
 
-import cc.davyy.slime.cosmetics.model.ArmorCosmetic;
-import cc.davyy.slime.cosmetics.model.ArmorData;
+import cc.davyy.slime.model.cosmetics.Cosmetic;
 import cc.davyy.slime.model.SlimePlayer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -9,10 +8,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public interface ArmorCosmeticService {
+/**
+ * Service interface for managing cosmetics in the game.
+ *
+ */
+public interface CosmeticService<T extends Cosmetic> {
 
-    void createCosmetic(@NotNull Component name,
-                        @NotNull ArmorData armorData);
+    /**
+     * Creates a cosmetic and registers it in the system.
+     *
+     * @param name The name of the cosmetic.
+     * @param data The specific data related to the cosmetic (e.g., ItemStack or EntityType).
+     */
+    void createCosmetic(@NotNull Component name, @NotNull Object data);
 
     /**
      * Applies the cosmetic to the given player.
@@ -37,7 +45,7 @@ public interface ArmorCosmeticService {
      * @return An optional containing the cosmetic if found.
      */
     @NotNull
-    Optional<ArmorCosmetic> getCosmeticByID(int id);
+    Optional<T> getCosmeticByID(int id);
 
     /**
      * Returns a list of all available cosmetics.
@@ -45,6 +53,6 @@ public interface ArmorCosmeticService {
      * @return A list of all available cosmetics.
      */
     @NotNull
-    List<ArmorCosmetic> getAvailableCosmetics();
+    List<T> getAvailableCosmetics();
 
 }

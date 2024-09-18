@@ -1,6 +1,6 @@
 package cc.davyy.slime.factories;
 
-import cc.davyy.slime.cosmetics.model.*;
+import cc.davyy.slime.model.cosmetics.*;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;

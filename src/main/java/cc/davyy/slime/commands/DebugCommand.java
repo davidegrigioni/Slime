@@ -5,7 +5,7 @@ import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.managers.BossBarManager;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.SidebarManager;
-import cc.davyy.slime.cosmetics.model.Cosmetic;
+import cc.davyy.slime.model.cosmetics.Cosmetic;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;

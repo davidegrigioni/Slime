@@ -1,8 +1,8 @@
-package cc.davyy.slime.cosmetics.managers;
+package cc.davyy.slime.managers.cosmetics;
 
 import cc.davyy.slime.factories.CosmeticFactory;
-import cc.davyy.slime.cosmetics.ParticleCosmeticService;
-import cc.davyy.slime.cosmetics.model.ParticleCosmetic;
+import cc.davyy.slime.services.cosmetics.ParticleCosmeticService;
+import cc.davyy.slime.model.cosmetics.ParticleCosmetic;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

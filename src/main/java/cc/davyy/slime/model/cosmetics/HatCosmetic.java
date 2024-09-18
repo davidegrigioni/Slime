@@ -1,4 +1,4 @@
-package cc.davyy.slime.cosmetics.model;
+package cc.davyy.slime.model.cosmetics;
 
 import cc.davyy.slime.model.SlimePlayer;
 import net.kyori.adventure.text.Component;

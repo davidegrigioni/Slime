@@ -1,9 +1,9 @@
-package cc.davyy.slime.cosmetics.managers;
+package cc.davyy.slime.managers.cosmetics;
 
-import cc.davyy.slime.cosmetics.ArmorCosmeticService;
+import cc.davyy.slime.services.cosmetics.ArmorCosmeticService;
 import cc.davyy.slime.factories.CosmeticFactory;
-import cc.davyy.slime.cosmetics.model.ArmorCosmetic;
-import cc.davyy.slime.cosmetics.model.ArmorData;
+import cc.davyy.slime.model.cosmetics.ArmorCosmetic;
+import cc.davyy.slime.model.cosmetics.ArmorData;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

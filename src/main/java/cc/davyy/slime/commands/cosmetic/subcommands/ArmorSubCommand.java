@@ -1,7 +1,7 @@
 package cc.davyy.slime.commands.cosmetic.subcommands;
 
-import cc.davyy.slime.cosmetics.managers.ArmorCosmeticManager;
-import cc.davyy.slime.cosmetics.model.ArmorData;
+import cc.davyy.slime.managers.cosmetics.ArmorCosmeticManager;
+import cc.davyy.slime.model.cosmetics.ArmorData;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

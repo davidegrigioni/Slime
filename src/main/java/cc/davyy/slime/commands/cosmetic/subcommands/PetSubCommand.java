@@ -1,6 +1,6 @@
 package cc.davyy.slime.commands.cosmetic.subcommands;
 
-import cc.davyy.slime.cosmetics.managers.PetCosmeticManager;
+import cc.davyy.slime.managers.cosmetics.PetCosmeticManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;

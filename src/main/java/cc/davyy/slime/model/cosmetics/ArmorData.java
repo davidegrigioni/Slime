@@ -1,4 +1,4 @@
-package cc.davyy.slime.cosmetics.model;
+package cc.davyy.slime.model.cosmetics;
 
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;

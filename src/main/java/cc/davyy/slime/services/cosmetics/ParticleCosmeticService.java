@@ -1,6 +1,6 @@
-package cc.davyy.slime.cosmetics;
+package cc.davyy.slime.services.cosmetics;
 
-import cc.davyy.slime.cosmetics.model.ParticleCosmetic;
+import cc.davyy.slime.model.cosmetics.ParticleCosmetic;
 import cc.davyy.slime.model.SlimePlayer;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
