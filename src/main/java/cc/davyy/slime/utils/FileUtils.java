@@ -10,9 +10,14 @@ import me.lucko.luckperms.minestom.CommandRegistry;
 import me.lucko.luckperms.minestom.LuckPermsMinestom;
 import net.luckperms.api.LuckPerms;
 import net.minestom.server.MinecraftServer;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.file.Path;
+
+import static net.minestom.server.MinecraftServer.LOGGER;
 
 /**
  * Utility class for managing configuration files and integrating LuckPerms.
@@ -37,7 +42,6 @@ public final class FileUtils {
      */
     private static Yaml messages;
 
-    // Private constructor to prevent instantiation.
     private FileUtils() {}
 
     /**
@@ -78,14 +82,11 @@ public final class FileUtils {
     }
 
     public static void setupFiles() {
+        validateConfig();
         setupConfig();
         setupLuckPerms();
         //setupPayments();
     }
-
-    /*private static void setupPayments() {
-        PaymentHandler.init(StoreType.CRAFTINGSTORE_STORE, Path.of("store"));
-    }*/
 
     /**
      * Reloads the configuration and messages files.
@@ -111,5 +112,32 @@ public final class FileUtils {
      * @return The YAML configuration object for messages.
      */
     public static Yaml getMessages() { return messages; }
+
+    private static void validateConfig() {
+        final String ip = getConfig().getString("network.ip");
+        final int port = getConfig().getInt("network.port");
+
+        if (ip == null || !isValidIP(ip)) {
+            LOGGER.error("Invalid IP configuration: {}", ip);
+            throw new IllegalArgumentException("Invalid IP address configuration.");
+        }
+
+        if (port < 1 || port > 65535) {
+            LOGGER.error("Invalid port configuration: {}", port);
+            throw new IllegalArgumentException("Invalid port configuration. Must be between 1 and 65535.");
+        }
+
+        LOGGER.info("Configuration validated: IP = {}, Port = {}", ip, port);
+    }
+
+    private static boolean isValidIP(@NotNull String ip) {
+        try {
+            final InetAddress address = InetAddress.getByName(ip);
+            return address != null;
+        } catch (UnknownHostException ex) {
+            LOGGER.error("Invalid IP address: {}", ip);
+            return false;
+        }
+    }
 
 }

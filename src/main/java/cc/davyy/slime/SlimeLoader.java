@@ -64,7 +64,6 @@ public class SlimeLoader {
         final MinecraftServer minecraftServer = MinecraftServer.init();
 
         setupFiles();
-        validateConfig();
         injectGuice();
 
         LOGGER.info("Registering listeners...");
@@ -127,15 +126,6 @@ public class SlimeLoader {
         LOGGER.info("Server started on IP: {}, Port: {}", ip, port);
     }
 
-    private void validateConfig() {
-        final String ip = getConfig().getString("network.ip");
-        final int port = getConfig().getInt("network.port");
-        if (ip == null || port == 0) {
-            LOGGER.error("Invalid IP or port configuration.");
-            throw new IllegalArgumentException("Invalid IP or port configuration.");
-        }
-    }
-
     private ServerMode getServerModeFromConfig() {
         final String modeString = getConfig().getString("network.type").toUpperCase();
         try {
@@ -147,7 +137,7 @@ public class SlimeLoader {
     }
 
     private String loadVelocitySecret() {
-        final Path path = Paths.get("./config/velocity.secret");
+        final Path path = Paths.get("./configs/velocity.secret");
         try {
             return Files.readString(path).trim();
         } catch (IOException ex) {
