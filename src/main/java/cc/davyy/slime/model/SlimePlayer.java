@@ -101,6 +101,7 @@ public final class SlimePlayer extends Player {
         final String format = getConfig().getString(getConfig().getString("group-formats." + group) != null ? "group-formats." + group : "chat-format");
 
         return of(format)
+                .parseMMP("lobbyid", String.valueOf(getLobbyID()))
                 .parseMMP("prefix", metaData.getPrefix() != null ? metaData.getPrefix() : "")
                 .parseMMP("message", message)
                 .parseMMP("name", this.getName())
@@ -109,38 +110,40 @@ public final class SlimePlayer extends Player {
                 .build();
     }
 
-    public void setLobbyID(int lobbyID) { setTag(TagConstants.PLAYER_LOBBY_ID_TAG, lobbyID); }
+    public int getDeathY() { return this.getInstance().getTag(TagConstants.DEATH_Y); }
 
-    public void removeLobbyID() { removeTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
+    public void setLobbyID(int lobbyID) { this.setTag(TagConstants.PLAYER_LOBBY_ID_TAG, lobbyID); }
 
-    public boolean hasLobbyID() { return hasTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
+    public void removeLobbyID() { this.removeTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
 
-    public int getLobbyID() { return getTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
+    public boolean hasLobbyID() { return this.hasTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
 
-    public void setParkourCourse(int courseID) { setTag(TagConstants.PARKOUR_COURSE_ID_TAG, courseID); }
+    public int getLobbyID() { return this.getTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
 
-    public int getParkourCourse() { return getTag(TagConstants.PARKOUR_COURSE_ID_TAG); }
+    public void setParkourCourse(int courseID) { this.setTag(TagConstants.PARKOUR_COURSE_ID_TAG, courseID); }
 
-    public void setCheckpoint(int checkpointID) { setTag(TagConstants.PARKOUR_CHECKPOINT_TAG, checkpointID); }
+    public int getParkourCourse() { return this.getTag(TagConstants.PARKOUR_COURSE_ID_TAG); }
 
-    public int getCheckpoint() { return getTag(TagConstants.PARKOUR_CHECKPOINT_TAG); }
+    public void setCheckpoint(int checkpointID) { this.setTag(TagConstants.PARKOUR_CHECKPOINT_TAG, checkpointID); }
 
-    public void setParkourCompletionStatus(boolean status) { setTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG, status); }
+    public int getCheckpoint() { return this.getTag(TagConstants.PARKOUR_CHECKPOINT_TAG); }
 
-    public boolean hasParkourCompleted() { return hasTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG); }
+    public void setParkourCompletionStatus(boolean status) { this.setTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG, status); }
 
-    public boolean getParkourCompletionStatus() { return getTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG); }
+    public boolean hasParkourCompleted() { return this.hasTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG); }
 
-    public void setParkourStartTime(long startTime) { setTag(TagConstants.PARKOUR_START_TIME_TAG, startTime); }
+    public boolean getParkourCompletionStatus() { return this.getTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG); }
 
-    public long getParkourStartTime() { return getTag(TagConstants.PARKOUR_START_TIME_TAG); }
+    public void setParkourStartTime(long startTime) { this.setTag(TagConstants.PARKOUR_START_TIME_TAG, startTime); }
+
+    public long getParkourStartTime() { return this.getTag(TagConstants.PARKOUR_START_TIME_TAG); }
 
     public void removeFromParkourCourse() {
-        removeTag(TagConstants.PARKOUR_COURSE_ID_TAG);
+        this.removeTag(TagConstants.PARKOUR_COURSE_ID_TAG);
     }
 
     public boolean isInParkourCourse() {
-        return hasTag(TagConstants.PARKOUR_COURSE_ID_TAG);
+        return this.hasTag(TagConstants.PARKOUR_COURSE_ID_TAG);
     }
 
 }
