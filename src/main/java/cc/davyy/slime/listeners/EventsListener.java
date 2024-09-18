@@ -136,6 +136,11 @@ public class EventsListener {
         setupPlayerMetricsDisplay();
         sidebarManager.showSidebar(player);
         applyJoinKit(player);
+
+        player.setDisplayName(player.getPrefix()
+                .append(Component.text(" "))
+                .append(player.getName()));
+
         createServerLinks(player);
     }
 
@@ -163,6 +168,7 @@ public class EventsListener {
         final String posString = getConfig().getString("spawn.position");
         final Pos pos = PosUtils.fromString(posString);
 
+        /* TEMP FIX */
         player.setLobbyID(10000);
 
         limboInstance = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.THE_END);
