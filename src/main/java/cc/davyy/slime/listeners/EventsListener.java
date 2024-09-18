@@ -34,6 +34,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
@@ -131,6 +132,7 @@ public class EventsListener {
         if (player.getPosition().y() < deathY) {
             spawnManager.teleportToSpawn(player);
         }
+
     }
 
     private void handlePlayerDisconnectEvent(PlayerDisconnectEvent event) {
@@ -140,7 +142,7 @@ public class EventsListener {
 
     private void handlePlayerSpawnEvent(PlayerSpawnEvent event) {
         final SlimePlayer player = (SlimePlayer) event.getPlayer();
-        setupPlayerMetricsDisplay();
+        sendHeaderFooter(player);
         sidebarManager.showSidebar(player);
         applyJoinKit(player);
 
@@ -236,9 +238,15 @@ public class EventsListener {
     }
 
     private void sendHeaderFooter(@NotNull SlimePlayer player) {
-        final String header = getConfig().getString("header");
-        final String footer = getConfig().getString("footer");
+        // Get the string lists from the configuration
+        final List<String> headerList = getConfig().getStringList("header");
+        final List<String> footerList = getConfig().getStringList("footer");
 
+        // Join the strings from the lists into a single string with newlines separating each entry
+        final String header = String.join("\n", headerList);
+        final String footer = String.join("\n", footerList);
+
+        // Send the header and footer as components
         player.sendPlayerListHeaderAndFooter(
                 of(header).build(),
                 of(footer).build()

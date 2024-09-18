@@ -63,8 +63,12 @@ scoreboard:
     - "<gray><strikethrough>                                                        </strikethrough></gray>"
 
 # Header & Footer
-header: "<gradient:#ff007f:#7f00ff>Welcome to XenooCC!</gradient>"
-footer: "<gradient:#00bfff:#1e90ff>Enjoy your stay!</gradient>"
+header:
+  - "<gradient:#ff007f:#7f00ff>Welcome to XenooCC!</gradient>"
+  - "test"
+footer:
+  - "<gradient:#00bfff:#1e90ff>Enjoy your stay!</gradient>"
+  - "test"
 
 # Chat Format
 chat-format: "<lobbyid> <prefix><name>: <message>"
