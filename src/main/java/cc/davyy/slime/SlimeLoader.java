@@ -8,6 +8,7 @@ import cc.davyy.slime.commands.player.SpawnCommand;
 import cc.davyy.slime.commands.player.TeleportCommand;
 import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.*;
+import cc.davyy.slime.model.ServerMode;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
 import com.google.inject.Guice;
@@ -15,9 +16,11 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.extras.velocity.VelocityProxy;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.*;
@@ -27,6 +30,8 @@ import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 public class SlimeLoader {
 
     private static final ComponentLogger LOGGER = ComponentLogger.logger("SlimeLogger");
+
+    private ServerMode serverMode;
 
     @Inject private BroadcastManager broadcastManager;
     @Inject private BrandManager brandManager;
@@ -74,8 +79,9 @@ public class SlimeLoader {
         LOGGER.info("Setting up shutdown tasks...");
         setupShutdownTask();
 
-        //MojangAuth.init();
-        handleVelocityProxy();
+        serverMode = getServerModeFromConfig();
+        final String velocitySecret = (serverMode == ServerMode.VELOCITY) ? loadVelocitySecret() : "";
+        serverMode.initEncryption(velocitySecret);
 
         startServer(minecraftServer);
     }
@@ -130,16 +136,24 @@ public class SlimeLoader {
         }
     }
 
-    private void handleVelocityProxy() {
-        final String velocitySecret = getConfig().getString("velocity-secret");
-        Optional.ofNullable(velocitySecret)
-                .ifPresentOrElse(
-                        secret -> {
-                            VelocityProxy.enable(secret);
-                            LOGGER.info("Enabled Velocity Support with provided secret.");
-                        },
-                        () -> LOGGER.info("Velocity support not enabled. No secret provided.")
-                );
+    private ServerMode getServerModeFromConfig() {
+        final String modeString = getConfig().getString("network.type").toUpperCase();
+        try {
+            return ServerMode.valueOf(modeString);
+        } catch (IllegalArgumentException e) {
+            LOGGER.warn("Invalid server mode in config ({}), defaulting to ONLINE mode.", modeString);
+            return ServerMode.ONLINE;
+        }
+    }
+
+    private String loadVelocitySecret() {
+        final Path path = Paths.get("./config/velocity.secret");
+        try {
+            return Files.readString(path).trim();
+        } catch (IOException ex) {
+            LOGGER.error("Failed to read velocity secret from \"{}\". Velocity is enabled in config, aborting start.", path);
+            throw new RuntimeException("Could not load Velocity secret", ex);
+        }
     }
 
 }

@@ -3,7 +3,8 @@
 # Network settings
 network:
   ip: "0.0.0.0"
-  port: 25565
+  port: 25566
+  type: OFFLINE # VALUES: VELOCITY, OFFLINE, ONLINE
 velocity-secret: "test"
 
 # Branding information
