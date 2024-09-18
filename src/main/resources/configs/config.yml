@@ -67,10 +67,10 @@ header: "<gradient:#ff007f:#7f00ff>Welcome to XenooCC!</gradient>"
 footer: "<gradient:#00bfff:#1e90ff>Enjoy your stay!</gradient>"
 
 # Chat Format
-chat-format: "<prefix><name>: <message>"
+chat-format: "<lobbyid> <prefix><name>: <message>"
 group-formats:
-  default: "<name>: <message>"
-  owner: "<prefix> <red><name><grey> >></grey> <dark_red><message>"
+  default: "<lobbyid> <name>: <message>"
+  owner: "<lobbyid> <prefix> <red><name><grey> >></grey> <dark_red><message>"
 
 # Server Links
 news-link: "test"
