@@ -31,17 +31,6 @@ public final class GeneralUtils {
     }
 
     /**
-     * Broadcasts a message to all players in a specified instance.
-     *
-     * @param message the message to broadcast, in the form of a {@link Component}
-     * @param targetInstance the target {@link Instance} where the message will be sent
-     */
-    public static void broadcastSingleInstance(@NotNull Component message, @NotNull Instance targetInstance) {
-        targetInstance.getPlayers().forEach(player ->
-                player.sendMessage(message));
-    }
-
-    /**
      * Generates a random integer between the specified minimum and maximum values.
      *
      * @param min the minimum value of the range
