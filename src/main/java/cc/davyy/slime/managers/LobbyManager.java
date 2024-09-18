@@ -74,7 +74,10 @@ public class LobbyManager implements LobbyService {
                 player.sendMessage(Messages.ALREADY_IN_MAIN_LOBBY.asComponent());
                 return;
             }
-            player.setInstance(mainLobbyContainer).thenRun(() -> player.sendMessage(Messages.TELEPORT_TO_MAIN_LOBBY.asComponent()))
+            player.setInstance(mainLobbyContainer).thenRun(() -> {
+                player.setLobbyID(lobbyID);
+                player.sendMessage(Messages.TELEPORT_TO_MAIN_LOBBY.asComponent());
+                    })
                     .exceptionally(ex -> {
                         player.sendMessage(Messages.FAILED_TELEPORT_MAIN_LOBBY.asComponent());
                         return null;
