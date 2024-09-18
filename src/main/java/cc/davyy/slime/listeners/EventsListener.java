@@ -15,33 +15,26 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
-import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.monitoring.BenchmarkManager;
-import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.JoinUtils.applyJoinKit;
 
-@SuppressWarnings("UnstableApiUsage")
 @Singleton
 public class EventsListener {
 
@@ -62,8 +55,6 @@ public class EventsListener {
 
     private Instance limboInstance;
 
-    private final AtomicReference<TickMonitor> lastTickMonitor = new AtomicReference<>();
-
     @Inject
     public EventsListener(LobbyManager lobbyManager, SidebarManager sidebarManager, SpawnManager spawnManager) {
         this.lobbyManager = lobbyManager;
@@ -74,7 +65,6 @@ public class EventsListener {
 
     public void init() {
         MinecraftServer.getGlobalEventHandler()
-                .addListener(ServerTickMonitorEvent.class, event -> lastTickMonitor.set(event.getTickMonitor()))
                 .addChild(playerNode);
 
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
@@ -101,17 +91,19 @@ public class EventsListener {
 
         if (instance.equals(limboInstance)) {
             event.setCancelled(true);
-            player.sendMessage("You can't write in limbo");
+            player.sendMessage(Component.text("You can't write in limbo"));
             return;
         }
 
-        instance.getPlayers().forEach(players -> {
-            if (players instanceof SlimePlayer) {
-                final Component formattedMessage = player.getChatFormat(message);
+        final Component formattedMessage;
 
-                event.setChatFormat(chatEvent -> formattedMessage);
-            }
-        });
+        if (player.hasPermission("slime.colorchat")) {
+            formattedMessage = player.getChatFormat(message);
+        } else {
+            formattedMessage = player.getDefaultChatFormat(message);
+        }
+
+        event.setChatFormat(chatEvent -> formattedMessage);
     }
 
     private void handlePlayerMoveEvent(PlayerMoveEvent event) {
@@ -147,25 +139,6 @@ public class EventsListener {
         applyJoinKit(player);
 
         createServerLinks(player);
-    }
-
-    private void setupPlayerMetricsDisplay() {
-        BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            if (lastTickMonitor.get() == null || MinecraftServer.getConnectionManager().getOnlinePlayerCount() == 0)
-                return;
-
-            long ramUsage = benchmarkManager.getUsedMemory() / (long) 1e6; // bytes to MB
-            TickMonitor tickMonitor = lastTickMonitor.get();
-            final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")
-                    .append(Component.newline())
-                    .append(Component.text("TICK TIME: " + MathUtils.round(tickMonitor.getTickTime(), 2) + "ms"))
-                    .append(Component.newline())
-                    .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
-
-            final Component footer = benchmarkManager.getCpuMonitoringMessage();
-            Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
-        }).repeat(10, TimeUnit.SERVER_TICK).schedule();
     }
 
     private void handlePlayerConfigEvent(AsyncPlayerConfigurationEvent event) {
