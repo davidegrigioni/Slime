@@ -1,9 +1,7 @@
 package cc.davyy.slime.services;
 
-import cc.davyy.slime.model.SlimePlayer;
 import net.minestom.server.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import java.util.Collection;
 
 /**
  * Service interface for broadcasting messages and titles to players.
@@ -29,9 +27,8 @@ public interface BroadcastService {
      *
      * @param sender the sender of the broadcast, typically used for context or logging
      * @param titleText the text of the title to be broadcasted
-     * @param players the collection of players who will receive the title
      */
-    void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull Collection<SlimePlayer> players);
+    void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText);
 
     /**
      * Broadcasts a title and subtitle to a collection of players.
@@ -42,9 +39,8 @@ public interface BroadcastService {
      * @param sender the sender of the broadcast, typically used for context or logging
      * @param titleText the text of the title to be broadcasted
      * @param subTitle the text of the subtitle to be broadcasted
-     * @param players the collection of players who will receive the title and subtitle
      */
-    void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<SlimePlayer> players);
+    void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle);
 
     /**
      * Broadcasts a title and subtitle with specific timing to a collection of players.
@@ -55,8 +51,7 @@ public interface BroadcastService {
      * @param sender the sender of the broadcast, typically used for context or logging
      * @param titleText the text of the title to be broadcasted
      * @param subTitle the text of the subtitle to be broadcasted
-     * @param players the collection of players who will receive the title and subtitle
      */
-    void broadcastTitleWithTimes(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<SlimePlayer> players);
+    void broadcastTitleWithTimes(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle);
 
 }

@@ -1,16 +1,15 @@
 package cc.davyy.slime.managers;
 
 import cc.davyy.slime.services.BroadcastService;
-import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
+import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.util.Collection;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
@@ -36,29 +35,29 @@ public class BroadcastManager implements BroadcastService {
     }
 
     @Override
-    public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull Collection<SlimePlayer> players) {
+    public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText) {
         if (titleText.isEmpty()) {
             sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
             return;
         }
 
         final Title title = Title.title(parseComponent(titleText), Component.empty());
-        players.forEach(player -> player.showTitle(title));
+        Audiences.players().showTitle(title);
     }
 
     @Override
-    public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<SlimePlayer> players) {
+    public void broadcastTitle(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle) {
         if (titleText.isEmpty()) {
             sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
             return;
         }
 
         final Title title = Title.title(parseComponent(titleText), parseComponent(subTitle));
-        players.forEach(player -> player.showTitle(title));
+        Audiences.players().showTitle(title);
     }
 
     @Override
-    public void broadcastTitleWithTimes(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle, @NotNull Collection<SlimePlayer> players) {
+    public void broadcastTitleWithTimes(@NotNull CommandSender sender, @NotNull String titleText, @NotNull String subTitle) {
         if (titleText.isEmpty()) {
             sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
             return;
@@ -70,7 +69,7 @@ public class BroadcastManager implements BroadcastService {
 
         final Title.Times times = Title.Times.times(fadeInDuration, stayDuration, fadeOutDuration);
         final Title title = Title.title(parseComponent(titleText), parseComponent(subTitle), times);
-        players.forEach(player -> player.showTitle(title));
+        Audiences.players().showTitle(title);
     }
 
     private Duration getDuration(@NotNull String path) {
