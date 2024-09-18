@@ -29,7 +29,7 @@ public class BroadcastManager implements BroadcastService {
         }
 
         broadcastAllInstances(of(configMessage)
-                .parseMMP("message", message)
+                .addFormattedStringPlaceholder("message", message)
                 .parseLegacy()
                 .build());
     }

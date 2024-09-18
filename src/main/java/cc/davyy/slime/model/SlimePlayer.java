@@ -2,6 +2,7 @@ package cc.davyy.slime.model;
 
 import cc.davyy.slime.constants.TagConstants;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.model.data.DataMutateResult;
@@ -98,19 +99,29 @@ public final class SlimePlayer extends Player {
     public @NotNull Component getChatFormat(@NotNull String message) {
         final CachedMetaData metaData = this.getLuckPermsMetaData();
         final String group = metaData.getPrimaryGroup();
-        final String format = getConfig().getString(getConfig().getString("group-formats." + group) != null ? "group-formats." + group : "chat-format");
+        final String groupFormat = getConfig().getString("group-formats." + group) != null ? "group-formats." + group : "chat-format";
+        final String format = getConfig().getString(groupFormat);
 
         return of(format)
-                .parseMMP("lobbyid", String.valueOf(getLobbyID()))
-                .parseMMP("prefix", metaData.getPrefix() != null ? metaData.getPrefix() : "")
-                .parseMMP("message", message)
-                .parseMMP("name", this.getName())
-                .parseMMP("username-color", metaData.getMetaValue("username-color") != null ? metaData.getMetaValue("username-color") : "")
-                .parseMMP("message-color", metaData.getMetaValue("message-color") != null ? metaData.getMetaValue("message-color") : "")
+                .addPlainStringPlaceholder("lobbyid", String.valueOf(getLobbyID()))
+                .addFormattedStringPlaceholder("prefix", metaData.getPrefix() != null ? metaData.getPrefix() : "")
+                .addFormattedStringPlaceholder("message", message)
+                .addComponentPlaceholder("name", this.getName())
+                .addFormattedStringPlaceholder("username-color", metaData.getMetaValue("username-color") != null ? metaData.getMetaValue("username-color") : "")
+                .addFormattedStringPlaceholder("message-color", metaData.getMetaValue("message-color") != null ? metaData.getMetaValue("message-color") : "")
                 .build();
     }
 
-    public int getDeathY() { return this.getInstance().getTag(TagConstants.DEATH_Y); }
+    public @NotNull Component getDefaultChatFormat(@NotNull String message) {
+        final String format = getConfig().getString("chat-format");
+
+        return of(format)
+                .addComponentPlaceholder("prefix", this.getPrefix())
+                .addPlainStringPlaceholder("lobbyid", String.valueOf(getLobbyID()))
+                .addPlainStringPlaceholder("message", message)
+                .addComponentPlaceholder("name", this.getName())
+                .build();
+    }
 
     public void setLobbyID(int lobbyID) { this.setTag(TagConstants.PLAYER_LOBBY_ID_TAG, lobbyID); }
 

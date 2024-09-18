@@ -87,18 +87,18 @@ public class SidebarManager implements SidebarService {
 
             if (playerSidebar.getLine(lineId) != null) {
                 playerSidebar.updateLineContent(lineId, of(text)
-                        .parseMMP("lobby", lobbyName)
-                        .parseMMP("rank", player.getPrefix())
-                        .parseMMP("playercount", String.valueOf(onlinePlayersSize))
+                        .addPlainStringPlaceholder("lobby", lobbyName)
+                        .addComponentPlaceholder("rank", player.getPrefix())
+                        .addPlainStringPlaceholder("playercount", String.valueOf(onlinePlayersSize))
                         .build());
                 return;
             }
 
             final Sidebar.ScoreboardLine scoreboardLine = new Sidebar.ScoreboardLine(lineId,
                     of(text)
-                            .parseMMP("lobby", lobbyName)
-                            .parseMMP("rank", player.getPrefix())
-                            .parseMMP("playercount", String.valueOf(onlinePlayersSize))
+                            .addFormattedStringPlaceholder("lobby", lobbyName)
+                            .addComponentPlaceholder("rank", player.getPrefix())
+                            .addPlainStringPlaceholder("playercount", String.valueOf(onlinePlayersSize))
                             .build(), score, Sidebar.NumberFormat.blank());
 
             playerSidebar.createLine(scoreboardLine);
