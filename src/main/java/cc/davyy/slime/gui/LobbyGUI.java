@@ -21,6 +21,7 @@ import java.util.Collection;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.ColorUtils.of;
+import static net.minestom.server.MinecraftServer.LOGGER;
 
 @Singleton
 public class LobbyGUI extends Inventory {
@@ -35,7 +36,6 @@ public class LobbyGUI extends Inventory {
         this.lobbyManager = lobbyManager;
 
         updateGUI();
-        listenToEvents();
     }
 
     public void open(@NotNull SlimePlayer player) {
@@ -55,25 +55,6 @@ public class LobbyGUI extends Inventory {
             ItemStack item = createLobbyItem(lobby);
             this.setItemStack(slot++, item);
         }
-
-    }
-
-    private void listenToEvents() {
-        final var handler = MinecraftServer.getGlobalEventHandler();
-        final var lobbyGUINode = EventNode.type("lobby-gui-listener", EventFilter.INVENTORY, ((inventoryEvent, inventory) -> this == inventory))
-                .addListener(InventoryClickEvent.class, event -> {
-                    final SlimePlayer player = (SlimePlayer) event.getPlayer();
-                    final ItemStack clickedItem = event.getClickedItem();
-                    final Collection<Lobby> lobbies = lobbyManager.getAllLobbies();
-                    final Integer lobbyTag = clickedItem.getTag(TagConstants.LOBBY_ID_TAG);
-
-                    if (lobbyTag != null) {
-                        lobbies.stream()
-                                .filter(l -> l.id() == lobbyTag)
-                                .findFirst().ifPresent(lobby -> lobbyManager.teleportPlayerToLobby(player, lobbyTag));
-                    }
-                });
-        handler.addChild(lobbyGUINode);
     }
 
     private ItemStack createLobbyItem(@NotNull Lobby lobby) {
