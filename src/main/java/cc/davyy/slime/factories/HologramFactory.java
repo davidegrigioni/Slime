@@ -1,5 +1,6 @@
-package cc.davyy.slime.entities.holograms;
+package cc.davyy.slime.factories;
 
+import cc.davyy.slime.entities.HologramEntity;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;

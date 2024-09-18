@@ -1,9 +1,8 @@
 package cc.davyy.slime.managers;
 
-import cc.davyy.slime.entities.npc.NPCEntity;
+import cc.davyy.slime.entities.NPCEntity;
 import cc.davyy.slime.services.NPCService;
-import cc.davyy.slime.entities.npc.NPCFactory;
-import cc.davyy.slime.constants.TagConstants;
+import cc.davyy.slime.factories.NPCFactory;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

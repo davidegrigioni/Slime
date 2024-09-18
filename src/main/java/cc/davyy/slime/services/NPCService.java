@@ -1,6 +1,6 @@
 package cc.davyy.slime.services;
 
-import cc.davyy.slime.entities.npc.NPCEntity;
+import cc.davyy.slime.entities.NPCEntity;
 import cc.davyy.slime.model.SlimePlayer;
 import net.minestom.server.entity.PlayerSkin;
 import org.jetbrains.annotations.NotNull;

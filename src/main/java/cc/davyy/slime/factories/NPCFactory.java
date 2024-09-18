@@ -1,5 +1,6 @@
-package cc.davyy.slime.entities.npc;
+package cc.davyy.slime.factories;
 
+import cc.davyy.slime.entities.NPCEntity;
 import com.google.inject.Singleton;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.PlayerSkin;

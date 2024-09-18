@@ -1,4 +1,4 @@
-package cc.davyy.slime.model;
+package cc.davyy.slime.model.parkour;
 
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
