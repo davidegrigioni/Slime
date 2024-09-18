@@ -9,8 +9,9 @@ import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.event.inventory.InventoryClickEvent;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
@@ -21,7 +22,6 @@ import java.util.Collection;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.ColorUtils.of;
-import static net.minestom.server.MinecraftServer.LOGGER;
 
 @Singleton
 public class LobbyGUI extends Inventory {
@@ -36,6 +36,7 @@ public class LobbyGUI extends Inventory {
         this.lobbyManager = lobbyManager;
 
         updateGUI();
+        listenEvents();
     }
 
     public void open(@NotNull SlimePlayer player) {
@@ -55,6 +56,24 @@ public class LobbyGUI extends Inventory {
             ItemStack item = createLobbyItem(lobby);
             this.setItemStack(slot++, item);
         }
+    }
+
+    private void listenEvents() {
+        final var lobbyNode = EventNode.type("lobby-node", EventFilter.INVENTORY)
+                .addListener(EventListener.builder(InventoryPreClickEvent.class)
+                        .handler(event -> {
+                            final SlimePlayer player = (SlimePlayer) event.getPlayer();
+                            final ItemStack lobbyItem = event.getClickedItem();
+                            final Integer lobbyTag = lobbyItem.getTag(TagConstants.LOBBY_ID_TAG);
+
+                            event.setCancelled(true);
+
+                            if (lobbyItem.hasTag(TagConstants.LOBBY_ID_TAG)) {
+                                lobbyManager.teleportPlayerToLobby(player, lobbyTag);
+                            }
+                        })
+                        .build());
+        MinecraftServer.getGlobalEventHandler().addChild(lobbyNode);
     }
 
     private ItemStack createLobbyItem(@NotNull Lobby lobby) {

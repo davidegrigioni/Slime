@@ -5,7 +5,6 @@ import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.SidebarManager;
 import cc.davyy.slime.managers.SpawnManager;
-import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.PosUtils;
 import cc.davyy.slime.constants.TagConstants;
@@ -20,12 +19,9 @@ import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.event.inventory.InventoryClickEvent;
-import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
-import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
@@ -38,13 +34,13 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.JoinUtils.applyJoinKit;
 
+@SuppressWarnings("UnstableApiUsage")
 @Singleton
 public class EventsListener {
 
@@ -53,7 +49,6 @@ public class EventsListener {
     private static final String SERVER_SL = "serversl";
 
     private final EventNode<PlayerEvent> playerNode;
-    private final EventNode<InventoryEvent> inventoryNode;
 
     private final LobbyManager lobbyManager;
     private final SidebarManager sidebarManager;
@@ -74,55 +69,15 @@ public class EventsListener {
         this.sidebarManager = sidebarManager;
         this.spawnManager = spawnManager;
         this.playerNode = createPlayerNode();
-        this.inventoryNode = createInventoryNode();
     }
 
     public void init() {
         MinecraftServer.getGlobalEventHandler()
                 .addListener(ServerTickMonitorEvent.class, event -> lastTickMonitor.set(event.getTickMonitor()))
-                .addChild(inventoryNode)
                 .addChild(playerNode);
 
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
         MinestomAdventure.COMPONENT_TRANSLATOR = (c, l) -> c;
-    }
-
-    private EventNode<InventoryEvent> createInventoryNode() {
-        return EventNode.type("inventory-node", EventFilter.INVENTORY)
-                .addListener(InventoryPreClickEvent.class, event -> event.setCancelled(true))
-                .addListener(InventoryClickEvent.class, event -> {
-                    if (event.getInventory() instanceof LobbyGUI) {
-                        LOGGER.debug("InventoryClickEvent triggered");
-                        final SlimePlayer player = (SlimePlayer) event.getPlayer();
-                        final ItemStack clickedItem = event.getClickedItem();
-                        final Collection<Lobby> lobbies = lobbyManager.getAllLobbies();
-                        final Integer lobbyTag = clickedItem.getTag(TagConstants.LOBBY_ID_TAG);
-
-                        // Debug logs
-                        LOGGER.debug("Player {} clicked item: {}", player.getName(), clickedItem);
-                        if (lobbyTag != null) {
-                            LOGGER.debug("Item has lobby tag: {}", lobbyTag);
-                        } else {
-                            LOGGER.debug("Item does not have a lobby tag.");
-                        }
-
-                        if (lobbyTag != null) {
-                            Lobby selectedLobby = lobbies.stream()
-                                    .filter(l -> l.id() == lobbyTag)
-                                    .findFirst()
-                                    .orElse(null);
-
-                            if (selectedLobby != null) {
-                                LOGGER.debug("Teleporting player {} to lobby with ID: {}", player.getName(), lobbyTag);
-                                lobbyManager.teleportPlayerToLobby(player, lobbyTag);
-                            } else {
-                                LOGGER.debug("No lobby found with ID: {}", lobbyTag);
-                            }
-                        } else {
-                            LOGGER.debug("Lobby tag was null. No action taken.");
-                        }
-                    }
-                });
     }
 
     private EventNode<PlayerEvent> createPlayerNode() {
