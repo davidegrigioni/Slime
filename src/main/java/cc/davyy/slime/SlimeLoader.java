@@ -1,6 +1,5 @@
 package cc.davyy.slime;
 
-import cc.davyy.slime.commands.*;
 import cc.davyy.slime.commands.admin.*;
 import cc.davyy.slime.commands.cosmetic.CosmeticCommand;
 import cc.davyy.slime.commands.player.SocialCommand;
@@ -44,7 +43,6 @@ public class SlimeLoader {
     @Inject private BroadCastCommand broadcastCommand;
     @Inject private ConfigReloadCommand configReloadCommand;
     @Inject private CosmeticCommand cosmeticCommand;
-    @Inject private DebugCommand debugCommand;
     @Inject private ExecuteCommand executeCommand;
     @Inject private GameModeCommand gameModeCommand;
     @Inject private HologramCommand hologramCommand;
@@ -97,7 +95,6 @@ public class SlimeLoader {
         commandManager.register(broadcastCommand,
                 configReloadCommand,
                 cosmeticCommand,
-                debugCommand,
                 executeCommand,
                 gameModeCommand,
                 hologramCommand,
