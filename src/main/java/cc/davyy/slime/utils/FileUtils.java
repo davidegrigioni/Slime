@@ -82,8 +82,8 @@ public final class FileUtils {
     }
 
     public static void setupFiles() {
-        validateConfig();
         setupConfig();
+        validateConfig();
         setupLuckPerms();
         //setupPayments();
     }
