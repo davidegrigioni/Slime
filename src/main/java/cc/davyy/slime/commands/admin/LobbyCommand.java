@@ -12,9 +12,10 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.ArgumentWord;
-import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
+import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
@@ -27,10 +28,10 @@ public class LobbyCommand extends Command {
 
     private final LobbyManager lobbyManager;
 
-    private final ArgumentWord actionArgument = ArgumentType.Word("action")
-            .from("create", "teleport");
+    private final ArgumentLiteral createArg = ArgumentType.Literal("create");
+    private final ArgumentLiteral teleportArg = ArgumentType.Literal("teleport");
 
-    private final ArgumentInteger lobbyIDArg = ArgumentType.Integer("id");
+    private final ArgumentNumber<Integer> lobbyIDArg = ArgumentType.Integer("id").between(0, 50);
 
     @Inject
     public LobbyCommand(LobbyManager lobbyManager) {
@@ -47,8 +48,30 @@ public class LobbyCommand extends Command {
 
         setDefaultExecutor(this::showUsage);
 
-        addSyntax(this::handleCommand, actionArgument);
-        addSyntax(this::handleTeleport, actionArgument, lobbyIDArg);
+        setArgumentCallback(this::onSyntaxError, lobbyIDArg);
+
+        addSyntax(this::create, createArg);
+        addSyntax(this::handleTeleport, teleportArg, lobbyIDArg);
+    }
+
+    private void create(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final Lobby lobby = lobbyManager.createNewLobby();
+        sender.sendMessage(Component.text("Created new lobby with name: " + lobby.name())
+                .color(NamedTextColor.GREEN));
+    }
+
+    private void onSyntaxError(@NotNull CommandSender sender, @NotNull ArgumentSyntaxException exception) {
+        final int error = exception.getErrorCode();
+        final String input = exception.getInput();
+        switch (error) {
+            case ArgumentNumber.NOT_NUMBER_ERROR:
+                sender.sendMessage(Component.text("SYNTAX ERROR: '" + input + "' isn't a number!"));
+                break;
+            case ArgumentNumber.TOO_LOW_ERROR:
+            case ArgumentNumber.TOO_HIGH_ERROR:
+                sender.sendMessage(Component.text("SYNTAX ERROR: " + input + " is not between 0 and 100"));
+                break;
+        }
     }
 
     private void showUsage(@NotNull CommandSender commandSender, @NotNull CommandContext context) {
@@ -68,21 +91,6 @@ public class LobbyCommand extends Command {
                         .decorate(TextDecoration.ITALIC));
 
         commandSender.sendMessage(usageMessage);
-    }
-
-    private void handleCommand(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final String action = context.get(actionArgument);
-
-        switch (action) {
-            case "create" -> createLobby(sender);
-            case "teleport" -> handleTeleport(sender, context);
-        }
-    }
-
-    private void createLobby(@NotNull CommandSender sender) {
-        final Lobby lobby = lobbyManager.createNewLobby();
-        sender.sendMessage(Component.text("Created new lobby with name: " + lobby.name())
-                .color(NamedTextColor.GREEN));
     }
 
     private void handleTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
