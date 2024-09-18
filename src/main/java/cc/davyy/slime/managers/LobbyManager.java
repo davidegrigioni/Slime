@@ -123,4 +123,16 @@ public class LobbyManager implements LobbyService {
     @Override
     public @NotNull Collection<Lobby> getAllLobbies() { return lobbies.values(); }
 
+    public Integer getLobbyIDForInstance(@NotNull Instance instance) {
+        if (isMainInstance(instance)) {
+            return 0;
+        }
+
+        return lobbies.values().stream()
+                .filter(lobby -> lobby.sharedInstance().equals(instance))
+                .map(Lobby::id)
+                .findFirst()
+                .orElse(null);
+    }
+
 }
