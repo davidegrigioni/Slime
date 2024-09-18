@@ -7,6 +7,7 @@ import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.SidebarManager;
 import cc.davyy.slime.cosmetics.model.Cosmetic;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
@@ -33,6 +34,7 @@ import java.util.List;
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.ColorUtils.stringListToComponentList;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
+import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 import static net.kyori.adventure.text.Component.text;
 
 // TODO: Remove this command
@@ -61,6 +63,14 @@ public class DebugCommand extends Command {
 
         setArgumentCallback(this::onModeError, modeArg);
         setArgumentCallback(this::onValueError, valueArg);
+
+        setCondition((sender, commandString) -> {
+            if (!hasPlayerPermission(sender, "slime.debug")) {
+                sender.sendMessage(Messages.NO_PERMS.asComponent());
+                return false;
+            }
+            return true;
+        });
 
         addSyntax(this::execute, ArgumentType.Literal("brandname"));
         addSyntax(this::executeInstances, ArgumentType.Literal("instances"));

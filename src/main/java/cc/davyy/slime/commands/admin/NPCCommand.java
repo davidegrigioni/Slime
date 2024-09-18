@@ -2,6 +2,7 @@ package cc.davyy.slime.commands.admin;
 
 import cc.davyy.slime.managers.NPCManager;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
@@ -17,6 +18,7 @@ import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.entity.PlayerSkin;
 import org.jetbrains.annotations.NotNull;
 
+import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
 
@@ -38,6 +40,14 @@ public class NPCCommand extends Command {
     public NPCCommand(NPCManager npcManager) {
         super("npc");
         this.npcManager = npcManager;
+
+        setCondition((sender, commandString) -> {
+            if (!hasPlayerPermission(sender, "slime.npc")) {
+                sender.sendMessage(Messages.NO_PERMS.asComponent());
+                return false;
+            }
+            return true;
+        });
 
         setDefaultExecutor(this::showUsage);
 

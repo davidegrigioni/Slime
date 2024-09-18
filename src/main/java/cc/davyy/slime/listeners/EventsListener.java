@@ -115,9 +115,16 @@ public class EventsListener {
 
     private void handlePlayerMoveEvent(PlayerMoveEvent event) {
         final SlimePlayer player = (SlimePlayer) event.getPlayer();
-        final int deathY = player.getDeathY();
+        final Instance playerInstance = player.getInstance();
 
-        if (limboInstance != null && player.getInstance().equals(limboInstance)) {
+        if (playerInstance.equals(limboInstance)) {
+            return;
+        }
+
+        final Integer deathY = playerInstance.getTag(TagConstants.DEATH_Y);
+
+        if (deathY == null) {
+            LOGGER.warn("Death Y value is missing for instance: {}", playerInstance.getUniqueId());
             return;
         }
 
@@ -136,10 +143,6 @@ public class EventsListener {
         setupPlayerMetricsDisplay();
         sidebarManager.showSidebar(player);
         applyJoinKit(player);
-
-        player.setDisplayName(player.getPrefix()
-                .append(Component.text(" "))
-                .append(player.getName()));
 
         createServerLinks(player);
     }
