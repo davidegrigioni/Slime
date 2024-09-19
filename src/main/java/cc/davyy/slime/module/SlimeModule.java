@@ -7,7 +7,6 @@ public class SlimeModule extends AbstractModule {
     @Override
     protected void configure() {
         install(new CosmeticModule());
-        install(new ParkourModule());
         install(new LobbyModule());
         install(new EntitiesModule());
         install(new MiscModule());
