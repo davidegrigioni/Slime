@@ -14,17 +14,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Singleton
 public class ParkourManager implements ParkourService {
 
     private final ParkourFactory parkourFactory;
+    private final Map<Integer, Parkour> parkours = new ConcurrentHashMap<>();
     private final Map<UUID, ParkourSession> activeSessions = new ConcurrentHashMap<>();
-    private final Map<Integer, Parkour> parkourMap = new ConcurrentHashMap<>();
-    private final AtomicInteger parkourID = new AtomicInteger();
+    private final AtomicInteger parkourIdGenerator = new AtomicInteger();
 
     @Inject
     public ParkourManager(ParkourFactory parkourFactory) {
@@ -33,57 +35,80 @@ public class ParkourManager implements ParkourService {
 
     @Override
     public void createParkour(@NotNull Component name) {
-        int id = parkourID.getAndIncrement();
+        int id = parkourIdGenerator.getAndIncrement();
+        ParkourCheckpoint checkpoint = new ParkourCheckpoint(id, new CopyOnWriteArrayList<>(), false);
+        Parkour parkour = parkourFactory.createParkour(id, name, checkpoint);
+        parkours.put(id, parkour);
     }
 
     @Override
     public void deleteParkour(int id) {
-        parkourMap.remove(id);
+        parkours.remove(id);
     }
 
     @Override
-    public Parkour getParkour(int id) {
-        return parkourMap.get(id);
+    public Optional<Parkour> getParkour(int id) {
+        return Optional.ofNullable(parkours.get(id));
     }
 
     @Override
     public List<Parkour> getAllParkours() {
-        return List.copyOf(parkourMap.values());
+        return List.copyOf(parkours.values());
     }
 
     @Override
     public void startParkour(@NotNull SlimePlayer player, int parkourId) {
-        final Parkour parkour = getParkour(parkourId);
+        Parkour parkour = parkours.get(parkourId);
         if (parkour != null) {
-            final ParkourSession session = new ParkourSession(parkour, System.currentTimeMillis(), 0);
+            ParkourSession session = new ParkourSession(parkour, System.currentTimeMillis(), 0);
             activeSessions.put(player.getUuid(), session);
-            player.sendMessage("Parkour Started");
+            player.setParkourCourse(parkourId);
+            player.setParkourStartTime(System.currentTimeMillis());
         }
     }
 
     @Override
     public void endParkour(@NotNull SlimePlayer player) {
-        final ParkourSession session = activeSessions.remove(player.getUuid());
+        ParkourSession session = activeSessions.remove(player.getUuid());
         if (session != null) {
-            long duration = System.currentTimeMillis() - session.startTime();
-            player.sendMessage("Parkour ended" + duration);
+            long endTime = System.currentTimeMillis();
+            long startTime = player.getParkourStartTime();
+            long duration = endTime - startTime;
+
+            player.setParkourCompletionStatus(true);
         }
     }
 
     @Override
-    public void updateCheckpoint(@NotNull SlimePlayer player) {
-        final ParkourSession session = activeSessions.get(player.getUuid());
+    public void setCheckpoint(@NotNull SlimePlayer player) {
+        ParkourSession session = activeSessions.get(player.getUuid());
         if (session != null) {
-            int nextCheckpoint = session.currentCheckpoint() + 1;
+            Parkour parkour = session.parkour();
+            ParkourCheckpoint checkpoint = parkour.checkpoint();
+            checkpoint.checkpoints().add(new Pos(player.getPosition())); // Assuming Pos can be created from player position
+            parkour = new Parkour(parkour.id(), parkour.name(), checkpoint);
+            parkours.put(parkour.id(), parkour);
 
-            if (nextCheckpoint < session.parkour().parkourCheckpoint().checkpointList().size()) {
-                activeSessions.put(player.getUuid(),
-                        new ParkourSession(session.parkour(), session.startTime(), nextCheckpoint));
-                player.sendMessage("new checkpoint " + nextCheckpoint);
-                return;
+            player.setParkourCheckpoint(checkpoint.checkpoints().size());
+        }
+    }
+
+    @Override
+    public void editCheckpoint(@NotNull SlimePlayer player, int checkpointId) {
+        // Implement editing logic based on checkpointId
+    }
+
+    @Override
+    public void finishParkour(@NotNull SlimePlayer player) {
+        ParkourSession session = activeSessions.get(player.getUuid());
+        if (session != null) {
+            Parkour parkour = session.parkour();
+            ParkourCheckpoint checkpoint = parkour.checkpoint();
+            if (checkpoint.isFinalCheckpoint() && !checkpoint.checkpoints().isEmpty()) {
+                endParkour(player);
+            } else {
+                // Notify player that parkour is not completed correctly
             }
-
-            endParkour(player);
         }
     }
 

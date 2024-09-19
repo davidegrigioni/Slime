@@ -3,10 +3,10 @@ package cc.davyy.slime.services;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.model.parkour.Parkour;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ParkourService {
 
@@ -14,7 +14,7 @@ public interface ParkourService {
 
     void deleteParkour(int id);
 
-    Parkour getParkour(int id);
+    Optional<Parkour> getParkour(int id);
 
     List<Parkour> getAllParkours();
 
@@ -22,6 +22,10 @@ public interface ParkourService {
 
     void endParkour(@NotNull SlimePlayer player);
 
-    void updateCheckpoint(@NotNull SlimePlayer player);
+    void setCheckpoint(@NotNull SlimePlayer player);
+
+    void editCheckpoint(@NotNull SlimePlayer player, int checkpointId);
+
+    void finishParkour(@NotNull SlimePlayer player);
 
 }

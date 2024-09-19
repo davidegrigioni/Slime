@@ -135,7 +135,7 @@ public final class SlimePlayer extends Player {
 
     public int getParkourCourse() { return this.getTag(TagConstants.PARKOUR_COURSE_ID_TAG); }
 
-    public void setCheckpoint(int checkpointID) { this.setTag(TagConstants.PARKOUR_CHECKPOINT_TAG, checkpointID); }
+    public void setParkourCheckpoint(int checkpointID) { this.setTag(TagConstants.PARKOUR_CHECKPOINT_TAG, checkpointID); }
 
     public int getCheckpoint() { return this.getTag(TagConstants.PARKOUR_CHECKPOINT_TAG); }
 
