@@ -1,7 +1,7 @@
 package cc.davyy.slime.managers.entities;
 
 import cc.davyy.slime.entities.NPCEntity;
-import cc.davyy.slime.services.NPCService;
+import cc.davyy.slime.services.entities.NPCService;
 import cc.davyy.slime.factories.NPCFactory;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;

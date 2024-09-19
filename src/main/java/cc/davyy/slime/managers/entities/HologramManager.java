@@ -1,7 +1,7 @@
 package cc.davyy.slime.managers.entities;
 
 import cc.davyy.slime.entities.HologramEntity;
-import cc.davyy.slime.services.HologramService;
+import cc.davyy.slime.services.entities.HologramService;
 import cc.davyy.slime.factories.HologramFactory;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.constants.TagConstants;
