@@ -1,6 +1,6 @@
-package cc.davyy.slime.commands.admin;
+package cc.davyy.slime.commands.entities;
 
-import cc.davyy.slime.managers.HologramManager;
+import cc.davyy.slime.managers.entities.HologramManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;

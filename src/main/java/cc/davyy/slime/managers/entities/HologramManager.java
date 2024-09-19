@@ -1,4 +1,4 @@
-package cc.davyy.slime.managers;
+package cc.davyy.slime.managers.entities;
 
 import cc.davyy.slime.entities.HologramEntity;
 import cc.davyy.slime.services.HologramService;

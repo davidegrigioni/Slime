@@ -1,4 +1,4 @@
-package cc.davyy.slime.managers;
+package cc.davyy.slime.managers.entities;
 
 import cc.davyy.slime.entities.NPCEntity;
 import cc.davyy.slime.services.NPCService;
