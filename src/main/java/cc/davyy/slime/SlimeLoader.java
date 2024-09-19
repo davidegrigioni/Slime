@@ -2,11 +2,14 @@ package cc.davyy.slime;
 
 import cc.davyy.slime.commands.admin.*;
 import cc.davyy.slime.commands.cosmetic.CosmeticCommand;
+import cc.davyy.slime.commands.entities.HologramCommand;
+import cc.davyy.slime.commands.entities.NPCCommand;
 import cc.davyy.slime.commands.player.SocialCommand;
 import cc.davyy.slime.commands.player.SpawnCommand;
 import cc.davyy.slime.commands.player.TeleportCommand;
 import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.*;
+import cc.davyy.slime.managers.entities.HologramManager;
 import cc.davyy.slime.model.ServerMode;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
@@ -46,7 +49,6 @@ public class SlimeLoader {
     @Inject private ExecuteCommand executeCommand;
     @Inject private GameModeCommand gameModeCommand;
     @Inject private HologramCommand hologramCommand;
-    @Inject private ListCommandsCommand listCommandsCommand;
     @Inject private LobbyCommand lobbyCommand;
     @Inject private NPCCommand npcCommand;
     @Inject private SayCommand sayCommand;
@@ -85,7 +87,7 @@ public class SlimeLoader {
 
     private void injectGuice() {
         LOGGER.info("Injecting dependencies using Guice...");
-        final Injector injector = Guice.createInjector(new SlimeModule(this));
+        final Injector injector = Guice.createInjector(new SlimeModule());
         injector.injectMembers(this);
     }
 
@@ -98,7 +100,6 @@ public class SlimeLoader {
                 executeCommand,
                 gameModeCommand,
                 hologramCommand,
-                listCommandsCommand,
                 lobbyCommand,
                 npcCommand,
                 sayCommand,
