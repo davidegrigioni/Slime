@@ -1,6 +1,7 @@
 package cc.davyy.slime.commands.entities;
 
-import cc.davyy.slime.managers.entities.NPCManager;
+import cc.davyy.slime.managers.entities.npc.NPC;
+import cc.davyy.slime.managers.entities.npc.NPCManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
@@ -11,11 +12,11 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
-import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
@@ -27,14 +28,9 @@ public class NPCCommand extends Command {
 
     private final NPCManager npcManager;
 
-    private final ArgumentLiteral createArg = ArgumentType.Literal("create");
-    private final ArgumentLiteral moveArg = ArgumentType.Literal("move");
-    private final ArgumentLiteral deleteArg = ArgumentType.Literal("delete");
-
-    private final ArgumentString nameArg = ArgumentType.String("name");
     private final ArgumentInteger idArg = ArgumentType.Integer("id");
-
-    private final ArgumentString skinArg = ArgumentType.String("skin");
+    private final ArgumentEntityType entityTypeArg = ArgumentType.EntityType("entityType");
+    private final ArgumentString nameArg = ArgumentType.String("npcName");
 
     @Inject
     public NPCCommand(NPCManager npcManager) {
@@ -51,14 +47,31 @@ public class NPCCommand extends Command {
 
         setDefaultExecutor(this::showUsage);
 
-        addSyntax(this::handleCreate, createArg, nameArg);
-        addSyntax(this::handleDelete, deleteArg, idArg);
-        addSyntax(this::handleMove, moveArg, idArg);
-        addSyntax(this::id);
+        addSyntax(this::createNPC, entityTypeArg, nameArg);
+        addSyntax(this::changeNPCName, idArg, nameArg);
     }
 
-    private void id(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    private void changeNPCName(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final SlimePlayer player = (SlimePlayer) sender;
+        final String name = context.get(nameArg);
+        final int id = context.get(idArg);
+        final NPC npc = npcManager.getNPC(id);
 
+        if (npc != null) {
+            npc.setName(name);
+            player.sendMessage("set new name to " + name);
+        }
+
+    }
+
+    private void createNPC(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final SlimePlayer player = (SlimePlayer) sender;
+        final EntityType entityType = context.get(entityTypeArg);
+        final String name = context.get(nameArg);
+        final NPC npc = npcManager.createNPC(entityType, name, null, null);
+
+        npc.setInstance(player.getInstance(), player.getPosition());
+        player.sendMessage("created new npc with " + entityType.name() + " with name " + name);
     }
 
     private void showUsage(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -82,28 +95,6 @@ public class NPCCommand extends Command {
                         .decorate(TextDecoration.ITALIC));
 
         sender.sendMessage(usageMessage);
-    }
-
-    private void handleDelete(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final int npcID = context.get(idArg);
-
-        npcManager.deleteNPC(npcID, player);
-    }
-
-    private void handleMove(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final int npcID = context.get(idArg);
-
-        npcManager.moveNPC(npcID, player);
-    }
-
-    private void handleCreate(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final String name = context.get(nameArg);
-        final String skin = context.get(skinArg);
-
-        npcManager.createNPC(name, PlayerSkin.fromUsername(skin), player);
     }
 
 }
