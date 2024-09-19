@@ -1,5 +1,7 @@
 package cc.davyy.slime.managers.entities.nametag;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
+@Singleton
 public class NameTagManager {
 
     private static final Tag<NameTag> NAME_TAG = Tag.Transient("msnametags.name-tag");
@@ -31,6 +34,7 @@ public class NameTagManager {
     private final Function<Entity, Team> teamCallback;
 
     @SuppressWarnings("UnstableApiUsage")
+    @Inject
     public NameTagManager(EventNode<Event> node, Function<Entity, Team> teamCallback) {
         this.teamCallback = teamCallback;
         EventListener<PlayerRespawnEvent> respawnListener = EventListener.builder(PlayerRespawnEvent.class)

@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+// https://github.com/EcholightMC/MSNPCs/tree/master
 @Singleton
 public class NPCManager {
 
