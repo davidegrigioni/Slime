@@ -2,7 +2,6 @@ package cc.davyy.slime.model;
 
 import cc.davyy.slime.constants.TagConstants;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.model.data.DataMutateResult;
@@ -21,7 +20,7 @@ import static cc.davyy.slime.utils.FileUtils.getConfig;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public final class SlimePlayer extends Player {
+public class SlimePlayer extends Player {
 
     private final @NotNull LuckPerms luckPerms;
     private final @NonNull PlayerAdapter<Player> playerAdapter;
@@ -130,31 +129,5 @@ public final class SlimePlayer extends Player {
     public boolean hasLobbyID() { return this.hasTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
 
     public int getLobbyID() { return this.getTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
-
-    public void setParkourCourse(int courseID) { this.setTag(TagConstants.PARKOUR_COURSE_ID_TAG, courseID); }
-
-    public int getParkourCourse() { return this.getTag(TagConstants.PARKOUR_COURSE_ID_TAG); }
-
-    public void setParkourCheckpoint(int checkpointID) { this.setTag(TagConstants.PARKOUR_CHECKPOINT_TAG, checkpointID); }
-
-    public int getCheckpoint() { return this.getTag(TagConstants.PARKOUR_CHECKPOINT_TAG); }
-
-    public void setParkourCompletionStatus(boolean status) { this.setTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG, status); }
-
-    public boolean hasParkourCompleted() { return this.hasTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG); }
-
-    public boolean getParkourCompletionStatus() { return this.getTag(TagConstants.PARKOUR_COMPLETION_STATUS_TAG); }
-
-    public void setParkourStartTime(long startTime) { this.setTag(TagConstants.PARKOUR_START_TIME_TAG, startTime); }
-
-    public long getParkourStartTime() { return this.getTag(TagConstants.PARKOUR_START_TIME_TAG); }
-
-    public void removeFromParkourCourse() {
-        this.removeTag(TagConstants.PARKOUR_COURSE_ID_TAG);
-    }
-
-    public boolean isInParkourCourse() {
-        return this.hasTag(TagConstants.PARKOUR_COURSE_ID_TAG);
-    }
 
 }

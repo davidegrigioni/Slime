@@ -10,7 +10,10 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
+import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.utils.entity.EntityFinder;
+import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
@@ -20,6 +23,7 @@ public class TeleportCommand extends Command {
 
     private final TeleportManager teleportManager;
 
+    private final ArgumentRelativeVec3 posArg = ArgumentType.RelativeVec3("pos");
     private final ArgumentEntity playerEntityArg = ArgumentType.Entity("player").onlyPlayers(true);
 
     @Inject
@@ -36,6 +40,15 @@ public class TeleportCommand extends Command {
         });
 
         addSyntax(this::onTeleport, playerEntityArg);
+        addSyntax(this::onPosTeleport, posArg);
+    }
+
+    private void onPosTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final SlimePlayer player = (SlimePlayer) sender;
+        final RelativeVec relativeVec = context.get(posArg);
+        final Pos position = player.getPosition().withCoord(relativeVec.from(player));
+
+        teleportManager.teleportPlayerToCoordinates(player, position);
     }
 
     private void onTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {

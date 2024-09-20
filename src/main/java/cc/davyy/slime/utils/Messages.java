@@ -21,6 +21,14 @@ public enum Messages implements ComponentLike {
     NO_PERMS("messages.no-permission"),
     TARGET_PLAYER_NOT_FOUND("messages.target-player-not-found"),
 
+    TELEPORT_EXECUTOR_MESSAGE("messages.teleport-executor-message"),
+    TELEPORT_TARGET_MESSAGE("messages.teleport-target-message"),
+    TELEPORT_YOURSELF_TO_YOURSELF_ERROR("messages.teleport-yourself-to-yourself-error"),
+    TELEPORT_TO_COORDINATE("messages.teleport-to-coordinate"),
+    COORDINATES_OUT_OF_BOUND("messages.coordinates-out-of-bound"),
+    TELEPORT_TO_PLAYER("messages.teleport-to-player"),
+    TELEPORT_WAIT_TIME("messages.teleport-wait-time"),
+
     PET_COSMETIC_CREATED("messages.pet-cosmetic-created"),
     ITEM_COSMETIC_CREATED("messages.item-cosmetic-created"),
     COSMETIC_ID_NOT_FOUND("messages.cosmetic-id-not-found"),

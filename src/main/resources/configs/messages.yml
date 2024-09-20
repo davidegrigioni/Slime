@@ -14,6 +14,14 @@ messages:
   no-permission: "<red>You do not have permission to use this command.</red>"
   target-player-not-found: "<red>Target player not found or invalid.</red>"
 
+  teleport-executor-message: "<green>Success! You have teleported <target> to your location.</green>"
+  teleport-target-message: "<green>You've been summoned by <player>! Hold tight!</green>"
+  teleport-yourself-to-yourself-error: "<red>Error: You can't teleport yourself to yourself!</red>"
+  teleport-to-coordinate: "<green>Whoosh! You've been teleported to: <pos></green>"
+  coordinates-out-of-bound: "<red>Error: The coordinates you entered are out of bounds.</red>"
+  teleport-wait-time: "<red>You must wait <time> seconds before teleporting again.</red>"
+  teleport-to-player: "<green>You have been teleported to <target>!</green>"
+
   hologram-created: "<gradient:#00FF00:#007700>Hologram created with ID: <id></gradient>"
   hologram-does-not-exists: "<red>Hologram with ID <id> does not exist.</red>"
   hologram-deleted: "<red>Hologram <id> deleted.</red>"

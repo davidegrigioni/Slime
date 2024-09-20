@@ -55,6 +55,10 @@ public final class PosUtils {
         return new Pos(x, y, z);
     }
 
+    public static @NotNull Pos of(double x, double y, double z, float yaw, float pitch) {
+        return new Pos(x, y, z, yaw, pitch);
+    }
+
     /**
      * Creates a {@link Pos} from a {@link Point} object.
      *
