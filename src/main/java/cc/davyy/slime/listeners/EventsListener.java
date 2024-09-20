@@ -5,6 +5,8 @@ import cc.davyy.slime.gui.ServerGUI;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.managers.SidebarManager;
 import cc.davyy.slime.managers.SpawnManager;
+import cc.davyy.slime.managers.entities.nametag.NameTag;
+import cc.davyy.slime.managers.entities.nametag.NameTagManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.PosUtils;
 import cc.davyy.slime.constants.TagConstants;
@@ -45,6 +47,7 @@ public class EventsListener {
     private final LobbyManager lobbyManager;
     private final SidebarManager sidebarManager;
     private final SpawnManager spawnManager;
+    private final NameTagManager nameTagManager;
 
     @Inject
     private Provider<LobbyGUI> lobbyGUIProvider;
@@ -52,10 +55,11 @@ public class EventsListener {
     private Provider<ServerGUI> serverGUIProvider;
 
     @Inject
-    public EventsListener(LobbyManager lobbyManager, SidebarManager sidebarManager, SpawnManager spawnManager) {
+    public EventsListener(LobbyManager lobbyManager, SidebarManager sidebarManager, SpawnManager spawnManager, NameTagManager nameTagManager) {
         this.lobbyManager = lobbyManager;
         this.sidebarManager = sidebarManager;
         this.spawnManager = spawnManager;
+        this.nameTagManager = nameTagManager;
         this.playerNode = createPlayerNode();
     }
 
@@ -126,8 +130,15 @@ public class EventsListener {
 
     private void handlePlayerSpawnEvent(PlayerSpawnEvent event) {
         final SlimePlayer player = (SlimePlayer) event.getPlayer();
+
         sendHeaderFooter(player);
+
+        setNameTags(player, player.getPrefix()
+                .append(Component.text(" "))
+                .append(player.getName()));
+
         sidebarManager.showSidebar(player);
+
         applyJoinKit(player);
 
         createServerLinks(player);
@@ -201,6 +212,13 @@ public class EventsListener {
                 of(header).build(),
                 of(footer).build()
         );
+    }
+
+    private void setNameTags(@NotNull SlimePlayer player, @NotNull Component text) {
+        final NameTag nameTag = nameTagManager.createNameTag(player);
+        nameTag.setText(text);
+        nameTag.addViewer(player);
+        nameTag.mount();
     }
 
 }
