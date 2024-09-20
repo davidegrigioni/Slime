@@ -49,12 +49,14 @@ public class SidebarManager implements SidebarService {
     public void toggleSidebar(@NotNull SlimePlayer player) {
         final Sidebar playerSidebar = sidebarMap.get(player.getUuid());
 
-        if (playerSidebar != null && playerSidebar.getViewers().contains(player)) {
-            playerSidebar.removeViewer(player);
-            return;
+        if (playerSidebar != null) {
+            if (playerSidebar.getViewers().contains(player)) {
+                playerSidebar.removeViewer(player);
+            } else {
+                playerSidebar.addViewer(player);
+            }
         }
 
-        showSidebar(player);
     }
 
     @Override

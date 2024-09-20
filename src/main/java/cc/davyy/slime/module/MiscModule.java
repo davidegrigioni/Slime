@@ -1,6 +1,7 @@
 package cc.davyy.slime.module;
 
 import cc.davyy.slime.commands.admin.*;
+import cc.davyy.slime.commands.player.SidebarCommand;
 import cc.davyy.slime.commands.player.SocialCommand;
 import cc.davyy.slime.commands.player.SpawnCommand;
 import cc.davyy.slime.commands.player.TeleportCommand;
@@ -26,6 +27,7 @@ public class MiscModule extends AbstractModule {
         bind(TeleportManager.class);
 
         // Bind commands
+        bind(SidebarCommand.class);
         bind(BroadCastCommand.class);
         bind(ConfigReloadCommand.class);
         bind(ExecuteCommand.class);
