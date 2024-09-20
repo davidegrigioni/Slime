@@ -135,7 +135,7 @@ public class SlimeLoader {
     }
 
     private String loadVelocitySecret() {
-        final Path path = Paths.get("./configs/velocity.secret");
+        final Path path = Paths.get("./configs/forwarding.secret");
         try {
             return Files.readString(path).trim();
         } catch (IOException ex) {

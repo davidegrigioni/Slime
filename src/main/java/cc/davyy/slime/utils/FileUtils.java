@@ -70,7 +70,7 @@ public final class FileUtils {
      * The setup enables command registry and dependency management for LuckPerms.
      */
     public static void setupLuckPerms() {
-        final Path dir = Path.of("luckperms");
+        final Path dir = Path.of("./luckperms");
         LuckPerms luckPerms = LuckPermsMinestom.builder(dir)
                 .commandRegistry(CommandRegistry.minestom())
                 .configurationAdapter(plugin -> new MultiConfigurationAdapter(plugin,
