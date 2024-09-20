@@ -82,6 +82,12 @@ public class SlimePlayer extends Player {
         return user.getCachedData().getPermissionData().checkPermission(permissionName);
     }
 
+    public @NotNull Component getGroup() {
+        String group = this.getLuckPermsMetaData().getPrimaryGroup();
+        if (group == null) return Component.empty();
+        return of(group).parseLegacy().build();
+    }
+
     /**
      * Gets the prefix of the player. This method uses the MiniMessage library
      * to parse the prefix, which is a more advanced option than using legacy
