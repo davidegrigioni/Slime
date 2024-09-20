@@ -4,8 +4,8 @@ import cc.davyy.slime.model.SlimePlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
@@ -26,8 +26,7 @@ public final class GeneralUtils {
      * @param message the message to broadcast, in the form of a {@link Component}
      */
     public static void broadcastAllInstances(@NotNull Component message) {
-        MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player ->
-                player.sendMessage(message));
+        Audiences.players().sendMessage(message);
     }
 
     /**
