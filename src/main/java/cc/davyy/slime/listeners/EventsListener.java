@@ -15,7 +15,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
-import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
@@ -25,9 +24,7 @@ import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
-import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
-import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -53,8 +50,6 @@ public class EventsListener {
     private Provider<LobbyGUI> lobbyGUIProvider;
     @Inject
     private Provider<ServerGUI> serverGUIProvider;
-
-    private Instance limboInstance;
 
     @Inject
     public EventsListener(LobbyManager lobbyManager, SidebarManager sidebarManager, SpawnManager spawnManager) {
@@ -90,12 +85,6 @@ public class EventsListener {
         final String message = event.getMessage();
         final Instance instance = player.getInstance();
 
-        if (instance.equals(limboInstance)) {
-            event.setCancelled(true);
-            player.sendMessage(Component.text("You can't write in limbo."));
-            return;
-        }
-
         final Component formattedMessage;
         if (player.hasPermission("slime.colorchat")) {
             formattedMessage = player.getChatFormat(message);
@@ -116,10 +105,6 @@ public class EventsListener {
     private void handlePlayerMoveEvent(PlayerMoveEvent event) {
         final SlimePlayer player = (SlimePlayer) event.getPlayer();
         final Instance playerInstance = player.getInstance();
-
-        if (playerInstance.equals(limboInstance)) {
-            return;
-        }
 
         final Integer deathY = playerInstance.getTag(TagConstants.DEATH_Y);
 
@@ -152,30 +137,17 @@ public class EventsListener {
         final SlimePlayer player = (SlimePlayer) event.getPlayer();
         final String posString = getConfig().getString("spawn.position");
         final Pos pos = PosUtils.fromString(posString);
+        final Instance instance = lobbyManager.getMainLobbyContainer();
 
-        /* TEMP FIX */
-        player.setLobbyID(10000);
-
-        limboInstance = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.THE_END);
-
-        event.setSpawningInstance(limboInstance);
+        if (!player.hasLobbyID()) {
+            final int lobbyIDForInstance = lobbyManager.getLobbyIDForInstance(instance);
+            player.setLobbyID(lobbyIDForInstance);
+            event.setSpawningInstance(instance);
+            return;
+        }
 
         Check.notNull(pos, "Position cannot be null, Check your Config!");
         player.setRespawnPoint(pos);
-
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            final Instance mainLobby = lobbyManager.getMainLobbyContainer();
-            player.setInstance(mainLobby);
-
-            MinecraftServer.getSchedulerManager().buildTask(() -> {
-                if (limboInstance.getPlayers().isEmpty()) {
-                    MinecraftServer.getInstanceManager().unregisterInstance(limboInstance);
-                    return;
-                }
-
-                LOGGER.warn("Cannot unregister limbo instance {} as it still has players.", limboInstance.getUniqueId());
-            }).delay(10, TimeUnit.SECOND).schedule();
-        }).delay(10, TimeUnit.SECOND).schedule();
     }
 
     private void handleItemUseEvent(PlayerUseItemEvent event) {
@@ -205,6 +177,7 @@ public class EventsListener {
         }
     }
 
+    @SuppressWarnings("all")
     private void createServerLinks(@NotNull SlimePlayer player) {
         final String newsLink = getConfig().getString("news-link");
         final String bugsReportLink = getConfig().getString("bugs-report-link");
@@ -218,15 +191,12 @@ public class EventsListener {
     }
 
     private void sendHeaderFooter(@NotNull SlimePlayer player) {
-        // Get the string lists from the configuration
         final List<String> headerList = getConfig().getStringList("header");
         final List<String> footerList = getConfig().getStringList("footer");
 
-        // Join the strings from the lists into a single string with newlines separating each entry
         final String header = String.join("\n", headerList);
         final String footer = String.join("\n", footerList);
 
-        // Send the header and footer as components
         player.sendPlayerListHeaderAndFooter(
                 of(header).build(),
                 of(footer).build()
