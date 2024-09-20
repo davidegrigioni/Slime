@@ -13,8 +13,10 @@ import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static net.minestom.server.MinecraftServer.LOGGER;
@@ -70,8 +72,17 @@ public final class FileUtils {
      * The setup enables command registry and dependency management for LuckPerms.
      */
     public static void setupLuckPerms() {
-        final Path dir = Path.of("./luckperms");
-        LuckPerms luckPerms = LuckPermsMinestom.builder(dir)
+        final Path luckPermsDir = Path.of("luckperms");
+
+        if (!Files.exists(luckPermsDir)) {
+            try {
+                Files.createDirectories(luckPermsDir);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to create LuckPerms directory!", e);
+            }
+        }
+
+        final LuckPerms luckPerms = LuckPermsMinestom.builder(luckPermsDir)
                 .commandRegistry(CommandRegistry.minestom())
                 .configurationAdapter(plugin -> new MultiConfigurationAdapter(plugin,
                         new EnvironmentVariableConfigAdapter(plugin),

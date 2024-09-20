@@ -13,7 +13,7 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 public final class HoconConfigurationAdapter extends ConfigurateConfigAdapter implements ConfigurationAdapter {
 
     public HoconConfigurationAdapter(LuckPermsPlugin plugin) {
-        super(plugin, ((LPMinestomPlugin) plugin).resolveConfig("./luckperms/luckperms.conf"));
+        super(plugin, ((LPMinestomPlugin) plugin).resolveConfig("luckperms.conf"));
     }
 
     @Override
