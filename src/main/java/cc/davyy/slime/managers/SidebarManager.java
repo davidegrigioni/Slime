@@ -24,7 +24,6 @@ public class SidebarManager implements SidebarService {
 
     private static final String SIDEBAR_TITLE = getConfig().getString("scoreboard.title");
 
-    private final Sidebar sidebar = new Sidebar(of(SIDEBAR_TITLE).build());
     private final LobbyManager lobbyManager;
     private final Map<UUID, Sidebar> sidebarMap = new ConcurrentHashMap<>();
 
@@ -40,8 +39,9 @@ public class SidebarManager implements SidebarService {
     @Override
     public void showSidebar(@NotNull SlimePlayer player) {
         if (!sidebarMap.containsKey(player.getUuid())) {
-            sidebar.addViewer(player);
-            sidebarMap.put(player.getUuid(), sidebar);
+            Sidebar playerSidebar = new Sidebar(of(SIDEBAR_TITLE).build());
+            playerSidebar.addViewer(player);
+            sidebarMap.put(player.getUuid(), playerSidebar);
         }
     }
 
@@ -56,15 +56,14 @@ public class SidebarManager implements SidebarService {
                 playerSidebar.addViewer(player);
             }
         }
-
     }
 
     @Override
     public void removeSidebar(@NotNull SlimePlayer player) {
-        final Sidebar sidebar = sidebarMap.remove(player.getUuid());
+        final Sidebar playerSidebar = sidebarMap.remove(player.getUuid());
 
-        if (sidebar != null) {
-            sidebar.removeViewer(player);
+        if (playerSidebar != null) {
+            playerSidebar.removeViewer(player);
         }
     }
 
