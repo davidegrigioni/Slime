@@ -92,9 +92,11 @@ title-settings:
     value: 2
     unit: seconds
 
-# Servers
-servers:
-  skywars:
+# Social
+socials:
+  - "test"
+  - "test"
+  - "test"
 
 # MISC
 deathY: 20
