@@ -15,6 +15,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
@@ -91,19 +92,25 @@ public class EventsListener {
 
         if (instance.equals(limboInstance)) {
             event.setCancelled(true);
-            player.sendMessage(Component.text("You can't write in limbo"));
+            player.sendMessage(Component.text("You can't write in limbo."));
             return;
         }
 
         final Component formattedMessage;
-
         if (player.hasPermission("slime.colorchat")) {
             formattedMessage = player.getChatFormat(message);
         } else {
             formattedMessage = player.getDefaultChatFormat(message);
         }
 
-        event.setChatFormat(chatEvent -> formattedMessage);
+        event.setCancelled(true);
+
+        instance.getPlayers().forEach(players -> {
+            if (players instanceof SlimePlayer slimePlayer) {
+                slimePlayer.sendMessage(formattedMessage);
+            }
+        });
+
     }
 
     private void handlePlayerMoveEvent(PlayerMoveEvent event) {
