@@ -8,11 +8,11 @@ import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,12 +23,16 @@ public class TeleportCommand extends Command {
 
     private final TeleportManager teleportManager;
 
+    private final ArgumentLiteral toArg = ArgumentType.Literal("to");
+    private final ArgumentLiteral toCoordsArg = ArgumentType.Literal("to-coords");
+
+    private final ArgumentEntity targetEntityArg = ArgumentType.Entity("target").onlyPlayers(true);
     private final ArgumentRelativeVec3 posArg = ArgumentType.RelativeVec3("pos");
     private final ArgumentEntity playerEntityArg = ArgumentType.Entity("player").onlyPlayers(true);
 
     @Inject
     public TeleportCommand(TeleportManager teleportManager) {
-        super("tp");
+        super("teleport","tp");
         this.teleportManager = teleportManager;
 
         setCondition((sender, commandString) -> {
@@ -39,8 +43,10 @@ public class TeleportCommand extends Command {
             return true;
         });
 
-        addSyntax(this::onTeleport, playerEntityArg);
-        addSyntax(this::onPosTeleport, posArg);
+        //addConditionalSyntax()
+        addSyntax(this::onTeleport, toArg, playerEntityArg);
+        addSyntax(this::onPosTeleport, toCoordsArg, posArg);
+        addSyntax(this::onTargetToPlayerTeleport, targetEntityArg, playerEntityArg);
     }
 
     private void onPosTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -53,13 +59,21 @@ public class TeleportCommand extends Command {
 
     private void onTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
-        final EntityFinder entityName = context.get(playerEntityArg);
-        final SlimePlayer slimePlayerTarget = (SlimePlayer) entityName.findFirstPlayer(player);
+        final SlimePlayer slimePlayerTarget = (SlimePlayer) context.get(playerEntityArg)
+                .findFirstPlayer(player);
 
         if (slimePlayerTarget != null) {
             teleportManager.teleportPlayerToTarget(player, slimePlayerTarget);
         }
 
+    }
+
+    private void onTargetToPlayerTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final SlimePlayer executor = (SlimePlayer) sender;
+        final SlimePlayer target = (SlimePlayer) context.get(playerEntityArg)
+                .findFirstPlayer(executor);
+
+        teleportManager.teleportTargetToExecutor(executor, target);
     }
 
 }

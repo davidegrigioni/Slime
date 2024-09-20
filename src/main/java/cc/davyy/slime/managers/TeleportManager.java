@@ -6,6 +6,7 @@ import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import com.google.inject.Singleton;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -40,12 +41,16 @@ public class TeleportManager implements TeleportService {
             }
         }
 
-        player.teleport(target.getPosition()).thenRun(() -> {
-            teleportCooldowns.put(player.getUuid(), currentTime);
-            player.sendMessage(Messages.TELEPORT_TO_PLAYER
-                    .addPlaceholder("target", target.getUsername())
-                    .asComponent());
-        });
+        final Pos targetPos = target.getPosition();
+        final Instance targetInstance = target.getInstance();
+        final Instance playerInstance = player.getInstance();
+
+        if (!playerInstance.equals(targetInstance)) {
+            player.setInstance(targetInstance).thenRun(() -> handleTeleport(player, targetPos, currentTime, target));
+            return;
+        }
+
+        handleTeleport(player, targetPos, currentTime, target);
     }
 
     @Override
@@ -84,6 +89,15 @@ public class TeleportManager implements TeleportService {
         executor.sendMessage(Messages.TELEPORT_EXECUTOR_MESSAGE
                 .addPlaceholder("target", target.getUsername())
                 .asComponent());
+    }
+
+    private void handleTeleport(@NotNull SlimePlayer player, @NotNull Pos targetPos, long currentTime, @NotNull SlimePlayer targetUsername) {
+        player.teleport(targetPos).thenRun(() -> {
+            teleportCooldowns.put(player.getUuid(), currentTime);
+            player.sendMessage(Messages.TELEPORT_TO_PLAYER
+                    .addPlaceholder("target", targetUsername.getUsername())
+                    .asComponent());
+        });
     }
 
 }
