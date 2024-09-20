@@ -7,7 +7,6 @@ import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -28,10 +27,10 @@ public class LobbyCommand extends Command {
 
     private final LobbyManager lobbyManager;
 
+    private final ArgumentNumber<Integer> lobbyIDArg = ArgumentType.Integer("id").between(0, 50);
+
     private final ArgumentLiteral createArg = ArgumentType.Literal("create");
     private final ArgumentLiteral teleportArg = ArgumentType.Literal("teleport");
-
-    private final ArgumentNumber<Integer> lobbyIDArg = ArgumentType.Integer("id").between(0, 50);
 
     @Inject
     public LobbyCommand(LobbyManager lobbyManager) {
@@ -52,12 +51,6 @@ public class LobbyCommand extends Command {
 
         addSyntax(this::create, createArg);
         addSyntax(this::handleTeleport, teleportArg, lobbyIDArg);
-    }
-
-    private void create(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final Lobby lobby = lobbyManager.createNewLobby();
-        sender.sendMessage(Component.text("Created new lobby with name: " + lobby.name())
-                .color(NamedTextColor.GREEN));
     }
 
     private void onSyntaxError(@NotNull CommandSender sender, @NotNull ArgumentSyntaxException exception) {
@@ -91,6 +84,15 @@ public class LobbyCommand extends Command {
                         .decorate(TextDecoration.ITALIC));
 
         commandSender.sendMessage(usageMessage);
+    }
+
+    private void create(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final SlimePlayer player = (SlimePlayer) sender;
+        final Lobby lobby = lobbyManager.createNewLobby();
+
+        player.sendMessage(Messages.LOBBY_CREATED
+                .addPlaceholder("lobbyname", lobby.name())
+                .asComponent());
     }
 
     private void handleTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {

@@ -13,6 +13,8 @@ messages:
   message-empty: "<gradient:#FF0000:#AA0000>Message cannot be empty.</gradient>"
   no-permission: "<red>You do not have permission to use this command.</red>"
   target-player-not-found: "<red>Target player not found or invalid.</red>"
+  execute-command-message: "<green>Player <target> executed <command></green>"
+  lobby-created: "<green>Created lobby with name <lobbyname></green>"
 
   teleport-executor-message: "<green>Success! You have teleported <target> to your location.</green>"
   teleport-target-message: "<green>You've been summoned by <player>! Hold tight!</green>"

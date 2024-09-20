@@ -11,7 +11,6 @@ import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.arguments.ArgumentCommand;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
-import net.minestom.server.utils.entity.EntityFinder;
 import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
@@ -39,11 +38,15 @@ public class ExecuteCommand extends Command {
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
         final CommandResult command = context.get(executeCommandArg);
-        final EntityFinder finder = context.get(playerArg);
-        final SlimePlayer target = (SlimePlayer) finder.findFirstPlayer(player);
+        final SlimePlayer target = (SlimePlayer) context.get(playerArg).findFirstPlayer(player);
+        final String commandInput = command.getInput();
 
-        MinecraftServer.getCommandManager().execute(target, command.getInput());
-        player.sendMessage("Player " + target.getUsername() + " executed command " + command.getInput());
+        MinecraftServer.getCommandManager().execute(target, commandInput);
+
+        player.sendMessage(Messages.EXECUTE_COMMAND_MESSAGE
+                .addPlaceholder("command", commandInput)
+                .addPlaceholder("target", player.getUsername())
+                .asComponent());
     }
 
 }

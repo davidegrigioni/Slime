@@ -20,6 +20,8 @@ public enum Messages implements ComponentLike {
     MESSAGE_EMPTY("messages.message-empty"),
     NO_PERMS("messages.no-permission"),
     TARGET_PLAYER_NOT_FOUND("messages.target-player-not-found"),
+    LOBBY_CREATED("messages.lobby-created"),
+    EXECUTE_COMMAND_MESSAGE("messages.execute-command-message"),
 
     TELEPORT_EXECUTOR_MESSAGE("messages.teleport-executor-message"),
     TELEPORT_TARGET_MESSAGE("messages.teleport-target-message"),
