@@ -68,6 +68,14 @@ public class SidebarManager implements SidebarService {
 
     private void updateSidebarLines(@NotNull List<String> lines) {
         for (SlimePlayer player : getOnlineSlimePlayers()) {
+            updatePlayerSidebar(player, lines);
+        }
+    }
+
+    private void updatePlayerSidebar(@NotNull SlimePlayer player, @NotNull List<String> lines) {
+        final Sidebar playerSidebar = sidebarMap.get(player.getUuid());
+
+        if (playerSidebar != null) {
             for (int i = 0; i < lines.size(); i++) {
                 String text = lines.get(i);
                 int score = lines.size() - i;
