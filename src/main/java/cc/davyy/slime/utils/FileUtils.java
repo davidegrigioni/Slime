@@ -18,6 +18,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static net.minestom.server.MinecraftServer.LOGGER;
 
@@ -72,7 +73,7 @@ public final class FileUtils {
      * The setup enables command registry and dependency management for LuckPerms.
      */
     public static void setupLuckPerms() {
-        final Path luckPermsDir = Path.of("luckperms");
+        final Path luckPermsDir = Paths.get(System.getProperty("user.dir"), "luckperms");
 
         if (!Files.exists(luckPermsDir)) {
             try {
