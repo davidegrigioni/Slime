@@ -1,5 +1,6 @@
 package cc.davyy.slime;
 
+import cc.davyy.slime.commands.ItemDisplayCommand;
 import cc.davyy.slime.commands.VehicleCommand;
 import cc.davyy.slime.commands.admin.*;
 import cc.davyy.slime.commands.cosmetic.CosmeticCommand;
@@ -112,6 +113,7 @@ public class SlimeLoader {
                 stopCommand,
                 sidebarCommand,
                 vehicleCommand,
+                new ItemDisplayCommand(),
                 teleportCommand);
     }
 
