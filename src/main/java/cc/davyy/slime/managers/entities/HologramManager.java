@@ -12,8 +12,11 @@ import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -81,8 +84,8 @@ public class HologramManager implements HologramService {
     }
 
     @Override
-    public @NotNull HologramEntity getHologramById(int id) {
-        return hologramEntityMap.get(id);
+    public @NotNull Optional<HologramEntity> getHologramById(int id) {
+        return Optional.ofNullable(hologramEntityMap.get(id));
     }
 
     @Override
@@ -94,6 +97,62 @@ public class HologramManager implements HologramService {
     public void clearHolograms() {
         hologramEntityMap.values().forEach(HologramEntity::remove);
         hologramEntityMap.clear();
+    }
+
+    @Override
+    public void addHologramLine(int id, @NotNull Component text) {
+        final HologramEntity hologram = hologramEntityMap.get(id);
+
+        if (hologram != null) {
+            hologram.addLine(text);
+        }
+
+    }
+
+    @Override
+    public void insertHologramLine(int id, int index, @NotNull Component text) {
+        final HologramEntity hologram = hologramEntityMap.get(id);
+
+        if (hologram != null) {
+            hologram.insertLine(index, text);
+        }
+
+    }
+
+    @Override
+    public void removeHologramLine(int id, int index) {
+        final HologramEntity hologram = hologramEntityMap.get(id);
+
+        if (hologram != null) {
+            hologram.removeLine(index);
+        }
+
+    }
+
+    @Override
+    public void updateHologramLine(int id, int index, @NotNull Component newText) {
+        final HologramEntity hologram = hologramEntityMap.get(id);
+
+        if (hologram != null) {
+            hologram.updateLine(index, newText);
+        }
+
+    }
+
+    @Override
+    public @Nullable List<Component> getHologramLines(int id) {
+        final HologramEntity hologram = hologramEntityMap.get(id);
+        return hologram != null ? hologram.getLines() : null;
+    }
+
+    @Override
+    public void clearHologramLines(int id) {
+        final HologramEntity hologram = hologramEntityMap.get(id);
+
+        if (hologram != null) {
+            hologram.clearLines();
+        }
+
     }
 
 }

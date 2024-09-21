@@ -4,8 +4,11 @@ import cc.davyy.slime.entities.HologramEntity;
 import cc.davyy.slime.model.SlimePlayer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Service interface for managing holograms in the game.
@@ -59,7 +62,7 @@ public interface HologramService {
      * @return the hologram entity associated with the ID, or {@code null} if not found
      */
     @NotNull
-    HologramEntity getHologramById(int id);
+    Optional<HologramEntity> getHologramById(int id);
 
     /**
      * Retrieves all hologram entities currently managed by the service.
@@ -81,5 +84,77 @@ public interface HologramService {
      * </p>
      */
     void clearHolograms();
+
+    /**
+     * Adds a new line of text to the hologram with the specified ID.
+     * <p>
+     * This method appends a new line of text to the hologram identified by the given ID.
+     * Each new line will appear below the existing lines.
+     * </p>
+     *
+     * @param id the ID of the hologram to add a line to
+     * @param text the text to add as a new line
+     */
+    void addHologramLine(int id, @NotNull Component text);
+
+    /**
+     * Inserts a line of text at a specific position in the hologram with the given ID.
+     * <p>
+     * This method inserts a line of text at the specified index in the hologram. Existing lines
+     * will be shifted down to accommodate the new line.
+     * </p>
+     *
+     * @param id the ID of the hologram to insert the line into
+     * @param index the index where the new line will be inserted (0 for the top line)
+     * @param text the text to insert as a line
+     */
+    void insertHologramLine(int id, int index, @NotNull Component text);
+
+    /**
+     * Removes a specific line of text from the hologram with the given ID.
+     * <p>
+     * This method removes the line of text at the specified index from the hologram.
+     * The remaining lines will shift up to fill the gap.
+     * </p>
+     *
+     * @param id the ID of the hologram to remove a line from
+     * @param index the index of the line to remove (0 for the top line)
+     */
+    void removeHologramLine(int id, int index);
+
+    /**
+     * Replaces a specific line of text in the hologram with the specified ID.
+     * <p>
+     * This method updates the line of text at the given index in the hologram with new content.
+     * </p>
+     *
+     * @param id the ID of the hologram to update a line in
+     * @param index the index of the line to replace (0 for the top line)
+     * @param newText the new text to display on the specified line
+     */
+    void updateHologramLine(int id, int index, @NotNull Component newText);
+
+    /**
+     * Retrieves all lines of text from the hologram with the specified ID.
+     * <p>
+     * This method returns a list of all text lines currently displayed by the hologram.
+     * </p>
+     *
+     * @param id the ID of the hologram to retrieve lines from
+     * @return a list of all lines of text in the hologram
+     */
+    @Nullable
+    List<Component> getHologramLines(int id);
+
+    /**
+     * Clears all lines of text from the hologram with the specified ID.
+     * <p>
+     * This method removes all lines of text from the hologram, leaving it empty.
+     * </p>
+     *
+     * @param id the ID of the hologram to clear
+     */
+    void clearHologramLines(int id);
+
 
 }
