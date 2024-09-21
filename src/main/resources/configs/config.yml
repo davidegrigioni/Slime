@@ -92,6 +92,12 @@ title-settings:
     value: 2
     unit: seconds
 
+# Items
+item-commands:
+  COMPASS: "queue"
+  GOLD_INGOT: "say You clicked on a gold ingot!"
+  IRON_PICKAXE: "give @p iron_pickaxe 1"
+
 # Social
 socials:
   - "test"

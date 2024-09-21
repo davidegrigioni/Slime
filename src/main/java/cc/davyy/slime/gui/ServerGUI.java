@@ -2,15 +2,15 @@ package cc.davyy.slime.gui;
 
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.constants.InventoryConstants;
-import cc.davyy.slime.constants.TagConstants;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.google.inject.Singleton;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryClickEvent;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
@@ -72,25 +72,22 @@ public class ServerGUI extends Inventory {
 
     private void listenToEvents() {
         var serverNode = EventNode.type("server-inv", EventFilter.INVENTORY, ((inventoryEvent, inventory) -> this == inventory))
-                .addListener(InventoryClickEvent.class, event -> {
+                .addListener(InventoryPreClickEvent.class, event -> {
                     final SlimePlayer player = (SlimePlayer) event.getPlayer();
                     final ItemStack item = event.getClickedItem();
-                    final String skywarsServer = getConfig().getString("server.skywars");
 
-                    switch (item.getTag(TagConstants.SERVER_SWITCH_TAG)) {
-                        case "skywars-server" -> {
-                            sendToServer(player, skywarsServer);
-                        }
+                    final String commandToExecute = getConfig().getString("item-commands." + item.material().name());
+
+                    if (commandToExecute != null && !commandToExecute.isEmpty()) {
+                        MinecraftServer.getCommandManager().execute(player, commandToExecute);
+
+                        player.sendMessage(Component.text("Command executed: " + commandToExecute)
+                                .color(NamedTextColor.GREEN));
                     }
+
+                    event.setCancelled(true);
                 });
         MinecraftServer.getGlobalEventHandler().addChild(serverNode);
-    }
-
-    private void sendToServer(@NotNull SlimePlayer player, @NotNull String server) {
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("Connect");
-        out.writeUTF(server);
-        player.sendPluginMessage("BungeeCord", out.toByteArray());
     }
 
 }
