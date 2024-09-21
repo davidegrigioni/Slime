@@ -1,5 +1,6 @@
 package cc.davyy.slime;
 
+import cc.davyy.slime.commands.VehicleCommand;
 import cc.davyy.slime.commands.admin.*;
 import cc.davyy.slime.commands.cosmetic.CosmeticCommand;
 import cc.davyy.slime.commands.entities.HologramCommand;
@@ -58,6 +59,7 @@ public class SlimeLoader {
     @Inject private StopCommand stopCommand;
     @Inject private TeleportCommand teleportCommand;
     @Inject private SidebarCommand sidebarCommand;
+    @Inject private VehicleCommand vehicleCommand;
 
     @Inject private EventsListener eventsListener;
 
@@ -109,6 +111,7 @@ public class SlimeLoader {
                 spawnCommand,
                 stopCommand,
                 sidebarCommand,
+                vehicleCommand,
                 teleportCommand);
     }
 
