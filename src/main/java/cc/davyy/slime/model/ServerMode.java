@@ -3,6 +3,7 @@ package cc.davyy.slime.model;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.velocity.VelocityProxy;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.MinecraftServer.LOGGER;
 
@@ -35,6 +36,6 @@ public enum ServerMode {
         }
     };
 
-    public abstract void initEncryption(String velocitySecret);
+    public abstract void initEncryption(@Nullable String velocitySecret);
 
 }
