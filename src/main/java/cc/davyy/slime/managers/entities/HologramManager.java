@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Singleton
 public class HologramManager implements HologramService {
 
-    private static final AtomicInteger entityIdCounter = new AtomicInteger(1);
+    private static final AtomicInteger entityIdCounter = new AtomicInteger();
 
     private final HologramFactory hologramFactory;
     private final Map<Integer, HologramEntity> hologramEntityMap = new ConcurrentHashMap<>();
