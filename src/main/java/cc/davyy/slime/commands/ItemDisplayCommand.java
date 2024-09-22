@@ -1,6 +1,7 @@
 package cc.davyy.slime.commands;
 
 import cc.davyy.slime.model.SlimePlayer;
+import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -15,6 +16,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import org.jetbrains.annotations.NotNull;
 
+@Singleton
 public class ItemDisplayCommand extends Command {
 
     private final ArgumentRelativeVec3 relativeArg = ArgumentType.RelativeVec3("scale");

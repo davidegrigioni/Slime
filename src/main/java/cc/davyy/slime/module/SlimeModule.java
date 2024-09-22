@@ -6,10 +6,11 @@ public class SlimeModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        install(new CosmeticModule());
-        install(new LobbyModule());
-        install(new EntitiesModule());
-        install(new MiscModule());
+        install(new GUIModule());
+        install(new FactoryModule());
+        install(new InterfaceModule());
+        install(new ManagerModule());
+        install(new CommandModule());
     }
 
 }

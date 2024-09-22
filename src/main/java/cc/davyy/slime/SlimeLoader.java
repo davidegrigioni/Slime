@@ -22,7 +22,7 @@ import static cc.davyy.slime.utils.FileUtils.*;
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 
-public class SlimeLoader {
+public final class SlimeLoader {
 
     private static final ComponentLogger LOGGER = ComponentLogger.logger("SlimeLogger");
 
