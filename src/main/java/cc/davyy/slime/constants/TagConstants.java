@@ -16,6 +16,9 @@ public final class TagConstants {
     // Cosmetic Related tags
     public static final Tag<String> COSMETIC_NAME_TAG = Tag.String("cosmetic-name");
 
+    // Vehicle Tags
+    public static final Tag<String> VEHICLE_NAME_TAG = Tag.String("vehicle-name");
+
     // Server GUI tags
     public static final Tag<String> SERVER_SWITCH_TAG = Tag.String("server-switch");
 
