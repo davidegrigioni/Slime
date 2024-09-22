@@ -75,7 +75,7 @@ public final class PosUtils {
      * @param vec The {@link Vec} object.
      * @return A {@link Pos} object.
      */
-    public static @NotNull Pos of(@NotNull Vec vec) {
+    public static @NotNull Pos ofVec(@NotNull Vec vec) {
         return new Pos(vec.x(), vec.y(), vec.z());
     }
 
