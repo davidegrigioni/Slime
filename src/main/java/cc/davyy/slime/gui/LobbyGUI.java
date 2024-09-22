@@ -4,6 +4,7 @@ import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.constants.TagConstants;
+import cc.davyy.slime.utils.FileUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
@@ -18,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static net.kyori.adventure.text.Component.text;
 
@@ -27,7 +27,7 @@ public class LobbyGUI extends Inventory {
 
     private final LobbyManager lobbyManager;
 
-    private static final String LOBBY_GUI_TITLE = getConfig().getString("lobby-gui-title");
+    private static final String LOBBY_GUI_TITLE = FileUtils.getConfig().getString("lobby-gui-title");
 
     @Inject
     public LobbyGUI(LobbyManager lobbyManager) {

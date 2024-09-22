@@ -30,6 +30,7 @@ protection:
 # Items
 server-gui-title: "<gradient:#ff007f:#7f00ff>XenooCC Server</gradient>"
 lobby-gui-title: "<red>Lobbies</red>"
+cosmetic-gui-title: "<red>Cosmetic GUI</red>"
 
 compass-item:
   name: "<gradient:#ff4500:#ff7f50>Compass</gradient>"
@@ -79,7 +80,7 @@ news-link: "test"
 bugs-report-link: "test"
 announcement-link: "test"
 
-# Broadcast
+# Broadcast & Title
 broadcast: "<red>[ANNUNCIO]</red> <message>"
 title-settings:
   fadeIn:
@@ -92,7 +93,7 @@ title-settings:
     value: 2
     unit: seconds
 
-# Items
+# Item Commands
 item-commands:
   minecraft:gold_block: "broadcast t"
   GOLD_INGOT: "say You clicked on a gold ingot!"

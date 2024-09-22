@@ -1,5 +1,6 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.commands.DebugCommand;
 import cc.davyy.slime.commands.ItemDisplayCommand;
 import cc.davyy.slime.commands.VehicleCommand;
 import cc.davyy.slime.commands.admin.*;
@@ -50,6 +51,7 @@ public class CommandManager {
                 stopCommand,
                 sidebarCommand,
                 vehicleCommand,
+                new DebugCommand(),
                 new ItemDisplayCommand(),
                 teleportCommand);
     }
