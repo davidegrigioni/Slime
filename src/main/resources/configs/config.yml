@@ -94,15 +94,47 @@ title-settings:
 
 # Items
 item-commands:
-  COMPASS: "queue"
+  minecraft:gold_block: "broadcast t"
   GOLD_INGOT: "say You clicked on a gold ingot!"
   IRON_PICKAXE: "give @p iron_pickaxe 1"
 
 # Social
 socials:
+  - "<red>Youtube: </red>"
   - "test"
   - "test"
-  - "test"
+
+# Join Items
+# !! DON'T CHANGE ACTION-TAG !!
+items:
+  hide-item:
+    material: "minecraft:gray_dye"
+    slot: 2
+    display-name: "Hide"
+    lore:
+      - "This is a hide item"
+    action-tag: "hide"
+  show-item:
+    material: "minecraft:green_dye"
+    slot: 2
+    display-name: "Show"
+    lore:
+      - "This is a show item"
+    action-tag: "show"
+  compass-item:
+    material: "minecraft:compass"
+    slot: 4
+    display-name: "<red>Compass"
+    lore:
+      - "select"
+    action-tag: "serversl"
+  lobby-item:
+    material: "minecraft:nether_star"
+    slot: 8
+    display-name: "<red>Lobbies"
+    lore:
+      - "ets"
+    action-tag: "lobbysl"
 
 # MISC
 deathY: 20

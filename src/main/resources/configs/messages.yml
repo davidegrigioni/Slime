@@ -16,6 +16,9 @@ messages:
   execute-command-message: "<green>Player <target> executed <command></green>"
   lobby-created: "<green>Created lobby with name <lobbyname></green>"
 
+  show: "<green>You have shown all players on the server</green>"
+  hide: "<red>You have hidden all players on the server</red>"
+
   teleport-executor-message: "<green>Success! You have teleported <target> to your location.</green>"
   teleport-target-message: "<green>You've been summoned by <player>! Hold tight!</green>"
   teleport-yourself-to-yourself-error: "<red>Error: You can't teleport yourself to yourself!</red>"

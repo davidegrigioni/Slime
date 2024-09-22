@@ -23,6 +23,9 @@ public enum Messages implements ComponentLike {
     LOBBY_CREATED("messages.lobby-created"),
     EXECUTE_COMMAND_MESSAGE("messages.execute-command-message"),
 
+    HIDE("messages.hide"),
+    SHOW("messages.show"),
+
     TELEPORT_EXECUTOR_MESSAGE("messages.teleport-executor-message"),
     TELEPORT_TARGET_MESSAGE("messages.teleport-target-message"),
     TELEPORT_YOURSELF_TO_YOURSELF_ERROR("messages.teleport-yourself-to-yourself-error"),
