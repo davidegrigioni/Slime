@@ -20,6 +20,7 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -77,6 +78,7 @@ public class EventsListener {
 
     private EventNode<PlayerEvent> createPlayerNode() {
         return EventNode.type("player-node", EventFilter.PLAYER)
+                .addListener(PlayerEntityInteractEvent.class, this::playerInteract)
                 .addListener(PlayerPacketEvent.class, this::playerPacket)
                 .addListener(PlayerChatEvent.class, this::handleChatEvent)
                 .addListener(PlayerMoveEvent.class, this::handlePlayerMoveEvent)
@@ -87,6 +89,15 @@ public class EventsListener {
                 .addListener(ItemDropEvent.class, event -> event.setCancelled(true))
                 .addListener(PlayerSwapItemEvent.class, event -> event.setCancelled(true))
                 .addListener(PlayerBlockBreakEvent.class, this::handleBlockBreakEvent);
+    }
+
+    private void playerInteract(@NotNull PlayerEntityInteractEvent event) {
+        final SlimePlayer player = (SlimePlayer) event.getPlayer();
+        final Entity target = event.getTarget();
+
+        if (event.getHand() != Player.Hand.MAIN) return;
+
+        target.addPassenger(player);
     }
 
     private void playerPacket(@NotNull PlayerPacketEvent event) {

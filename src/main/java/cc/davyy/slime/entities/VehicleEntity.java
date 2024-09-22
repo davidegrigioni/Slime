@@ -2,48 +2,28 @@ package cc.davyy.slime.entities;
 
 import cc.davyy.slime.constants.TagConstants;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.model.Vehicle;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.network.packet.client.play.ClientSteerVehiclePacket;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 public final class VehicleEntity extends EntityCreature {
 
     private SlimePlayer driver;
+    private final Vehicle vehicleData;
 
-    public VehicleEntity(@NotNull EntityType entityType, @NotNull String vehicleName, @NotNull Instance instance, @NotNull Pos spawn) {
-        super(entityType);
+    public VehicleEntity(@NotNull Vehicle vehicle, @NotNull Instance instance, @NotNull Pos spawn) {
+        super(vehicle.entityType());
+        this.vehicleData = vehicle;
 
         setBoundingBox(1.5f, 1.0f, 1.5f);
         setNoGravity(true);
-        setTag(TagConstants.VEHICLE_NAME_TAG, vehicleName);
+        setTag(TagConstants.VEHICLE_ID_TAG, vehicle.id());
 
         setInstance(instance, spawn);
-    }
-
-    public void handleSteerPacket(ClientSteerVehiclePacket packet) {
-        final float fwSpeed = packet.forward();
-        final float swSpeed = packet.sideways();
-        final byte flags = packet.flags();
-
-        if (driver != null) {
-            final Pos pos = driver.getPosition();
-
-            setView(pos.yaw(), pos.pitch());
-
-            final Vec forwardDir = pos.direction();
-            final Vec sideways = forwardDir.cross(new Vec(0, -1, 0));
-            final Vec total = forwardDir.mul(fwSpeed).add(sideways.mul(swSpeed));
-
-            setVelocity(getVelocity().add(total));
-
-            if (flags == 2) {
-                removePassenger(driver);
-            }
-        }
     }
 
     /**
@@ -72,6 +52,20 @@ public final class VehicleEntity extends EntityCreature {
     public void remove() {
         removeDriver();
         super.remove();
+    }
+
+    /**
+     * Get the speed of the vehicle.
+     */
+    public double getVehicleSpeed() {
+        return vehicleData.vehicleSpeed();
+    }
+
+    /**
+     * Get the UUID of the player who owns the vehicle.
+     */
+    public UUID getPlayerUUID() {
+        return vehicleData.playerUUID();
     }
 
 }
