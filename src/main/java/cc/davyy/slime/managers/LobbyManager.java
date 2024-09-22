@@ -11,6 +11,7 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.*;
+import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +44,7 @@ public class LobbyManager implements LobbyService {
 
         this.mainLobbyContainer = instanceManager.createInstanceContainer();
         this.mainLobbyContainer.setChunkSupplier(LightingChunk::new);
+        this.mainLobbyContainer.setChunkLoader(new AnvilLoader("worlds/world"));
         this.mainLobbyContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 20, Block.GRASS_BLOCK));
         this.mainLobbyContainer.setTag(TagConstants.DEATH_Y, deathY);
     }

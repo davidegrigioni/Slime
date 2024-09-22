@@ -22,6 +22,7 @@ dependencies {
     implementation('org.slf4j:slf4j-simple:2.0.16')
     implementation('com.google.inject:guice:7.0.0')
     implementation('ninja.leaping.configurate:configurate-hocon:3.7.1')
+    implementation('commons-io:commons-io:2.17.0')
     // https://github.com/expxx/Minestom-Payments
     //implementation('dev.expx.minestom:Payments:1.2.3')
     // https://github.com/Mangolise/mango-anti-cheat
