@@ -6,10 +6,8 @@ import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.constants.TagConstants;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
@@ -22,6 +20,7 @@ import java.util.Collection;
 
 import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.ColorUtils.of;
+import static net.kyori.adventure.text.Component.text;
 
 @Singleton
 public class LobbyGUI extends Inventory {
@@ -35,7 +34,6 @@ public class LobbyGUI extends Inventory {
         super(InventoryType.CHEST_1_ROW, of(LOBBY_GUI_TITLE).build());
         this.lobbyManager = lobbyManager;
 
-        updateGUI();
         listenEvents();
     }
 
@@ -43,7 +41,7 @@ public class LobbyGUI extends Inventory {
         player.openInventory(this);
     }
 
-    private void updateGUI() {
+    public void updateGUI() {
         this.clear();
 
         final Collection<Lobby> lobbies = lobbyManager.getAllLobbies();
@@ -59,28 +57,26 @@ public class LobbyGUI extends Inventory {
     }
 
     private void listenEvents() {
-        final var lobbyNode = EventNode.type("lobby-node", EventFilter.INVENTORY)
-                .addListener(EventListener.builder(InventoryPreClickEvent.class)
-                        .handler(event -> {
-                            final SlimePlayer player = (SlimePlayer) event.getPlayer();
-                            final ItemStack lobbyItem = event.getClickedItem();
-                            final Integer lobbyTag = lobbyItem.getTag(TagConstants.LOBBY_ID_TAG);
+        final var lobbyNode = EventNode.type("lobby-node", EventFilter.INVENTORY, ((inventoryEvent, inventory) -> this == inventory))
+                .addListener(InventoryPreClickEvent.class, event -> {
+                    final SlimePlayer player = (SlimePlayer) event.getPlayer();
+                    final ItemStack lobbyItem = event.getClickedItem();
+                    final Integer lobbyTag = lobbyItem.getTag(TagConstants.LOBBY_ID_TAG);
 
-                            event.setCancelled(true);
+                    event.setCancelled(true);
 
-                            if (lobbyItem.hasTag(TagConstants.LOBBY_ID_TAG)) {
-                                lobbyManager.teleportPlayerToLobby(player, lobbyTag);
-                            }
-                        })
-                        .build());
+                    if (lobbyItem.hasTag(TagConstants.LOBBY_ID_TAG)) {
+                        lobbyManager.teleportPlayerToLobby(player, lobbyTag);
+                    }
+                });
         MinecraftServer.getGlobalEventHandler().addChild(lobbyNode);
     }
 
     private ItemStack createLobbyItem(@NotNull Lobby lobby) {
         return ItemStack.builder(Material.DIAMOND_BLOCK)
                 .set(TagConstants.LOBBY_ID_TAG, lobby.id())
-                .customName(Component.text(lobby.name()))
-                .lore(Component.text("Players: " + lobby.sharedInstance().getPlayers().size()))
+                .customName(text(lobby.name()))
+                .lore(text("Players: " + lobby.sharedInstance().getPlayers().size()))
                 .build();
     }
 

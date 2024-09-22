@@ -1,10 +1,13 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.gui.LobbyGUI;
 import cc.davyy.slime.services.LobbyService;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.constants.TagConstants;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.*;
@@ -24,6 +27,9 @@ public class LobbyManager implements LobbyService {
 
     private static final AtomicInteger lobbyIDCounter = new AtomicInteger(1);
     private static final AtomicInteger lobbyCounter = new AtomicInteger(1);
+
+    @Inject
+    private Provider<LobbyGUI> lobbyGUIProvider;
 
     private final int deathY = getConfig().getInt("deathY");
     private final InstanceContainer mainLobbyContainer;
@@ -55,6 +61,8 @@ public class LobbyManager implements LobbyService {
         sharedInstance.setTag(TagConstants.LOBBY_NAME_TAG, lobbyName);
         sharedInstance.setTag(TagConstants.LOBBY_ID_TAG, lobbyID);
         sharedInstance.setTag(TagConstants.DEATH_Y, deathY);
+
+        lobbyGUIProvider.get().updateGUI();
 
         return lobby;
     }

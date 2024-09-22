@@ -8,6 +8,8 @@ import cc.davyy.slime.managers.SpawnManager;
 import cc.davyy.slime.managers.entities.nametag.NameTag;
 import cc.davyy.slime.managers.entities.nametag.NameTagManager;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.utils.FileUtils;
+import cc.davyy.slime.utils.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import cc.davyy.slime.constants.TagConstants;
 import com.google.inject.Inject;
@@ -23,6 +25,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.trait.PlayerEvent;
@@ -37,15 +40,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
-import static cc.davyy.slime.utils.FileUtils.getConfig;
-import static cc.davyy.slime.utils.JoinUtils.applyJoinKit;
+import static cc.davyy.slime.utils.JoinUtils.*;
 
 @Singleton
 public class EventsListener {
 
-    private static final ComponentLogger LOGGER = ComponentLogger.logger("EventsListener: ");
+    private static final ComponentLogger LOGGER = ComponentLogger.logger("EventsListener");
     private static final String LOBBY_SL = "lobbysl";
     private static final String SERVER_SL = "serversl";
+    private static final String SHOW = "show";
+    private static final String HIDE = "hide";
 
     private final EventNode<PlayerEvent> playerNode;
 
@@ -78,6 +82,10 @@ public class EventsListener {
 
     private EventNode<PlayerEvent> createPlayerNode() {
         return EventNode.type("player-node", EventFilter.PLAYER)
+                .addListener(InventoryPreClickEvent.class, event -> {
+                    if (event.getInventory() instanceof ServerGUI || event.getInventory() instanceof LobbyGUI) return;
+                    event.setCancelled(true);
+                })
                 .addListener(PlayerEntityInteractEvent.class, this::playerInteract)
                 .addListener(PlayerPacketEvent.class, this::playerPacket)
                 .addListener(PlayerChatEvent.class, this::handleChatEvent)
@@ -191,7 +199,7 @@ public class EventsListener {
 
     private void handlePlayerConfigEvent(AsyncPlayerConfigurationEvent event) {
         final SlimePlayer player = (SlimePlayer) event.getPlayer();
-        final String posString = getConfig().getString("spawn.position");
+        final String posString = FileUtils.getConfig().getString("spawn.position");
         final Pos pos = PosUtils.fromString(posString);
         final Instance instance = lobbyManager.getMainLobbyContainer();
 
@@ -209,21 +217,42 @@ public class EventsListener {
     private void handleItemUseEvent(PlayerUseItemEvent event) {
         final SlimePlayer player = (SlimePlayer) event.getPlayer();
         final ItemStack item = event.getItemStack();
+
+        if (event.getHand() != Player.Hand.MAIN) return;
+
         switch (item.getTag(TagConstants.ACTION_TAG)) {
             case LOBBY_SL -> lobbyGUIProvider.get().open(player);
             case SERVER_SL -> serverGUIProvider.get().open(player);
+            case SHOW -> {
+                final ItemStack hideItem = createItemFromConfig("items.hide-item");
+                final int hideSlot = FileUtils.getConfig().getInt("items.hide-item.slot");
+
+                player.getInventory().setItemStack(hideSlot, hideItem);
+                player.updateViewableRule(playerVisible -> true);
+                player.sendMessage(Messages.SHOW
+                        .asComponent());
+            }
+            case HIDE -> {
+                final ItemStack showItem = createItemFromConfig("items.show-item");
+                final int showSlot = FileUtils.getConfig().getInt("items.show-item.slot");
+
+                player.getInventory().setItemStack(showSlot, showItem);
+                player.updateViewableRule(playerVisible -> false);
+                player.sendMessage(Messages.HIDE
+                        .asComponent());
+            }
             default -> {}
         }
     }
 
     private void handleBlockBreakEvent(PlayerBlockBreakEvent event) {
-        final boolean blockBreakEnabled = getConfig().getBoolean("protection.disable-build-protection");
-        final boolean messageEnabled = getConfig().getBoolean("protection.block-break-message.enable");
+        final boolean blockBreakEnabled = FileUtils.getConfig().getBoolean("protection.disable-build-protection");
+        final boolean messageEnabled = FileUtils.getConfig().getBoolean("protection.block-break-message.enable");
 
         if (blockBreakEnabled) {
             event.setCancelled(true);
             if (messageEnabled) {
-                final String message = getConfig().getString("protection.block-break-message.message");
+                final String message = FileUtils.getConfig().getString("protection.block-break-message.message");
                 if (message != null && !message.isEmpty()) {
                     event.getPlayer().sendMessage(of(message).build());
                     return;
@@ -235,9 +264,9 @@ public class EventsListener {
 
     @SuppressWarnings("all")
     private void createServerLinks(@NotNull SlimePlayer player) {
-        final String newsLink = getConfig().getString("news-link");
-        final String bugsReportLink = getConfig().getString("bugs-report-link");
-        final String announcementLink = getConfig().getString("announcement-link");
+        final String newsLink = FileUtils.getConfig().getString("news-link");
+        final String bugsReportLink = FileUtils.getConfig().getString("bugs-report-link");
+        final String announcementLink = FileUtils.getConfig().getString("announcement-link");
 
         player.sendPacket(new ServerLinksPacket(
                 new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.NEWS, newsLink),
@@ -247,8 +276,8 @@ public class EventsListener {
     }
 
     private void sendHeaderFooter(@NotNull SlimePlayer player) {
-        final List<String> headerList = getConfig().getStringList("header");
-        final List<String> footerList = getConfig().getStringList("footer");
+        final List<String> headerList = FileUtils.getConfig().getStringList("header");
+        final List<String> footerList = FileUtils.getConfig().getStringList("footer");
 
         final String header = String.join("\n", headerList);
         final String footer = String.join("\n", footerList);
@@ -261,6 +290,7 @@ public class EventsListener {
 
     private void setNameTags(@NotNull SlimePlayer player, @NotNull Component text) {
         final NameTag nameTag = nameTagManager.createNameTag(player);
+
         nameTag.setText(text);
         nameTag.addViewer(player);
         nameTag.mount();
