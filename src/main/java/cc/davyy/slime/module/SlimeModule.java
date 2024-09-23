@@ -6,6 +6,7 @@ public class SlimeModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        install(new ListenerModule());
         install(new GUIModule());
         install(new FactoryModule());
         install(new InterfaceModule());
