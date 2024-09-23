@@ -2,7 +2,6 @@ package cc.davyy.slime.utils;
 
 import cc.davyy.slime.model.SlimePlayer;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.command.CommandSender;
@@ -12,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static cc.davyy.slime.utils.ColorUtils.*;
 
@@ -30,17 +28,6 @@ public final class GeneralUtils {
     }
 
     /**
-     * Generates a random integer between the specified minimum and maximum values.
-     *
-     * @param min the minimum value of the range
-     * @param max the maximum value of the range (inclusive)
-     * @return a random integer between the specified range
-     */
-    public static int getRandomNumber(int min, int max) {
-        return ThreadLocalRandom.current().nextInt(min, max + 1);
-    }
-
-    /**
      * Retrieves a collection of all currently online {@link SlimePlayer}s.
      *
      * @return a {@link Collection} of all online {@link SlimePlayer}s
@@ -50,48 +37,6 @@ public final class GeneralUtils {
                 .filter(player -> player instanceof SlimePlayer)
                 .map(player -> (SlimePlayer) player)
                 .toList();
-    }
-
-    /**
-     * Creates a translatable component using the specified translation key.
-     *
-     * @param key the translation key (e.g., "chat.type.text")
-     * @return a {@link TranslatableComponent} created with the specified key
-     */
-    public static TranslatableComponent translateComponent(@NotNull String key) {
-        return Component.translatable(key);
-    }
-
-    /**
-     * Creates a translatable component with arguments using the specified translation key.
-     *
-     * @param key the translation key (e.g., "chat.type.text")
-     * @param args the components to be used as arguments in the translation
-     * @return a {@link TranslatableComponent} created with the specified key and arguments
-     */
-    public static TranslatableComponent translatable(@NotNull String key, @NotNull Component... args) {
-        return Component.translatable(key, args);
-    }
-
-    /**
-     * Sends a translatable message to the given {@link CommandSender}.
-     *
-     * @param sender the {@link CommandSender} who will receive the message
-     * @param key the translation key (e.g., "chat.type.text")
-     * @param args the components to be used as arguments in the translation
-     */
-    public static void sendTranslatable(@NotNull CommandSender sender, @NotNull String key, @NotNull Component... args) {
-        sender.sendMessage(translatable(key, args));
-    }
-
-    /**
-     * Sends a colorable text message to the specified {@link CommandSender}, allowing for MiniMessage formatting.
-     *
-     * @param sender the {@link CommandSender} who will receive the message
-     * @param text the message text in MiniMessage format
-     */
-    public static void sendColorable(@NotNull CommandSender sender, @NotNull String text) {
-        sender.sendMessage(txt(text));
     }
 
     /**
