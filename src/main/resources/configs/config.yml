@@ -51,29 +51,43 @@ player-item:
 
 # Scoreboard
 scoreboard:
-  title: "<gradient:#ff007f:#7f00ff>XenooCC</gradient>"
+  title: "<gradient:#ff007f:#7f00ff>XenooCC</gradient> <dark_gray>|</dark_gray> <gradient:#ff0000:#ff4500>DEV Version</gradient>"
   lines:
     - "<gray><strikethrough>                                                        </strikethrough></gray>"
-    - "<gradient:#ff7f50:#ff4500>Welcome to the Lobby!</gradient>"
-    - "<gradient:#00ff00:#7fff00>Online Players: <playercount></gradient>"
-    - "<green>Lobby: <lobby></green>"
-    - "<gradient:#00bfff:#1e90ff>Your rank: <rank></gradient>"
+    - "<gradient:#ff7f50:#ff4500>» Welcome to the Lobby!</gradient>"
+    - "<dark_gray>──────────────</dark_gray>"
+    - "<gradient:#00ff00:#7fff00>» Online Players: <playercount></gradient>"
+    - "<gradient:#00bfff:#1e90ff>» Your Lobby: <lobby></gradient>"
+    - "<gradient:#ffdf00:#ff8c00>» Your Rank: <rank></gradient>"
+    - "<dark_gray>──────────────</dark_gray>"
+    - "<gradient:#ff6347:#ff4500>» THIS IS A DEV SERVER</gradient>"
+    - "<gradient:#ff6347:#ff4500>» Features may not be stable!</gradient>"
+    - "<dark_gray>──────────────</dark_gray>"
     - "<gradient:#ffd700:#ff8c00>Enjoy your stay!</gradient>"
     - "<gray><strikethrough>                                                        </strikethrough></gray>"
 
 # Header & Footer
 header:
-  - "<gradient:#ff007f:#7f00ff>Welcome to XenooCC!</gradient>"
-  - "test"
+  - "<gray><strikethrough>                                                        </strikethrough></gray>"
+  - "<gradient:#ff007f:#7f00ff>» Welcome to <bold>XenooCC</bold>!</gradient>"
+  - "<dark_gray>──────────────</dark_gray>"
+  - "<gradient:#00ff7f:#00ffbf>» The Ultimate Minecraft Experience</gradient>"
+  - "<dark_gray>──────────────</dark_gray>"
+
 footer:
-  - "<gradient:#00bfff:#1e90ff>Enjoy your stay!</gradient>"
-  - "test"
+  - "<gray><strikethrough>                                                        </strikethrough></gray>"
+  - "<gradient:#00bfff:#1e90ff>» <bold>Enjoy your stay!</bold></gradient>"
+  - "<gradient:#ffdf00:#ff8c00>» Join our community: <yellow>discord.gg/XenooCC</yellow></gradient>"
+  - "<dark_gray>──────────────</dark_gray>"
+  - "<gradient:#ff7f50:#ff4500>» <italic>Play fair, have fun!</italic></gradient>"
+  - "<gray><strikethrough>                                                        </strikethrough></gray>"
 
 # Chat Format
-chat-format: "<lobbyid> <prefix><name>: <message>"
+chat-format: "<dark_aqua>[Lobby <lobbyid>]</dark_aqua> <prefix><white> <name></white>: <message>"
+
 group-formats:
-  default: "<lobbyid> <name>: <message>"
-  owner: "<lobbyid> <prefix> <red><name><grey> >></grey> <dark_red><message>"
+  default: "<dark_aqua>[Lobby <lobbyid>]</dark_aqua> <gray><name></gray>: <white><message></white>"
+  owner: "<dark_aqua>[Lobby <lobbyid>]</dark_aqua> <red><bold><name></bold></red> <gray>»</gray> <dark_red><message></dark_red>"
 
 # Server Links
 news-link: "test"
@@ -101,9 +115,13 @@ item-commands:
 
 # Social
 socials:
-  - "<red>Youtube: </red>"
-  - "test"
-  - "test"
+  - "<gray><strikethrough>                                                        </strikethrough></gray>"
+  - "<gradient:#FF0000:#FF6347>» <bold>YouTube:</bold> <white>youtube.com/XenooCC</white></gradient>"
+  - "<gradient:#1DA1F2:#00ACEE>» <bold>Twitter:</bold> <white>@XenooCC</white></gradient>"
+  - "<gradient:#E1306C:#C13584>» <bold>Instagram:</bold> <white>@XenooCC_Official</white></gradient>"
+  - "<gradient:#FF5700:#FF8C00>» <bold>Reddit:</bold> <white>reddit.com/r/XenooCC</white></gradient>"
+  - "<gradient:#FFFC00:#FFD700>» <bold>TikTok:</bold> <white>@XenooTikTok</white></gradient>"
+  - "<gray><strikethrough>                                                        </strikethrough></gray>"
 
 # Join Items
 # !! DON'T CHANGE ACTION-TAG !!
