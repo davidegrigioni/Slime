@@ -13,6 +13,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -96,6 +97,13 @@ public class ServerGUI extends Inventory {
                 this.setItemStack(i, glassPane);
             }
         }
+    }
+
+    private void sendToServer(@NotNull SlimePlayer player, @NotNull String server) {
+        player.sendPluginMessage("BungeeCord", NetworkBuffer.makeArray(buffer -> {
+            buffer.write(NetworkBuffer.STRING, "Connect");
+            buffer.write(NetworkBuffer.STRING, server);
+        }));
     }
 
 }
