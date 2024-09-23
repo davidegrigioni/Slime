@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.PacketUtils;
@@ -66,6 +67,35 @@ public class ParticleCosmeticManager implements ParticleCosmeticService {
     @Override
     public @NotNull List<ParticleCosmetic> getAvailableCosmetics() {
         return List.copyOf(particleCosmeticMap.values());
+    }
+
+    private void spawnParticle(@NotNull Pos pos, @NotNull Particle particle, int amount, double radius) {
+        double phi = (Math.sqrt(5) + 1) / 2; // Golden ratio
+        double goldenAngle = 2 * Math.PI * (phi - 1); // Golden angle
+
+        for (int i = 0; i < amount; i++) {
+            double z = 1 - (2.0 * i) / (amount - 1); // Distribute points along the z-axis
+            double r = Math.sqrt(1 - z * z); // Calculate the radius at height z
+            double theta = i * goldenAngle; // Rotate each point by the golden angle
+
+            // Convert spherical coordinates to Cartesian coordinates
+            double x = r * Math.cos(theta);
+            double y = r * Math.sin(theta);
+
+            // Multiply by the desired radius of the sphere
+            Vec point = new Vec(x, y, z).mul(radius);
+
+            // Spawn particle at this location
+            ParticlePacket particlePacket = new ParticlePacket(
+                    particle,
+                    false,
+                    pos,
+                    pos.add(point),
+                    20f,
+                    amount
+            );
+            PacketUtils.broadcastPlayPacket(particlePacket);
+        }
     }
 
 }
