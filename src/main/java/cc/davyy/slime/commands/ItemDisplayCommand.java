@@ -1,19 +1,20 @@
 package cc.davyy.slime.commands;
 
+import cc.davyy.slime.managers.ItemDisplayManager;
 import cc.davyy.slime.model.SlimePlayer;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentItemStack;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -24,30 +25,30 @@ public class ItemDisplayCommand extends Command {
     private final ArgumentEnum<ItemDisplayMeta.DisplayContext> displayContextArg = ArgumentType.Enum("displayContext", ItemDisplayMeta.DisplayContext.class);
     private final ArgumentLiteral summonArg = ArgumentType.Literal("summon");
 
-    private final Entity entity = new Entity(EntityType.ITEM_DISPLAY);
+    private final ItemDisplayManager itemDisplayManager;
 
-    public ItemDisplayCommand() {
+    @Inject
+    public ItemDisplayCommand(ItemDisplayManager itemDisplayManager) {
         super("itemdisplay");
+        this.itemDisplayManager = itemDisplayManager;
 
         addSyntax(this::summon, summonArg);
         addSyntax(this::modify, displayContextArg, itemArg, relativeArg);
     }
 
-    private void modify(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final var displayMeta = (ItemDisplayMeta) entity.getEntityMeta();
-        final var displayContext = context.get(displayContextArg);
-        final var itemDisplay = context.get(itemArg);
-        final var scaleDisplay = context.get(relativeArg);
-
-        displayMeta.setScale(scaleDisplay.from((SlimePlayer) sender));
-        displayMeta.setItemStack(itemDisplay);
-        displayMeta.setDisplayContext(displayContext);
-    }
-
     private void summon(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
 
-        entity.setInstance(player.getInstance(), player.getPosition());
+        itemDisplayManager.summonItemDisplay(player);
+    }
+
+    private void modify(@NotNull CommandSender sender, @NotNull CommandContext context) {
+        final SlimePlayer player = (SlimePlayer) sender;
+        final ItemStack itemDisplay = context.get(itemArg);
+        final RelativeVec scale = context.get(relativeArg);
+        final ItemDisplayMeta.DisplayContext displayContext = context.get(displayContextArg);
+
+        itemDisplayManager.modifyItemDisplay(player, itemDisplay, scale, displayContext);
     }
 
 }

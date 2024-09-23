@@ -33,6 +33,8 @@ public class CommandManager {
     @Inject private TeleportCommand teleportCommand;
     @Inject private SidebarCommand sidebarCommand;
     @Inject private VehicleCommand vehicleCommand;
+    @Inject private ItemDisplayCommand itemDisplayCommand;
+    @Inject private DebugCommand debugCommand;
 
     public void init() {
         final var commandRegistry = MinecraftServer.getCommandManager();
@@ -51,8 +53,8 @@ public class CommandManager {
                 stopCommand,
                 sidebarCommand,
                 vehicleCommand,
-                new DebugCommand(),
-                new ItemDisplayCommand(),
+                debugCommand,
+                itemDisplayCommand,
                 teleportCommand);
     }
 

@@ -1,5 +1,6 @@
 package cc.davyy.slime.module;
 
+import cc.davyy.slime.commands.DebugCommand;
 import cc.davyy.slime.commands.ItemDisplayCommand;
 import cc.davyy.slime.commands.VehicleCommand;
 import cc.davyy.slime.commands.admin.*;
@@ -43,6 +44,7 @@ public class CommandModule extends AbstractModule {
         bind(SpawnCommand.class).in(Singleton.class);
         bind(TeleportCommand.class).in(Singleton.class);
 
+        bind(DebugCommand.class).in(Singleton.class);
         bind(ItemDisplayCommand.class).in(Singleton.class);
         bind(VehicleCommand.class).in(Singleton.class);
     }

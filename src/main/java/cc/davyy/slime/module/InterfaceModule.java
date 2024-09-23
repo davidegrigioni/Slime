@@ -24,6 +24,7 @@ public class InterfaceModule extends AbstractModule {
         bind(BrandService.class).to(BrandManager.class).in(Singleton.class);
         bind(BroadcastService.class).to(BroadcastManager.class).in(Singleton.class);
         bind(GameModeService.class).to(GameModeManager.class).in(Singleton.class);
+        bind(ItemDisplayService.class).to(ItemDisplayManager.class).in(Singleton.class);
         bind(LobbyService.class).to(LobbyManager.class).in(Singleton.class);
         bind(SidebarService.class).to(SidebarManager.class).in(Singleton.class);
         bind(SpawnService.class).to(SpawnManager.class).in(Singleton.class);

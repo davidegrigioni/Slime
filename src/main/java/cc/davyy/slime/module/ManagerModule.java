@@ -40,6 +40,7 @@ public class ManagerModule extends AbstractModule {
         bind(BroadcastManager.class).in(Singleton.class);
         bind(CommandManager.class).in(Singleton.class);
         bind(GameModeManager.class).in(Singleton.class);
+        bind(ItemDisplayManager.class).in(Singleton.class);
         bind(LobbyManager.class).in(Singleton.class);
         bind(SidebarManager.class).in(Singleton.class);
         bind(SkinManager.class).in(Singleton.class);
