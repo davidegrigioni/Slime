@@ -6,6 +6,7 @@ import cc.davyy.slime.managers.entities.HologramManager;
 import cc.davyy.slime.model.ServerMode;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
+import cc.davyy.slime.utils.FileUtils;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -19,7 +20,6 @@ import java.nio.file.Paths;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.*;
-import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 
 public final class SlimeLoader {
@@ -80,14 +80,14 @@ public final class SlimeLoader {
     }
 
     private void startServer(MinecraftServer minecraftServer) {
-        final String ip = getConfig().getString("network.ip");
-        final int port = getConfig().getInt("network.port");
+        final String ip = FileUtils.getConfig().getString("network.ip");
+        final int port = FileUtils.getConfig().getInt("network.port");
         minecraftServer.start(ip, port);
         LOGGER.info("Server started on IP: {}, Port: {}", ip, port);
     }
 
     private ServerMode getServerModeFromConfig() {
-        final String modeString = getConfig().getString("network.type").toUpperCase();
+        final String modeString = FileUtils.getConfig().getString("network.type").toUpperCase();
         try {
             return ServerMode.valueOf(modeString);
         } catch (IllegalArgumentException e) {

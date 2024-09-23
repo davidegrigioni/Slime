@@ -35,6 +35,11 @@ public class HologramManager implements HologramService {
 
     @Override
     public void createHologram(@NotNull SlimePlayer player, @NotNull Component text) {
+        if (text.equals(Component.empty())) {
+            player.sendMessage(Messages.MESSAGE_EMPTY.asComponent());
+            return;
+        }
+
         final HologramEntity hologramEntity = hologramFactory.createHologramEntity(player, text);
         final int entityID = entityIdCounter.getAndIncrement();
 
@@ -51,16 +56,16 @@ public class HologramManager implements HologramService {
         final HologramEntity hologram = hologramEntityMap.get(id);
         final Pos pos = player.getPosition();
 
-        if (hologram != null) {
-            hologram.teleport(pos);
-            player.sendMessage(Messages.HOLOGRAM_MOVED
-                    .addPlaceholder("pos", PosUtils.toString(pos))
+        if (hologram == null) {
+            player.sendMessage(Messages.HOLOGRAM_DOES_NOT_EXISTS
                     .addPlaceholder("id", String.valueOf(id))
                     .asComponent());
             return;
         }
 
-        player.sendMessage(Messages.HOLOGRAM_DOES_NOT_EXISTS
+        hologram.teleport(pos);
+        player.sendMessage(Messages.HOLOGRAM_MOVED
+                .addPlaceholder("pos", PosUtils.toString(pos))
                 .addPlaceholder("id", String.valueOf(id))
                 .asComponent());
     }
@@ -69,16 +74,16 @@ public class HologramManager implements HologramService {
     public void deleteHologram(int id, @NotNull SlimePlayer player) {
         final HologramEntity hologram = hologramEntityMap.get(id);
 
-        if (hologram != null) {
-            hologram.remove();
-            hologramEntityMap.remove(id);
-            player.sendMessage(Messages.HOLOGRAM_DELETED
+        if (hologram == null) {
+            player.sendMessage(Messages.HOLOGRAM_DOES_NOT_EXISTS
                     .addPlaceholder("id", String.valueOf(id))
                     .asComponent());
             return;
         }
 
-        player.sendMessage(Messages.HOLOGRAM_DOES_NOT_EXISTS
+        hologram.remove();
+        hologramEntityMap.remove(id);
+        player.sendMessage(Messages.HOLOGRAM_DELETED
                 .addPlaceholder("id", String.valueOf(id))
                 .asComponent());
     }
@@ -103,40 +108,73 @@ public class HologramManager implements HologramService {
     public void addHologramLine(int id, @NotNull Component text) {
         final HologramEntity hologram = hologramEntityMap.get(id);
 
-        if (hologram != null) {
-            hologram.addLine(text);
+        if (hologram == null) {
+            // Optionally add player feedback here
+            return;
         }
 
+        if (text.equals(Component.empty())) {
+            // Optionally handle empty text feedback
+            return;
+        }
+
+        hologram.addLine(text);
     }
 
     @Override
     public void insertHologramLine(int id, int index, @NotNull Component text) {
         final HologramEntity hologram = hologramEntityMap.get(id);
 
-        if (hologram != null) {
-            hologram.insertLine(index, text);
+        if (hologram == null) {
+            // Optionally add player feedback here
+            return;
         }
 
+        if (index < 0 || index > hologram.getLines().size()) {
+            // Optionally handle index out of bounds feedback
+            return;
+        }
+
+        hologram.insertLine(index, text);
     }
 
     @Override
     public void removeHologramLine(int id, int index) {
         final HologramEntity hologram = hologramEntityMap.get(id);
 
-        if (hologram != null) {
-            hologram.removeLine(index);
+        if (hologram == null) {
+            // Optionally add player feedback here
+            return;
         }
 
+        if (index < 0 || index >= hologram.getLines().size()) {
+            // Optionally handle index out of bounds feedback
+            return;
+        }
+
+        hologram.removeLine(index);
     }
 
     @Override
     public void updateHologramLine(int id, int index, @NotNull Component newText) {
         final HologramEntity hologram = hologramEntityMap.get(id);
 
-        if (hologram != null) {
-            hologram.updateLine(index, newText);
+        if (hologram == null) {
+            // Optionally add player feedback here
+            return;
         }
 
+        if (index < 0 || index >= hologram.getLines().size()) {
+            // Optionally handle index out of bounds feedback
+            return;
+        }
+
+        if (newText.equals(Component.empty())) {
+            // Optionally handle empty text feedback
+            return;
+        }
+
+        hologram.updateLine(index, newText);
     }
 
     @Override
@@ -149,10 +187,12 @@ public class HologramManager implements HologramService {
     public void clearHologramLines(int id) {
         final HologramEntity hologram = hologramEntityMap.get(id);
 
-        if (hologram != null) {
-            hologram.clearLines();
+        if (hologram == null) {
+            // Optionally add player feedback here
+            return;
         }
 
+        hologram.clearLines();
     }
 
 }

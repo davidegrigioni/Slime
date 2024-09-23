@@ -105,9 +105,9 @@ public class HologramCommand extends Command {
         final String text = context.get(textArg);
 
         hologramManager.addHologramLine(id, of(text).parseLegacy().build());
-        /*player.sendMessage(Messages.HOLOGRAM_LINE_ADDED
+        player.sendMessage(Messages.HOLOGRAM_LINE_ADDED
                 .addPlaceholder("id", String.valueOf(id))
-                .asComponent());*/
+                .asComponent());
     }
 
     private void handleInsertLine(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -117,10 +117,10 @@ public class HologramCommand extends Command {
         final String text = context.get(textArg);
 
         hologramManager.insertHologramLine(id, index, of(text).parseLegacy().build());
-        /*player.sendMessage(Messages.HOLOGRAM_LINE_INSERTED
+        player.sendMessage(Messages.HOLOGRAM_LINE_INSERTED
                 .addPlaceholder("id", String.valueOf(id))
                 .addPlaceholder("index", String.valueOf(index))
-                .asComponent());*/
+                .asComponent());
     }
 
     private void handleRemoveLine(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -129,10 +129,10 @@ public class HologramCommand extends Command {
         final int index = context.get(indexArg);
 
         hologramManager.removeHologramLine(id, index);
-        /*player.sendMessage(Messages.HOLOGRAM_LINE_REMOVED
+        player.sendMessage(Messages.HOLOGRAM_LINE_REMOVED
                 .addPlaceholder("id", String.valueOf(id))
                 .addPlaceholder("index", String.valueOf(index))
-                .asComponent());*/
+                .asComponent());
     }
 
     private void handleUpdateLine(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -142,10 +142,10 @@ public class HologramCommand extends Command {
         final String newText = context.get(textArg);
 
         hologramManager.updateHologramLine(id, index, of(newText).parseLegacy().build());
-        /*player.sendMessage(Messages.HOLOGRAM_LINE_UPDATED
+        player.sendMessage(Messages.HOLOGRAM_LINE_UPDATED
                 .addPlaceholder("id", String.valueOf(id))
                 .addPlaceholder("index", String.valueOf(index))
-                .asComponent());*/
+                .asComponent());
     }
 
 }

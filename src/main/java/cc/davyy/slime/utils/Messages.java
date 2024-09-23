@@ -40,6 +40,10 @@ public enum Messages implements ComponentLike {
     COSMETIC_APPLIED("messages.cosmetic-applied"),
     COSMETIC_REMOVED("messages.cosmetic-removed"),
 
+    HOLOGRAM_LINE_UPDATED("messages.hologram-line-updated"),
+    HOLOGRAM_LINE_REMOVED("messages.hologram-line-removed"),
+    HOLOGRAM_LINE_INSERTED("messages.hologram-line-inserted"),
+    HOLOGRAM_LINE_ADDED("messages.hologram-line-added"),
     HOLOGRAM_CREATED("messages.hologram-created"),
     HOLOGRAM_DOES_NOT_EXISTS("messages.hologram-does-not-exists"),
     HOLOGRAM_DELETED("messages.hologram-deleted"),
