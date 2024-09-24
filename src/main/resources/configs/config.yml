@@ -149,7 +149,7 @@ items:
     action-tag: "serversl"
   lobby-item:
     material: "minecraft:nether_star"
-    slot: 8
+    slot: 6
     display-name: "<red>Lobbies"
     lore:
       - "ets"
