@@ -50,7 +50,7 @@ public class PlayerItemUseListener implements EventListener<PlayerUseItemEvent> 
                 final int hideSlot = FileUtils.getConfig().getInt("items.hide-item.slot");
 
                 player.getInventory().setItemStack(hideSlot, hideItem);
-                player.updateViewableRule(playerVisible -> true);
+                player.updateViewerRule(playerVisible -> true);
                 player.sendMessage(Messages.SHOW
                         .asComponent());
             }
@@ -59,7 +59,7 @@ public class PlayerItemUseListener implements EventListener<PlayerUseItemEvent> 
                 final int showSlot = FileUtils.getConfig().getInt("items.show-item.slot");
 
                 player.getInventory().setItemStack(showSlot, showItem);
-                player.updateViewableRule(playerVisible -> false);
+                player.updateViewerRule(playerVisible -> false);
                 player.sendMessage(Messages.HIDE
                         .asComponent());
             }
