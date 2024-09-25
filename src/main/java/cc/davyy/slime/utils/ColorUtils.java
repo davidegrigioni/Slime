@@ -76,10 +76,6 @@ public final class ColorUtils {
         return lore;
     }
 
-    public static @NotNull Component txt(@NotNull String message) {
-        return MINIMESSAGE.deserialize(message).decoration(TextDecoration.ITALIC, false);
-    }
-
     @Override
     public String toString() {
         return getText();
