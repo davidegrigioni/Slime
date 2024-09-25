@@ -4,6 +4,12 @@ import cc.davyy.slime.config.HoconConfigurationAdapter;
 import cc.davyy.slime.model.SlimePlayer;
 import de.leonhard.storage.SimplixBuilder;
 import de.leonhard.storage.Yaml;
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
+import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
+import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
+import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
+import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import me.lucko.luckperms.common.config.generic.adapter.EnvironmentVariableConfigAdapter;
 import me.lucko.luckperms.common.config.generic.adapter.MultiConfigurationAdapter;
 import me.lucko.luckperms.minestom.CommandRegistry;
@@ -38,12 +44,12 @@ public final class FileUtils {
     /**
      * The YAML configuration object for general settings.
      */
-    private static Yaml config;
+    private static YamlDocument config;
 
     /**
      * The YAML configuration object for messages.
      */
-    private static Yaml messages;
+    private static YamlDocument messages;
 
     private FileUtils() {}
 
@@ -56,6 +62,19 @@ public final class FileUtils {
      * - {@code messages.yml} for message strings
      */
     public static void setupConfig() {
+
+        YamlDocument.create(new File(CONFIG_FOLDER + "config.yml"),
+                FileUtils.class.getClassLoader().getResourceAsStream(CONFIG_FOLDER + "config.yml"),
+                GeneralSettings.DEFAULT,
+                LoaderSettings.builder()
+                        .setAutoUpdate(true)
+                        .build(),
+                DumperSettings.DEFAULT,
+                UpdaterSettings.builder()
+                        .setVersioning(
+                                new BasicVersioning("file-version"))
+                        .build());
+
         config = SimplixBuilder.fromFile(new File(CONFIG_FOLDER, "config.yml"))
                 .addInputStreamFromResource(CONFIG_FOLDER + "config.yml")
                 .createYaml();
