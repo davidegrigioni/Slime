@@ -1,18 +1,25 @@
 package cc.davyy.slime.module;
 
-import cc.davyy.slime.factories.CosmeticFactory;
-import cc.davyy.slime.factories.HologramFactory;
-import cc.davyy.slime.factories.VehicleFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import org.reflections.Reflections;
+
+import java.util.Set;
 
 public class FactoryModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(CosmeticFactory.class).in(Singleton.class);
-        bind(HologramFactory.class).in(Singleton.class);
-        bind(VehicleFactory.class).in(Singleton.class);
+        registerFactoryBindings();
+    }
+
+    private void registerFactoryBindings() {
+        Reflections reflections = new Reflections("cc.davyy.slime.factories");
+        Set<Class<?>> singletonClasses = reflections.getTypesAnnotatedWith(Singleton.class);
+
+        for (Class<?> clazz : singletonClasses) {
+            bind(clazz).in(Singleton.class);
+        }
     }
 
 }

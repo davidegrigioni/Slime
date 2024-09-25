@@ -1,24 +1,25 @@
 package cc.davyy.slime.module;
 
-import cc.davyy.slime.listeners.*;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import org.reflections.Reflections;
+
+import java.util.Set;
 
 public class ListenerModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(EventsListener.class).in(Singleton.class);
-        bind(InventoryPreClickListener.class).in(Singleton.class);
-        bind(PlayerEntityInteractListener.class).in(Singleton.class);
-        bind(PlayerPacketListener.class).in(Singleton.class);
-        bind(PlayerChatListener.class).in(Singleton.class);
-        bind(PlayerMoveListener.class).in(Singleton.class);
-        bind(PlayerDisconnectListener.class).in(Singleton.class);
-        bind(PlayerJoinListener.class).in(Singleton.class);
-        bind(AsyncConfigListener.class).in(Singleton.class);
-        bind(PlayerItemUseListener.class).in(Singleton.class);
-        bind(PlayerBlockBreakListener.class).in(Singleton.class);
+        registerListenersBindings();
+    }
+
+    private void registerListenersBindings() {
+        Reflections reflections = new Reflections("cc.davyy.slime.listeners");
+        Set<Class<?>> singletonClasses = reflections.getTypesAnnotatedWith(Singleton.class);
+
+        for (Class<?> clazz : singletonClasses) {
+            bind(clazz).in(Singleton.class);
+        }
     }
 
 }

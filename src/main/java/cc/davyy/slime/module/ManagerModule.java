@@ -1,13 +1,5 @@
 package cc.davyy.slime.module;
 
-import cc.davyy.slime.managers.*;
-import cc.davyy.slime.managers.cosmetics.ArmorCosmeticManager;
-import cc.davyy.slime.managers.cosmetics.HatCosmeticManager;
-import cc.davyy.slime.managers.cosmetics.ParticleCosmeticManager;
-import cc.davyy.slime.managers.cosmetics.PetCosmeticManager;
-import cc.davyy.slime.managers.entities.HologramManager;
-import cc.davyy.slime.managers.entities.nametag.NameTagManager;
-import cc.davyy.slime.managers.entities.npc.NPCManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -19,33 +11,16 @@ import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.scoreboard.TeamBuilder;
 import net.minestom.server.scoreboard.TeamManager;
+import org.reflections.Reflections;
 
+import java.util.Set;
 import java.util.function.Function;
 
 public class ManagerModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(ArmorCosmeticManager.class).in(Singleton.class);
-        bind(HatCosmeticManager.class).in(Singleton.class);
-        bind(ParticleCosmeticManager.class).in(Singleton.class);
-        bind(PetCosmeticManager.class).in(Singleton.class);
-
-        bind(NameTagManager.class).in(Singleton.class);
-        bind(NPCManager.class).in(Singleton.class);
-        bind(HologramManager.class).in(Singleton.class);
-
-        bind(BossBarManager.class).in(Singleton.class);
-        bind(BrandManager.class).in(Singleton.class);
-        bind(BroadcastManager.class).in(Singleton.class);
-        bind(CommandManager.class).in(Singleton.class);
-        bind(GameModeManager.class).in(Singleton.class);
-        bind(ItemDisplayManager.class).in(Singleton.class);
-        bind(LobbyManager.class).in(Singleton.class);
-        bind(SidebarManager.class).in(Singleton.class);
-        bind(SkinManager.class).in(Singleton.class);
-        bind(SpawnManager.class).in(Singleton.class);
-        bind(TeleportManager.class).in(Singleton.class);
+        registerManagersBindings();
     }
 
     @Provides
@@ -65,6 +40,15 @@ public class ManagerModule extends AbstractModule {
     @Provides
     public TeamManager provideTeamManager() {
         return MinecraftServer.getTeamManager();
+    }
+
+    private void registerManagersBindings() {
+        Reflections reflections = new Reflections("cc.davyy.slime.managers");
+        Set<Class<?>> singletonClasses = reflections.getTypesAnnotatedWith(Singleton.class);
+
+        for (Class<?> clazz : singletonClasses) {
+            bind(clazz).in(Singleton.class);
+        }
     }
 
 }
