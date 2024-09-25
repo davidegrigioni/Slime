@@ -26,6 +26,7 @@ public class SpawnManager implements SpawnService {
     public void setSpawnPosition(@NotNull Pos pos) {
         spawnPosition = pos;
         FileUtils.getConfig().getFileData().insert("spawn.position", PosUtils.toString(pos));
+        FileUtils.getConfig().write();
     }
 
     @Override
