@@ -1,7 +1,7 @@
 package cc.davyy.slime.commands.admin;
 
-import cc.davyy.slime.managers.BroadcastManager;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.services.BroadcastService;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -23,7 +23,7 @@ import static net.kyori.adventure.text.Component.text;
 @Singleton
 public class BroadCastCommand extends Command {
 
-    private final BroadcastManager broadcastManager;
+    private final BroadcastService broadcastService;
 
     private final ArgumentStringArray messageArgumentArray = ArgumentType.StringArray("message");
     private final ArgumentString broadcastTitleArg = ArgumentType.String("titleArg");
@@ -32,9 +32,9 @@ public class BroadCastCommand extends Command {
     private final ArgumentLiteral titleSubCommandArg = ArgumentType.Literal("title");
 
     @Inject
-    public BroadCastCommand(BroadcastManager broadcastManager) {
+    public BroadCastCommand(BroadcastService broadcastService) {
         super("broadcast");
-        this.broadcastManager = broadcastManager;
+        this.broadcastService = broadcastService;
 
         setCondition((sender, commandString) -> {
             if (!hasPlayerPermission(sender, "slime.broadcast")) {
@@ -66,14 +66,14 @@ public class BroadCastCommand extends Command {
     private void executeBroadcast(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final String finalMessage = String.join(" ", context.get(messageArgumentArray));
 
-        broadcastManager.broadcastMessage(sender, finalMessage);
+        broadcastService.broadcastMessage(sender, finalMessage);
     }
 
     private void executeBroadcastTitle(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
         final String message = context.get(broadcastTitleArg);
 
-        broadcastManager.broadcastTitle(player, message);
+        broadcastService.broadcastTitle(player, message);
     }
 
     private void executeBroadcastTitleSub(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -81,7 +81,7 @@ public class BroadCastCommand extends Command {
         final String message = context.get(broadcastTitleArg);
         final String subTitle = context.get(broadcastSubtitleArg);
 
-        broadcastManager.broadcastTitle(player, message, subTitle);
+        broadcastService.broadcastTitle(player, message, subTitle);
     }
 
     private void executeBroadcastTitleSubTime(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -89,7 +89,7 @@ public class BroadCastCommand extends Command {
         final String message = context.get(broadcastTitleArg);
         final String subTitle = context.get(broadcastSubtitleArg);
 
-        broadcastManager.broadcastTitleWithTimes(player, message, subTitle);
+        broadcastService.broadcastTitleWithTimes(player, message, subTitle);
     }
 
 }

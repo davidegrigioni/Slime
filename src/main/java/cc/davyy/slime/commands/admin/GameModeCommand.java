@@ -1,7 +1,7 @@
 package cc.davyy.slime.commands.admin;
 
-import cc.davyy.slime.managers.GameModeManager;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.services.GameModeService;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -24,16 +24,16 @@ import static net.kyori.adventure.text.Component.text;
 @Singleton
 public class GameModeCommand extends Command {
 
-    private final GameModeManager gameModeManager;
+    private final GameModeService gameModeService;
 
     private final ArgumentEnum<GameMode> gameModeArgumentEnum = ArgumentType.Enum("gamemode", GameMode.class)
             .setFormat(ArgumentEnum.Format.UPPER_CASED);
     private final ArgumentEntity playerEntity = ArgumentType.Entity("target").onlyPlayers(true);
 
     @Inject
-    public GameModeCommand(GameModeManager gameModeManager) {
+    public GameModeCommand(GameModeService gameModeService) {
         super("gamemode");
-        this.gameModeManager = gameModeManager;
+        this.gameModeService = gameModeService;
 
         setCondition((sender, commandString) -> {
             if (!hasPlayerPermission(sender, "slime.gamemode")) {
@@ -65,7 +65,7 @@ public class GameModeCommand extends Command {
         final SlimePlayer player = (SlimePlayer) sender;
         final GameMode gameMode = context.get(gameModeArgumentEnum);
 
-        gameModeManager.setGameMode(player, gameMode);
+        gameModeService.setGameMode(player, gameMode);
     }
 
     private void executeOther(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -75,7 +75,7 @@ public class GameModeCommand extends Command {
         final SlimePlayer target = (SlimePlayer) finder.findFirstPlayer(player);
 
         if (target != null) {
-            gameModeManager.setGameMode(player, gameMode, target);
+            gameModeService.setGameMode(player, gameMode, target);
             return;
         }
 

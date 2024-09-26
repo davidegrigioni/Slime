@@ -1,7 +1,7 @@
 package cc.davyy.slime.commands.cosmetic.subcommands;
 
-import cc.davyy.slime.managers.cosmetics.ParticleCosmeticManager;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.services.cosmetics.ParticleCosmeticService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;
@@ -20,7 +20,7 @@ import static cc.davyy.slime.utils.ColorUtils.of;
 @Singleton
 public class ParticleSubCommand extends Command {
 
-    private final ParticleCosmeticManager particleCosmeticManager;
+    private final ParticleCosmeticService particleCosmeticService;
 
     private final ArgumentLiteral createArg = ArgumentType.Literal("create");
     private final ArgumentLiteral applyArg = ArgumentType.Literal("apply");
@@ -33,9 +33,9 @@ public class ParticleSubCommand extends Command {
     private final ArgumentInteger particleCountArg = ArgumentType.Integer("particlecount");
 
     @Inject
-    public ParticleSubCommand(ParticleCosmeticManager particleCosmeticManager) {
+    public ParticleSubCommand(ParticleCosmeticService particleCosmeticService) {
         super("particle");
-        this.particleCosmeticManager = particleCosmeticManager;
+        this.particleCosmeticService = particleCosmeticService;
 
         addSyntax(this::execute, createArg, nameArg, particleModelArg, maxSpeedArg, particleCountArg);
         addSyntax(this::apply, applyArg, idArg);
@@ -46,14 +46,14 @@ public class ParticleSubCommand extends Command {
         final SlimePlayer player = (SlimePlayer) sender;
         final int id = context.get(idArg);
 
-        particleCosmeticManager.removeCosmetic(player, id);
+        particleCosmeticService.removeCosmetic(player, id);
     }
 
     private void apply(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
         final int id = context.get(idArg);
 
-        particleCosmeticManager.applyCosmetic(player, id);
+        particleCosmeticService.applyCosmetic(player, id);
     }
 
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -63,7 +63,7 @@ public class ParticleSubCommand extends Command {
         final int maxSpeed = context.get(maxSpeedArg);
         final int particleCount = context.get(particleCountArg);
 
-        particleCosmeticManager.createCosmetic(of(name)
+        particleCosmeticService.createCosmetic(of(name)
                 .parseLegacy()
                 .build(), modelParticle, player.getPosition(), player.getPosition(), maxSpeed, particleCount);
 

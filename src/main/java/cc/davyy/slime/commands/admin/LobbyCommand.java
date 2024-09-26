@@ -1,8 +1,8 @@
 package cc.davyy.slime.commands.admin;
 
-import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.services.LobbyService;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -25,7 +25,7 @@ import static net.kyori.adventure.text.format.TextColor.color;
 @Singleton
 public class LobbyCommand extends Command {
 
-    private final LobbyManager lobbyManager;
+    private final LobbyService lobbyService;
 
     private final ArgumentNumber<Integer> lobbyIDArg = ArgumentType.Integer("id").between(0, 50);
 
@@ -33,9 +33,9 @@ public class LobbyCommand extends Command {
     private final ArgumentLiteral teleportArg = ArgumentType.Literal("teleport");
 
     @Inject
-    public LobbyCommand(LobbyManager lobbyManager) {
+    public LobbyCommand(LobbyService lobbyService) {
         super("lobby");
-        this.lobbyManager = lobbyManager;
+        this.lobbyService = lobbyService;
 
         setCondition((sender, commandString) -> {
             if (!hasPlayerPermission(sender, "slime.lobby")) {
@@ -88,7 +88,7 @@ public class LobbyCommand extends Command {
 
     private void create(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
-        final Lobby lobby = lobbyManager.createNewLobby();
+        final Lobby lobby = lobbyService.createNewLobby();
 
         player.sendMessage(Messages.LOBBY_CREATED
                 .addPlaceholder("lobbyname", lobby.name())
@@ -99,7 +99,7 @@ public class LobbyCommand extends Command {
         final SlimePlayer player = (SlimePlayer) sender;
         final int lobbyID = context.get(lobbyIDArg);
 
-        lobbyManager.teleportPlayerToLobby(player, lobbyID);
+        lobbyService.teleportPlayerToLobby(player, lobbyID);
     }
 
 }

@@ -4,10 +4,6 @@ import cc.davyy.slime.commands.cosmetic.subcommands.ArmorSubCommand;
 import cc.davyy.slime.commands.cosmetic.subcommands.HatSubCommand;
 import cc.davyy.slime.commands.cosmetic.subcommands.ParticleSubCommand;
 import cc.davyy.slime.commands.cosmetic.subcommands.PetSubCommand;
-import cc.davyy.slime.managers.cosmetics.ArmorCosmeticManager;
-import cc.davyy.slime.managers.cosmetics.HatCosmeticManager;
-import cc.davyy.slime.managers.cosmetics.ParticleCosmeticManager;
-import cc.davyy.slime.managers.cosmetics.PetCosmeticManager;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -18,11 +14,13 @@ import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 @Singleton
 public class CosmeticCommand extends Command {
 
+    @Inject private ParticleSubCommand particleSubCommand;
+    @Inject private HatSubCommand hatSubCommand;
+    @Inject private PetSubCommand petSubCommand;
+    @Inject private ArmorSubCommand armorSubCommand;
+
     @Inject
-    public CosmeticCommand(PetCosmeticManager petCosmeticManager,
-                           ParticleCosmeticManager particleCosmeticManager,
-                           ArmorCosmeticManager armorCosmeticManager,
-                           HatCosmeticManager hatCosmeticManager) {
+    public CosmeticCommand() {
         super("cosmetic");
 
         setCondition((sender, commandString) -> {
@@ -33,10 +31,10 @@ public class CosmeticCommand extends Command {
             return true;
         });
 
-        addSubcommand(new ParticleSubCommand(particleCosmeticManager));
-        addSubcommand(new HatSubCommand(hatCosmeticManager));
-        addSubcommand(new PetSubCommand(petCosmeticManager));
-        addSubcommand(new ArmorSubCommand(armorCosmeticManager));
+        addSubcommand(particleSubCommand);
+        addSubcommand(hatSubCommand);
+        addSubcommand(petSubCommand);
+        addSubcommand(armorSubCommand);
     }
 
 }

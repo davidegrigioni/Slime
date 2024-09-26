@@ -1,7 +1,7 @@
 package cc.davyy.slime.commands.player;
 
-import cc.davyy.slime.managers.TeleportManager;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.services.TeleportService;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -21,7 +21,7 @@ import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 @Singleton
 public class TeleportCommand extends Command {
 
-    private final TeleportManager teleportManager;
+    private final TeleportService teleportService;
 
     private final ArgumentLiteral toArg = ArgumentType.Literal("to");
     private final ArgumentLiteral toCoordsArg = ArgumentType.Literal("to-coords");
@@ -31,9 +31,9 @@ public class TeleportCommand extends Command {
     private final ArgumentEntity playerEntityArg = ArgumentType.Entity("player").onlyPlayers(true);
 
     @Inject
-    public TeleportCommand(TeleportManager teleportManager) {
+    public TeleportCommand(TeleportService teleportService) {
         super("teleport","tp");
-        this.teleportManager = teleportManager;
+        this.teleportService = teleportService;
 
         setCondition((sender, commandString) -> {
             if (!hasPlayerPermission(sender, "slime.teleport")) {
@@ -54,7 +54,7 @@ public class TeleportCommand extends Command {
         final RelativeVec relativeVec = context.get(posArg);
         final Pos position = player.getPosition().withCoord(relativeVec.from(player));
 
-        teleportManager.teleportPlayerToCoordinates(player, position);
+        teleportService.teleportPlayerToCoordinates(player, position);
     }
 
     private void onTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -63,7 +63,7 @@ public class TeleportCommand extends Command {
                 .findFirstPlayer(player);
 
         if (slimePlayerTarget != null) {
-            teleportManager.teleportPlayerToTarget(player, slimePlayerTarget);
+            teleportService.teleportPlayerToTarget(player, slimePlayerTarget);
         }
 
     }
@@ -73,7 +73,7 @@ public class TeleportCommand extends Command {
         final SlimePlayer target = (SlimePlayer) context.get(playerEntityArg)
                 .findFirstPlayer(executor);
 
-        teleportManager.teleportTargetToExecutor(executor, target);
+        teleportService.teleportTargetToExecutor(executor, target);
     }
 
 }

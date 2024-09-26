@@ -1,8 +1,8 @@
 package cc.davyy.slime.commands.cosmetic.subcommands;
 
-import cc.davyy.slime.managers.cosmetics.ArmorCosmeticManager;
 import cc.davyy.slime.model.cosmetics.ArmorData;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.services.cosmetics.ArmorCosmeticService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;
@@ -21,7 +21,7 @@ import static cc.davyy.slime.utils.ColorUtils.of;
 @Singleton
 public class ArmorSubCommand extends Command {
 
-    private final ArmorCosmeticManager armorCosmeticManager;
+    private final ArmorCosmeticService armorCosmeticService;
 
     private final ArgumentLiteral createArg = ArgumentType.Literal("create");
     private final ArgumentLiteral applyArg = ArgumentType.Literal("apply");
@@ -35,9 +35,9 @@ public class ArmorSubCommand extends Command {
     private final ArgumentInteger idArg = ArgumentType.Integer("id");
 
     @Inject
-    public ArmorSubCommand(ArmorCosmeticManager armorCosmeticManager) {
+    public ArmorSubCommand(ArmorCosmeticService armorCosmeticService) {
         super("armor");
-        this.armorCosmeticManager = armorCosmeticManager;
+        this.armorCosmeticService = armorCosmeticService;
 
         addSyntax(this::execute, createArg, nameArg, helmetArg, chestplateArg, leggingsArg, bootsArg);
         addSyntax(this::apply, applyArg, idArg);
@@ -48,14 +48,14 @@ public class ArmorSubCommand extends Command {
         final SlimePlayer player = (SlimePlayer) sender;
         final int id = context.get(idArg);
 
-        armorCosmeticManager.removeCosmetic(player, id);
+        armorCosmeticService.removeCosmetic(player, id);
     }
 
     private void apply(@NotNull CommandSender sender, @NotNull CommandContext context) {
         final SlimePlayer player = (SlimePlayer) sender;
         final int id = context.get(idArg);
 
-        armorCosmeticManager.applyCosmetic(player, id);
+        armorCosmeticService.applyCosmetic(player, id);
     }
 
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
@@ -67,7 +67,7 @@ public class ArmorSubCommand extends Command {
         final ItemStack boots = context.get(bootsArg);
         final ArmorData armorData = new ArmorData(helmet, chest, leggings, boots);
 
-        armorCosmeticManager.createCosmetic(of(name)
+        armorCosmeticService.createCosmetic(of(name)
                 .parseLegacy()
                 .build(), armorData);
 
