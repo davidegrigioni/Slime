@@ -1,3 +1,5 @@
+file-version: 1
+
 messages:
   spawn-set: "<gradient:#00FF00:#007700>Set spawn to <pos></gradient>"
   spawn-teleport: "<gradient:#00FF00:#007700>You got teleported to spawn</gradient>"

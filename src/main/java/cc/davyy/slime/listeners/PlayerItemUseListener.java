@@ -3,8 +3,8 @@ package cc.davyy.slime.listeners;
 import cc.davyy.slime.constants.TagConstants;
 import cc.davyy.slime.gui.LobbyGUI;
 import cc.davyy.slime.gui.ServerGUI;
+import cc.davyy.slime.managers.ConfigManager;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.FileUtils;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -25,10 +25,17 @@ public class PlayerItemUseListener implements EventListener<PlayerUseItemEvent> 
     private static final String SHOW = "show";
     private static final String HIDE = "hide";
 
+    private final ConfigManager configManager;
+
     @Inject
     private Provider<LobbyGUI> lobbyGUIProvider;
     @Inject
     private Provider<ServerGUI> serverGUIProvider;
+
+    @Inject
+    public PlayerItemUseListener(ConfigManager configManager) {
+        this.configManager = configManager;
+    }
 
     @Override
     public @NotNull Class<PlayerUseItemEvent> eventType() {
@@ -46,8 +53,8 @@ public class PlayerItemUseListener implements EventListener<PlayerUseItemEvent> 
             case LOBBY_SL -> lobbyGUIProvider.get().open(player);
             case SERVER_SL -> serverGUIProvider.get().open(player);
             case SHOW -> {
-                final ItemStack hideItem = createItemFromConfig("items.hide-item");
-                final int hideSlot = FileUtils.getConfig().getInt("items.hide-item.slot");
+                final ItemStack hideItem = createItemFromConfig("items.hide-item", configManager);
+                final int hideSlot = configManager.getConfig().getInt("items.hide-item.slot");
 
                 player.getInventory().setItemStack(hideSlot, hideItem);
                 player.updateViewerRule(playerVisible -> true);
@@ -55,8 +62,8 @@ public class PlayerItemUseListener implements EventListener<PlayerUseItemEvent> 
                         .asComponent());
             }
             case HIDE -> {
-                final ItemStack showItem = createItemFromConfig("items.show-item");
-                final int showSlot = FileUtils.getConfig().getInt("items.show-item.slot");
+                final ItemStack showItem = createItemFromConfig("items.show-item", configManager);
+                final int showSlot = configManager.getConfig().getInt("items.show-item.slot");
 
                 player.getInventory().setItemStack(showSlot, showItem);
                 player.updateViewerRule(playerVisible -> false);

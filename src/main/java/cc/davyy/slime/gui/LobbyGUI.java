@@ -1,10 +1,10 @@
 package cc.davyy.slime.gui;
 
+import cc.davyy.slime.managers.ConfigManager;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.constants.TagConstants;
-import cc.davyy.slime.utils.FileUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
@@ -25,14 +25,16 @@ import static net.kyori.adventure.text.Component.text;
 @Singleton
 public class LobbyGUI extends Inventory {
 
+    private final ConfigManager configManager;
     private final LobbyManager lobbyManager;
-
-    private static final String LOBBY_GUI_TITLE = FileUtils.getConfig().getString("lobby-gui-title");
+    private final String lobbyGuiTitle;
 
     @Inject
-    public LobbyGUI(LobbyManager lobbyManager) {
-        super(InventoryType.CHEST_1_ROW, of(LOBBY_GUI_TITLE).build());
+    public LobbyGUI(ConfigManager configManager, LobbyManager lobbyManager, String lobbyGuiTitle) {
+        super(InventoryType.CHEST_1_ROW, of(lobbyGuiTitle).build());
+        this.configManager = configManager;
         this.lobbyManager = lobbyManager;
+        this.lobbyGuiTitle = configManager.getConfig().getString("lobby-gui-title");
 
         listenEvents();
     }

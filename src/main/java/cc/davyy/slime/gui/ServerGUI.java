@@ -1,7 +1,9 @@
 package cc.davyy.slime.gui;
 
+import cc.davyy.slime.managers.ConfigManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.FileUtils;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -29,10 +31,14 @@ public class ServerGUI extends Inventory {
     private static final int SETTINGS_SLOT = 15;
     private static final int PLAYER_MANAGEMENT_SLOT = 11;
 
-    private static final String GUI_TITLE = FileUtils.getConfig().getString("server-gui-title");
+    private final ConfigManager configManager;
+    private final String guiTitle;
 
-    public ServerGUI() {
-        super(InventoryType.CHEST_3_ROW, of(GUI_TITLE).build());
+    @Inject
+    public ServerGUI(ConfigManager configManager, String guiTitle) {
+        super(InventoryType.CHEST_3_ROW, of(guiTitle).build());
+        this.configManager = configManager;
+        this.guiTitle = configManager.getConfig().getString("server-gui-title");
         setupItems();
         listenToEvents();
     }
@@ -45,20 +51,20 @@ public class ServerGUI extends Inventory {
         fillBackground();
 
         // Navigation
-        final String navigatorName = FileUtils.getConfig().getString("compass-item.name");
-        final List<String> navigatorLore = FileUtils.getConfig().getStringList("compass-item.lore");
+        final String navigatorName = configManager.getConfig().getString("compass-item.name");
+        final List<String> navigatorLore = configManager.getConfig().getStringList("compass-item.lore");
         final ItemStack compass = createItem(Material.COMPASS, navigatorName, navigatorLore);
         this.setItemStack(NAVIGATOR_SLOT, compass);
 
         // Server settings
-        final String settingsName = FileUtils.getConfig().getString("settings-item.name");
-        final List<String> settingsLore = FileUtils.getConfig().getStringList("settings-item.lore");
+        final String settingsName = configManager.getConfig().getString("settings-item.name");
+        final List<String> settingsLore = configManager.getConfig().getStringList("settings-item.lore");
         final ItemStack settings = createItem(Material.REDSTONE, settingsName, settingsLore);
         this.setItemStack(SETTINGS_SLOT, settings);
 
         // Player management
-        final String playersManagementName = FileUtils.getConfig().getString("player-item.name");
-        final List<String> playersManagementLore = FileUtils.getConfig().getStringList("player-item.lore");
+        final String playersManagementName = configManager.getConfig().getString("player-item.name");
+        final List<String> playersManagementLore = configManager.getConfig().getStringList("player-item.lore");
         final ItemStack playerManagement = ItemStack.builder(Material.PLAYER_HEAD)
                 .customName(of(playersManagementName).build())
                 .lore(stringListToComponentList(playersManagementLore))
@@ -73,7 +79,7 @@ public class ServerGUI extends Inventory {
                     final SlimePlayer player = (SlimePlayer) event.getPlayer();
                     final ItemStack item = event.getClickedItem();
 
-                    final String commandToExecute = FileUtils.getConfig().getString("item-commands." + item.material().name());
+                    final String commandToExecute = configManager.getConfig().getString("item-commands." + item.material().name());
 
                     if (commandToExecute != null && !commandToExecute.isEmpty()) {
                         MinecraftServer.getCommandManager().execute(player, commandToExecute);

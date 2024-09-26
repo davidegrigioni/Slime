@@ -1,8 +1,9 @@
 package cc.davyy.slime.gui.cosmetic;
 
+import cc.davyy.slime.managers.ConfigManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.ColorUtils;
-import cc.davyy.slime.utils.FileUtils;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.inventory.Inventory;
@@ -16,12 +17,15 @@ import java.util.List;
 @Singleton
 public class CosmeticGUI extends Inventory {
 
-    private static final String COSMETIC_GUI_TITLE = FileUtils.getConfig().getString("cosmetic-gui-title");
+    private final ConfigManager configManager;
+    private final String cosmeticGuiTitle;
+    private final int[] cosmeticSlots = { 10, 12, 14 };
 
-    private static final int[] COSMETIC_SLOTS = {10, 12, 14};
-
-    public CosmeticGUI() {
-        super(InventoryType.CHEST_3_ROW, ColorUtils.of(COSMETIC_GUI_TITLE).build());
+    @Inject
+    public CosmeticGUI(ConfigManager configManager, String cosmeticGuiTitle) {
+        super(InventoryType.CHEST_3_ROW, ColorUtils.of(cosmeticGuiTitle).build());
+        this.configManager = configManager;
+        this.cosmeticGuiTitle = configManager.getConfig().getString("cosmetic-gui-title");
         setupCosmetics();
         fillBackground();
     }
@@ -46,9 +50,9 @@ public class CosmeticGUI extends Inventory {
                 "<gradient:#ffd700:#ff8c00>Pet Companion</gradient>",
                 List.of("Select a pet to follow you!", "Click to choose."));
 
-        this.setItemStack(COSMETIC_SLOTS[0], particleEffect);
-        this.setItemStack(COSMETIC_SLOTS[1], hat);
-        this.setItemStack(COSMETIC_SLOTS[2], petItem);
+        this.setItemStack(cosmeticSlots[0], particleEffect);
+        this.setItemStack(cosmeticSlots[1], hat);
+        this.setItemStack(cosmeticSlots[2], petItem);
     }
 
     private void fillBackground() {
@@ -64,7 +68,7 @@ public class CosmeticGUI extends Inventory {
     }
 
     private boolean isCosmeticSlot(int slot) {
-        for (int cosmeticSlot : COSMETIC_SLOTS) {
+        for (int cosmeticSlot : cosmeticSlots) {
             if (slot == cosmeticSlot) {
                 return true;
             }
@@ -77,24 +81,6 @@ public class CosmeticGUI extends Inventory {
                 .customName(ColorUtils.of(name).build())
                 .lore(ColorUtils.stringListToComponentList(lore))
                 .build();
-    }
-
-    private void openParticleEffectGUI(SlimePlayer player) {
-        // Implement the logic to open the Particle Effect sub-GUI
-        ParticleEffectGUI particleEffectGUI = new ParticleEffectGUI();
-        particleEffectGUI.open(player);
-    }
-
-    private void openHatGUI(SlimePlayer player) {
-        // Implement the logic to open the Hat sub-GUI
-        HatGUI hatGUI = new HatGUI();
-        hatGUI.open(player);
-    }
-
-    private void openPetGUI(SlimePlayer player) {
-        // Implement the logic to open the Pet sub-GUI
-        PetGUI petGUI = new PetGUI();
-        petGUI.open(player);
     }
 
 }

@@ -1,5 +1,7 @@
 # Server Configuration
 
+file-version: 1
+
 # Network settings
 network:
   ip: "0.0.0.0"

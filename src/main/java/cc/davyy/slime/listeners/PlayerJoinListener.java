@@ -1,10 +1,10 @@
 package cc.davyy.slime.listeners;
 
+import cc.davyy.slime.managers.ConfigManager;
 import cc.davyy.slime.managers.SidebarManager;
 import cc.davyy.slime.managers.entities.nametag.NameTag;
 import cc.davyy.slime.managers.entities.nametag.NameTagManager;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.FileUtils;
 import com.google.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.EventListener;
@@ -19,11 +19,13 @@ import static cc.davyy.slime.utils.JoinUtils.applyJoinKit;
 
 public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
 
+    private final ConfigManager configManager;
     private final NameTagManager nameTagManager;
     private final SidebarManager sidebarManager;
 
     @Inject
-    public PlayerJoinListener(NameTagManager nameTagManager, SidebarManager sidebarManager) {
+    public PlayerJoinListener(ConfigManager configManager, NameTagManager nameTagManager, SidebarManager sidebarManager) {
+        this.configManager = configManager;
         this.nameTagManager = nameTagManager;
         this.sidebarManager = sidebarManager;
     }
@@ -45,7 +47,7 @@ public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
 
         sidebarManager.showSidebar(player);
 
-        applyJoinKit(player);
+        applyJoinKit(player, configManager);
 
         createServerLinks(player);
 
@@ -54,9 +56,9 @@ public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
 
     @SuppressWarnings("all")
     private void createServerLinks(@NotNull SlimePlayer player) {
-        final String newsLink = FileUtils.getConfig().getString("news-link");
-        final String bugsReportLink = FileUtils.getConfig().getString("bugs-report-link");
-        final String announcementLink = FileUtils.getConfig().getString("announcement-link");
+        final String newsLink = configManager.getConfig().getString("news-link");
+        final String bugsReportLink = configManager.getConfig().getString("bugs-report-link");
+        final String announcementLink = configManager.getConfig().getString("announcement-link");
 
         player.sendPacket(new ServerLinksPacket(
                 new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.NEWS, newsLink),
@@ -66,8 +68,8 @@ public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
     }
 
     private void sendHeaderFooter(@NotNull SlimePlayer player) {
-        final List<String> headerList = FileUtils.getConfig().getStringList("header");
-        final List<String> footerList = FileUtils.getConfig().getStringList("footer");
+        final List<String> headerList = configManager.getConfig().getStringList("header");
+        final List<String> footerList = configManager.getConfig().getStringList("footer");
 
         final String header = String.join("\n", headerList);
         final String footer = String.join("\n", footerList);

@@ -1,8 +1,10 @@
 package cc.davyy.slime.gui.cosmetic;
 
+import cc.davyy.slime.managers.ConfigManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.ColorUtils;
 import cc.davyy.slime.utils.FileUtils;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.inventory.Inventory;
@@ -16,10 +18,14 @@ import java.util.List;
 @Singleton
 public class HatGUI extends Inventory {
 
-    private static final String HAT_GUI_TITLE = FileUtils.getConfig().getString("hat-gui-title");
+    private final String hatGuiTitle;
+    private final ConfigManager configManager;
 
-    public HatGUI() {
-        super(InventoryType.CHEST_3_ROW, ColorUtils.of(HAT_GUI_TITLE).build());
+    @Inject
+    public HatGUI(String hatGuiTitle, ConfigManager configManager) {
+        super(InventoryType.CHEST_3_ROW, ColorUtils.of(hatGuiTitle).build());
+        this.hatGuiTitle = configManager.getConfig().getString("hat-gui-title");
+        this.configManager = configManager;
         setupHats();
         fillBackground();
     }

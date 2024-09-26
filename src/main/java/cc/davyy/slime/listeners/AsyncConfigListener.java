@@ -1,8 +1,8 @@
 package cc.davyy.slime.listeners;
 
+import cc.davyy.slime.managers.ConfigManager;
 import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.FileUtils;
 import cc.davyy.slime.utils.PosUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -16,10 +16,12 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class AsyncConfigListener implements EventListener<AsyncPlayerConfigurationEvent> {
 
+    private final ConfigManager configManager;
     private final LobbyManager lobbyManager;
 
     @Inject
-    public AsyncConfigListener(LobbyManager lobbyManager) {
+    public AsyncConfigListener(ConfigManager configManager, LobbyManager lobbyManager) {
+        this.configManager = configManager;
         this.lobbyManager = lobbyManager;
     }
 
@@ -31,7 +33,7 @@ public class AsyncConfigListener implements EventListener<AsyncPlayerConfigurati
     @Override
     public @NotNull Result run(@NotNull AsyncPlayerConfigurationEvent event) {
         final SlimePlayer player = (cc.davyy.slime.model.SlimePlayer) event.getPlayer();
-        final String posString = FileUtils.getConfig().getString("spawn.position");
+        final String posString = configManager.getConfig().getString("spawn.position");
         final Pos pos = PosUtils.fromString(posString);
         final Instance instance = lobbyManager.getMainLobbyContainer();
 

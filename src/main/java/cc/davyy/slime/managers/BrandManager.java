@@ -1,6 +1,7 @@
 package cc.davyy.slime.managers;
 
 import cc.davyy.slime.services.BrandService;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -11,54 +12,25 @@ import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static net.kyori.adventure.text.Component.text;
 
-/**
- * Manages and animates the server's brand name.
- * <p>
- * This class handles the animation of the server's brand name by cycling through a list of styles
- * defined in the configuration. The animation interval and styles are configured through YAML configuration files.
- */
 @Singleton
 public class BrandManager implements BrandService {
 
-    /**
-     * Logger for the BrandManager class.
-     */
     private static final ComponentLogger LOGGER = ComponentLogger.logger(BrandManager.class);
 
-    /**
-     * List of brand name styles to animate through.
-     */
     private final List<String> brandNameStyles;
-
-    /**
-     * Interval between brand name style changes, in milliseconds.
-     */
     private final long animationInterval;
-
-    /**
-     * Default brand name when animation is disabled.
-     */
     private final String defaultBrandName;
 
-    /**
-     * Index of the current brand name style in the list.
-     */
     private int currentIndex = 0;
 
-    /**
-     * Constructs a BrandManager instance and initializes the animation settings.
-     * <p>
-     * Loads the brand name styles and animation interval from the configuration. If animation is enabled,
-     * starts the brand name animation.
-     */
-    public BrandManager() {
-        this.brandNameStyles = getConfig().getStringList("branding.animation-styles");
-        this.animationInterval = getConfig().getLong("branding.animation-interval");
-        this.defaultBrandName = getConfig().getString("branding.brand-name");
-        final boolean animateEnabled = getConfig().getBoolean("branding.animate");
+    @Inject
+    public BrandManager(ConfigManager configManager) {
+        this.brandNameStyles = configManager.getConfig().getStringList("branding.animation-styles");
+        this.animationInterval = configManager.getConfig().getLong("branding.animation-interval");
+        this.defaultBrandName = configManager.getConfig().getString("branding.brand-name");
+        final boolean animateEnabled = configManager.getConfig().getBoolean("branding.animate");
 
         if (!animateEnabled) {
             setDefaultBrandName();
@@ -81,12 +53,6 @@ public class BrandManager implements BrandService {
                 .schedule();
     }
 
-    /**
-     * Updates the server's brand name to the next style in the list.
-     * <p>
-     * Retrieves the current brand name style from the list, updates the server's brand name, and advances
-     * to the next style. If there are no styles available, logs a message and does not update the brand name.
-     */
     private void updateBrandName() {
         if (brandNameStyles == null || brandNameStyles.isEmpty()) {
             LOGGER.warn("No brand name styles available for animation.");
@@ -107,9 +73,6 @@ public class BrandManager implements BrandService {
         }
     }
 
-    /**
-     * Sets the default brand name when animation is not enabled.
-     */
     private void setDefaultBrandName() {
         try {
 

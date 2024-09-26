@@ -9,37 +9,40 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.scoreboard.Sidebar;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
-import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 
 @Singleton
 public class SidebarManager implements SidebarService {
 
-    private static final String SIDEBAR_TITLE = getConfig().getString("scoreboard.title");
+    private static final String SIDEBAR_TITLE = "scoreboard.title";
 
+    private final ConfigManager configManager;
     private final LobbyManager lobbyManager;
     private final Map<UUID, Sidebar> sidebarMap = new ConcurrentHashMap<>();
 
     @Inject
-    public SidebarManager(LobbyManager lobbyManager) {
+    public SidebarManager(ConfigManager configManager, LobbyManager lobbyManager) {
+        this.configManager = configManager;
         this.lobbyManager = lobbyManager;
 
-        final List<String> lines = getConfig().getStringList("scoreboard.lines");
+        final List<String> lines = configManager.getConfig().getStringList("scoreboard.lines");
         MinecraftServer.getSchedulerManager().buildTask(() -> updateSidebarLines(lines))
-                .repeat(1, TimeUnit.SECONDS.toChronoUnit()).schedule();
+                .repeat(1, ChronoUnit.SECONDS).schedule();
     }
 
     @Override
     public void showSidebar(@NotNull SlimePlayer player) {
         if (!sidebarMap.containsKey(player.getUuid())) {
-            Sidebar playerSidebar = new Sidebar(of(SIDEBAR_TITLE).build());
+            final String sidebarTitle = configManager.getConfig().getString(SIDEBAR_TITLE);
+            final Sidebar playerSidebar = new Sidebar(of(sidebarTitle)
+                    .build());
             playerSidebar.addViewer(player);
             sidebarMap.put(player.getUuid(), playerSidebar);
         }
@@ -50,11 +53,12 @@ public class SidebarManager implements SidebarService {
         final Sidebar playerSidebar = sidebarMap.get(player.getUuid());
 
         if (playerSidebar != null) {
-            if (playerSidebar.getViewers().contains(player)) {
-                playerSidebar.removeViewer(player);
-            } else {
+            if (!playerSidebar.getViewers().contains(player)) {
                 playerSidebar.addViewer(player);
+                return;
             }
+
+            playerSidebar.removeViewer(player);
         }
     }
 

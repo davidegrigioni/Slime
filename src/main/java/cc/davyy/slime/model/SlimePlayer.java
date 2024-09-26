@@ -1,6 +1,8 @@
 package cc.davyy.slime.model;
 
 import cc.davyy.slime.constants.TagConstants;
+import cc.davyy.slime.managers.ConfigManager;
+import com.google.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;
@@ -15,7 +17,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
-import static cc.davyy.slime.utils.FileUtils.getConfig;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -25,6 +26,9 @@ public class SlimePlayer extends Player {
     private final @NotNull LuckPerms luckPerms;
     private final @NonNull PlayerAdapter<Player> playerAdapter;
 
+    @Inject private ConfigManager configManager;
+
+    @Inject
     public SlimePlayer(@NotNull LuckPerms luckPerms, @NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(uuid, username, playerConnection);
         this.luckPerms = luckPerms;
@@ -104,8 +108,8 @@ public class SlimePlayer extends Player {
     public @NotNull Component getChatFormat(@NotNull String message) {
         final CachedMetaData metaData = this.getLuckPermsMetaData();
         final String group = metaData.getPrimaryGroup();
-        final String groupFormat = getConfig().getString("group-formats." + group) != null ? "group-formats." + group : "chat-format";
-        final String format = getConfig().getString(groupFormat);
+        final String groupFormat = configManager.getConfig().getString("group-formats." + group) != null ? "group-formats." + group : "chat-format";
+        final String format = configManager.getConfig().getString(groupFormat);
 
         return of(format)
                 .addPlainStringPlaceholder("lobbyid", String.valueOf(getLobbyID()))
@@ -118,7 +122,7 @@ public class SlimePlayer extends Player {
     }
 
     public @NotNull Component getDefaultChatFormat(@NotNull String message) {
-        final String format = getConfig().getString("chat-format");
+        final String format = configManager.getConfig().getString("chat-format");
 
         return of(format)
                 .addComponentPlaceholder("prefix", this.getPrefix())

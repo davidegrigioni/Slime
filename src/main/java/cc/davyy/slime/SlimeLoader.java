@@ -6,7 +6,7 @@ import cc.davyy.slime.managers.entities.HologramManager;
 import cc.davyy.slime.model.ServerMode;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
-import cc.davyy.slime.utils.FileUtils;
+import cc.davyy.slime.utils.Messages;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -28,6 +28,7 @@ public final class SlimeLoader {
 
     private ServerMode serverMode;
 
+    @Inject private ConfigManager configManager;
     @Inject private CommandManager commandManager;
     @Inject private BroadcastManager broadcastManager;
     @Inject private BrandManager brandManager;
@@ -45,6 +46,9 @@ public final class SlimeLoader {
 
         setupFiles();
         injectGuice();
+
+        configManager.setup();
+        Messages.setConfigManager(configManager);
 
         LOGGER.info("Registering listeners...");
         eventsListener.init();
@@ -73,21 +77,21 @@ public final class SlimeLoader {
 
     private void setupShutdownTask() {
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> {
-            final String kickMessage = getMessages().getString("messages.kick");
+            final String kickMessage = configManager.getMessages().getString("messages.kick");
             getOnlineSlimePlayers().forEach(player -> player.kick(of(kickMessage).build()));
             //MinecraftServer.getInstanceManager().getInstances().forEach(Instance::saveChunksToStorage);
         });
     }
 
     private void startServer(MinecraftServer minecraftServer) {
-        final String ip = FileUtils.getConfig().getString("network.ip");
-        final int port = FileUtils.getConfig().getInt("network.port");
+        final String ip = configManager.getConfig().getString("network.ip");
+        final int port = configManager.getConfig().getInt("network.port");
         minecraftServer.start(ip, port);
         LOGGER.info("Server started on IP: {}, Port: {}", ip, port);
     }
 
     private ServerMode getServerModeFromConfig() {
-        final String modeString = FileUtils.getConfig().getString("network.type").toUpperCase();
+        final String modeString = configManager.getConfig().getString("network.type").toUpperCase();
         try {
             return ServerMode.valueOf(modeString);
         } catch (IllegalArgumentException e) {

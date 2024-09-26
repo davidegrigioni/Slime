@@ -16,8 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Singleton
 public class TeleportManager implements TeleportService {
 
-    private final Map<UUID, Long> teleportCooldowns = new ConcurrentHashMap<>();
     private static final long TELEPORT_COOLDOWN_MILLIS = 5000;
+
+    private final Map<UUID, Long> teleportCooldowns = new ConcurrentHashMap<>();
 
     @Override
     public void teleportPlayerToTarget(@NotNull SlimePlayer player, @NotNull SlimePlayer target) {

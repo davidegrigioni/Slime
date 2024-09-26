@@ -1,8 +1,9 @@
 package cc.davyy.slime.gui.cosmetic;
 
+import cc.davyy.slime.managers.ConfigManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.ColorUtils;
-import cc.davyy.slime.utils.FileUtils;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.inventory.Inventory;
@@ -16,10 +17,14 @@ import java.util.List;
 @Singleton
 public class ParticleEffectGUI extends Inventory {
 
-    private static final String PARTICLE_GUI_TITLE = FileUtils.getConfig().getString("particle-gui-title");
+    private final String particleGuiTitle;
+    private final ConfigManager configManager;
 
-    public ParticleEffectGUI() {
-        super(InventoryType.CHEST_3_ROW, ColorUtils.of(PARTICLE_GUI_TITLE).build());
+    @Inject
+    public ParticleEffectGUI(String particleGuiTitle, ConfigManager configManager) {
+        super(InventoryType.CHEST_3_ROW, ColorUtils.of(particleGuiTitle).build());
+        this.particleGuiTitle = configManager.getConfig().getString("particle-gui-title");
+        this.configManager = configManager;
         setupParticles();
         fillBackground();
     }

@@ -1,8 +1,9 @@
 package cc.davyy.slime.gui.cosmetic;
 
+import cc.davyy.slime.managers.ConfigManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.ColorUtils;
-import cc.davyy.slime.utils.FileUtils;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.inventory.Inventory;
@@ -16,10 +17,14 @@ import java.util.List;
 @Singleton
 public class PetGUI extends Inventory {
 
-    private static final String PET_GUI_TITLE = FileUtils.getConfig().getString("pet-gui-title");
+    private final String petGuiTitle;
+    private final ConfigManager configManager;
 
-    public PetGUI() {
-        super(InventoryType.CHEST_3_ROW, ColorUtils.of(PET_GUI_TITLE).build());
+    @Inject
+    public PetGUI(String petGuiTitle, ConfigManager configManager) {
+        super(InventoryType.CHEST_3_ROW, ColorUtils.of(petGuiTitle).build());
+        this.petGuiTitle = configManager.getConfig().getString("pet-gui-title");
+        this.configManager = configManager;
         setupPets();
         fillBackground();
     }

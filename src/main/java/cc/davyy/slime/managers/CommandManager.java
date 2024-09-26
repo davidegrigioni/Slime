@@ -19,7 +19,7 @@ import net.minestom.server.MinecraftServer;
 public class CommandManager {
 
     @Inject private BroadCastCommand broadcastCommand;
-    @Inject private ConfigReloadCommand configReloadCommand;
+    @Inject private SlimeCommand slimeCommand;
     @Inject private CosmeticCommand cosmeticCommand;
     @Inject private ExecuteCommand executeCommand;
     @Inject private GameModeCommand gameModeCommand;
@@ -40,7 +40,7 @@ public class CommandManager {
         final var commandRegistry = MinecraftServer.getCommandManager();
 
         commandRegistry.register(broadcastCommand,
-                configReloadCommand,
+                slimeCommand,
                 cosmeticCommand,
                 executeCommand,
                 gameModeCommand,

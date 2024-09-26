@@ -2,6 +2,7 @@ package cc.davyy.slime.managers;
 
 import cc.davyy.slime.services.BroadcastService;
 import cc.davyy.slime.utils.Messages;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
@@ -12,16 +13,22 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
-import static cc.davyy.slime.utils.FileUtils.getConfig;
 import static cc.davyy.slime.utils.GeneralUtils.broadcastAllInstances;
 import static cc.davyy.slime.utils.GeneralUtils.sendComponent;
 
 @Singleton
 public class BroadcastManager implements BroadcastService {
 
+    private final ConfigManager configManager;
+
+    @Inject
+    public BroadcastManager(ConfigManager configManager) {
+        this.configManager = configManager;
+    }
+
     @Override
     public void broadcastMessage(@NotNull CommandSender sender, @NotNull String message) {
-        final String configMessage = getConfig().getString("broadcast");
+        final String configMessage = configManager.getConfig().getString("broadcast");
 
         if (message.isEmpty()) {
             sendComponent(sender, Messages.MESSAGE_EMPTY.asComponent());
@@ -73,8 +80,8 @@ public class BroadcastManager implements BroadcastService {
     }
 
     private Duration getDuration(@NotNull String path) {
-        final long value = getConfig().getLong(path + ".value");
-        final String unit = getConfig().getString(path + ".unit");
+        final long value = configManager.getConfig().getLong(path + ".value");
+        final String unit = configManager.getConfig().getString(path + ".unit");
 
         return switch (unit.toLowerCase()) {
             case "minutes" -> Duration.ofMinutes(value);

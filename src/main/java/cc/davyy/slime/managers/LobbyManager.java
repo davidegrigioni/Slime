@@ -21,26 +21,26 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static cc.davyy.slime.utils.FileUtils.getConfig;
-
 @Singleton
 public class LobbyManager implements LobbyService {
 
+    private static final String DEATH_Y = "deathY";
     private static final AtomicInteger lobbyIDCounter = new AtomicInteger(1);
     private static final AtomicInteger lobbyCounter = new AtomicInteger(1);
 
     @Inject
     private Provider<LobbyGUI> lobbyGUIProvider;
 
-    private final int deathY = getConfig().getInt("deathY");
+    private final ConfigManager configManager;
     private final InstanceContainer mainLobbyContainer;
     private final Map<Integer, Lobby> lobbies = new ConcurrentHashMap<>();
 
-    /**
-     * Initializes the LobbyManager and creates a primary InstanceContainer for the lobbies.
-     */
-    public LobbyManager() {
+    @Inject
+    public LobbyManager(ConfigManager configManager) {
+        this.configManager = configManager;
         final InstanceManager instanceManager = MinecraftServer.getInstanceManager();
+
+        final int deathY = configManager.getConfig().getInt(DEATH_Y);
 
         this.mainLobbyContainer = instanceManager.createInstanceContainer();
         this.mainLobbyContainer.setChunkSupplier(LightingChunk::new);
@@ -54,6 +54,7 @@ public class LobbyManager implements LobbyService {
         final String lobbyName = "Lobby " + lobbyCounter.getAndIncrement();
         final int lobbyID = lobbyIDCounter.getAndIncrement();
         final SharedInstance sharedInstance = MinecraftServer.getInstanceManager().createSharedInstance(mainLobbyContainer);
+        final int deathY = configManager.getConfig().getInt(DEATH_Y);
 
         sharedInstance.setChunkSupplier(LightingChunk::new);
 

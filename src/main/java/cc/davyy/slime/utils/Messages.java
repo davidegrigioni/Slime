@@ -1,5 +1,6 @@
 package cc.davyy.slime.utils;
 
+import cc.davyy.slime.managers.ConfigManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -11,8 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static cc.davyy.slime.utils.FileUtils.getMessages;
 
 public enum Messages implements ComponentLike {
 
@@ -68,13 +67,17 @@ public enum Messages implements ComponentLike {
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final List<TagResolver> minimessagePlaceholders = new ArrayList<>();
 
+    private static ConfigManager configManager;
+
     Messages(String key) {
         this.key = key;
     }
 
+    public static void setConfigManager(ConfigManager configManager) { Messages.configManager = configManager; }
+
     @Override
     public @NotNull Component asComponent() {
-        String rawMessage = Optional.ofNullable(getMessages().getString(key))
+        String rawMessage = Optional.ofNullable(configManager.getMessages().getString(key))
                 .orElse("Message not found for key: " + key);
         return miniMessage.deserialize(rawMessage, minimessagePlaceholders.toArray(new TagResolver[0]));
     }
