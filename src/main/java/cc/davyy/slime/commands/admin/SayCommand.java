@@ -2,6 +2,7 @@ package cc.davyy.slime.commands.admin;
 
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -19,6 +20,7 @@ public class SayCommand extends Command {
     private final ArgumentStringArray messageArray = ArgumentType.StringArray("message");
     private final ArgumentEntity playerArg = ArgumentType.Entity("player").onlyPlayers(true);
 
+    @Inject
     public SayCommand() {
         super("say");
 

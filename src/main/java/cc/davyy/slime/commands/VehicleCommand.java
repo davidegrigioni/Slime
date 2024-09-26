@@ -1,6 +1,7 @@
 package cc.davyy.slime.commands;
 
 import cc.davyy.slime.model.SlimePlayer;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -22,6 +23,7 @@ public class VehicleCommand extends Command {
     private final ArgumentLiteral removeArg = ArgumentType.Literal("remove");
     private final ArgumentLiteral rideArg = ArgumentType.Literal("ride");
 
+    @Inject
     public VehicleCommand() {
         super("vehicle");
 

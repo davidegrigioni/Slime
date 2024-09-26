@@ -1,9 +1,8 @@
 package cc.davyy.slime.gui.cosmetic;
 
-import cc.davyy.slime.managers.ConfigManager;
+import cc.davyy.slime.managers.general.ConfigManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.ColorUtils;
-import cc.davyy.slime.utils.FileUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;

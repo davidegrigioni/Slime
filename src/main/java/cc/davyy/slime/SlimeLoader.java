@@ -1,8 +1,10 @@
 package cc.davyy.slime;
 
-import cc.davyy.slime.listeners.*;
 import cc.davyy.slime.managers.*;
 import cc.davyy.slime.managers.entities.HologramManager;
+import cc.davyy.slime.managers.general.CommandManager;
+import cc.davyy.slime.managers.general.ConfigManager;
+import cc.davyy.slime.managers.general.EventsManager;
 import cc.davyy.slime.model.ServerMode;
 import cc.davyy.slime.module.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
@@ -38,7 +40,7 @@ public final class SlimeLoader {
     @Inject private SpawnManager spawnManager;
     @Inject private GameModeManager gameModeManager;
 
-    @Inject private EventsListener eventsListener;
+    @Inject private EventsManager eventsManager;
 
     public void init() {
         LOGGER.info("Initializing Minecraft Server...");
@@ -51,7 +53,7 @@ public final class SlimeLoader {
         Messages.setConfigManager(configManager);
 
         LOGGER.info("Registering listeners...");
-        eventsListener.init();
+        eventsManager.init();
 
         LOGGER.info("Setting up console...");
         ConsoleUtils.setupConsole();

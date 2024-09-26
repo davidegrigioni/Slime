@@ -1,6 +1,6 @@
 package cc.davyy.slime.listeners;
 
-import cc.davyy.slime.managers.ConfigManager;
+import cc.davyy.slime.managers.general.ConfigManager;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.event.EventListener;

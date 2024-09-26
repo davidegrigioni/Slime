@@ -1,6 +1,5 @@
-package cc.davyy.slime.managers;
+package cc.davyy.slime.managers.general;
 
-import cc.davyy.slime.commands.DebugCommand;
 import cc.davyy.slime.commands.ItemDisplayCommand;
 import cc.davyy.slime.commands.VehicleCommand;
 import cc.davyy.slime.commands.admin.*;
@@ -19,43 +18,43 @@ import net.minestom.server.MinecraftServer;
 public class CommandManager {
 
     @Inject private BroadCastCommand broadcastCommand;
-    @Inject private SlimeCommand slimeCommand;
-    @Inject private CosmeticCommand cosmeticCommand;
     @Inject private ExecuteCommand executeCommand;
     @Inject private GameModeCommand gameModeCommand;
-    @Inject private HologramCommand hologramCommand;
     @Inject private LobbyCommand lobbyCommand;
-    @Inject private NPCCommand npcCommand;
     @Inject private SayCommand sayCommand;
+    @Inject private SetSpawnCommand setSpawnCommand;
+    @Inject private SlimeCommand slimeCommand;
+    @Inject private StopCommand stopCommand; // fino a qui worka
+    //@Inject private CosmeticCommand cosmeticCommand;
+    @Inject private HologramCommand hologramCommand;
+    @Inject private NPCCommand npcCommand;
+    @Inject private SidebarCommand sidebarCommand;
     @Inject private SocialCommand socialCommand;
     @Inject private SpawnCommand spawnCommand;
-    @Inject private StopCommand stopCommand;
     @Inject private TeleportCommand teleportCommand;
-    @Inject private SidebarCommand sidebarCommand;
-    @Inject private VehicleCommand vehicleCommand;
     @Inject private ItemDisplayCommand itemDisplayCommand;
-    @Inject private DebugCommand debugCommand;
+    @Inject private VehicleCommand vehicleCommand;
 
     public void init() {
         final var commandRegistry = MinecraftServer.getCommandManager();
 
         commandRegistry.register(broadcastCommand,
-                slimeCommand,
-                cosmeticCommand,
                 executeCommand,
                 gameModeCommand,
-                hologramCommand,
                 lobbyCommand,
-                npcCommand,
                 sayCommand,
+                setSpawnCommand,
+                slimeCommand,
+                stopCommand,
+                //cosmeticCommand,
+                hologramCommand,
+                npcCommand,
+                sidebarCommand,
                 socialCommand,
                 spawnCommand,
-                stopCommand,
-                sidebarCommand,
-                vehicleCommand,
-                debugCommand,
+                teleportCommand,
                 itemDisplayCommand,
-                teleportCommand);
+                vehicleCommand);
     }
 
 }

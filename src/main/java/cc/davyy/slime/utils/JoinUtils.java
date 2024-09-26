@@ -1,7 +1,7 @@
 package cc.davyy.slime.utils;
 
 import cc.davyy.slime.constants.TagConstants;
-import cc.davyy.slime.managers.ConfigManager;
+import cc.davyy.slime.managers.general.ConfigManager;
 import cc.davyy.slime.model.SlimePlayer;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;

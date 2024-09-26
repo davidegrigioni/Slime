@@ -30,7 +30,10 @@ public class CosmeticCommand extends Command {
             }
             return true;
         });
+        init();
+    }
 
+    public void init() {
         addSubcommand(particleSubCommand);
         addSubcommand(hatSubCommand);
         addSubcommand(petSubCommand);

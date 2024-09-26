@@ -1,7 +1,7 @@
 package cc.davyy.slime.model;
 
 import cc.davyy.slime.constants.TagConstants;
-import cc.davyy.slime.managers.ConfigManager;
+import cc.davyy.slime.managers.general.ConfigManager;
 import com.google.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
@@ -26,13 +26,17 @@ public class SlimePlayer extends Player {
     private final @NotNull LuckPerms luckPerms;
     private final @NonNull PlayerAdapter<Player> playerAdapter;
 
-    @Inject private ConfigManager configManager;
+    private ConfigManager configManager;
 
-    @Inject
     public SlimePlayer(@NotNull LuckPerms luckPerms, @NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(uuid, username, playerConnection);
         this.luckPerms = luckPerms;
         this.playerAdapter = this.luckPerms.getPlayerAdapter(Player.class);
+    }
+
+    @Inject
+    public void setConfigManager(ConfigManager configManager) {
+        this.configManager = configManager;
     }
 
     private @NotNull User getLuckPermsUser() {

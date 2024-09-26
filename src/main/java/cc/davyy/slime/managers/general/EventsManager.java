@@ -1,5 +1,6 @@
-package cc.davyy.slime.listeners;
+package cc.davyy.slime.managers.general;
 
+import cc.davyy.slime.listeners.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
@@ -11,7 +12,7 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.event.trait.PlayerEvent;
 
 @Singleton
-public class EventsListener {
+public class EventsManager {
 
     private EventNode<PlayerEvent> playerNode;
 
