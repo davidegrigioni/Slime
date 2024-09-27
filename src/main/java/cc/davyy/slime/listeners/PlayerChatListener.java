@@ -1,6 +1,8 @@
 package cc.davyy.slime.listeners;
 
+import cc.davyy.slime.managers.general.ConfigManager;
 import cc.davyy.slime.model.SlimePlayer;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.EventListener;
@@ -10,6 +12,13 @@ import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class PlayerChatListener implements EventListener<PlayerChatEvent> {
+
+    private final ConfigManager configManager;
+
+    @Inject
+    public PlayerChatListener(ConfigManager configManager) {
+        this.configManager = configManager;
+    }
 
     @Override
     public @NotNull Class<PlayerChatEvent> eventType() {
@@ -24,7 +33,7 @@ public class PlayerChatListener implements EventListener<PlayerChatEvent> {
 
         final Component formattedMessage;
         if (player.hasPermission("slime.colorchat")) {
-            formattedMessage = player.getChatFormat(message);
+            formattedMessage = player.getChatFormat(message, configManager);
         } else {
             formattedMessage = player.getDefaultChatFormat(message);
         }

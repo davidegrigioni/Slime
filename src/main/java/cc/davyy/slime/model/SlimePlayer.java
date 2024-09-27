@@ -6,9 +6,7 @@ import com.google.inject.Inject;
 import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;
-import net.luckperms.api.model.data.DataMutateResult;
 import net.luckperms.api.model.user.User;
-import net.luckperms.api.node.Node;
 import net.luckperms.api.platform.PlayerAdapter;
 import net.luckperms.api.util.Tristate;
 import net.minestom.server.entity.Player;
@@ -19,14 +17,13 @@ import org.jetbrains.annotations.NotNull;
 import static cc.davyy.slime.utils.ColorUtils.of;
 
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public class SlimePlayer extends Player {
 
     private final @NotNull LuckPerms luckPerms;
     private final @NonNull PlayerAdapter<Player> playerAdapter;
 
-    private ConfigManager configManager;
+    @Inject private ConfigManager configManager;
 
     public SlimePlayer(@NotNull LuckPerms luckPerms, @NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(uuid, username, playerConnection);
@@ -45,25 +42,6 @@ public class SlimePlayer extends Player {
 
     private @NotNull CachedMetaData getLuckPermsMetaData() {
         return this.getLuckPermsUser().getCachedData().getMetaData();
-    }
-
-    /**
-     * Sets a permission for the player. This method uses a {@link Node} rather
-     * than a permission name, this allows for permissions that rely on context.
-     * You may choose not to implement this method on a production server, and
-     * leave permission management to the LuckPerms web interface or in-game
-     * commands.
-     *
-     * @param permission the permission to set
-     * @param value the value of the permission
-     * @return the result of the operation
-     */
-    public @NotNull CompletableFuture<DataMutateResult> setPermission(@NotNull Node permission, boolean value) {
-        User user = this.getLuckPermsUser();
-        DataMutateResult result = value
-                ? user.data().add(permission)
-                : user.data().remove(permission);
-        return this.luckPerms.getUserManager().saveUser(user).thenApply(ignored -> result);
     }
 
     /**
@@ -90,12 +68,6 @@ public class SlimePlayer extends Player {
         return user.getCachedData().getPermissionData().checkPermission(permissionName);
     }
 
-    public @NotNull Component getGroup() {
-        String group = this.getLuckPermsMetaData().getPrimaryGroup();
-        if (group == null) return Component.empty();
-        return of(group).parseLegacy().build();
-    }
-
     /**
      * Gets the prefix of the player. This method uses the MiniMessage library
      * to parse the prefix, which is a more advanced option than using legacy
@@ -109,7 +81,7 @@ public class SlimePlayer extends Player {
         return of(prefix).parseLegacy().build();
     }
 
-    public @NotNull Component getChatFormat(@NotNull String message) {
+    public @NotNull Component getChatFormat(@NotNull String message, @NotNull ConfigManager configManager) {
         final CachedMetaData metaData = this.getLuckPermsMetaData();
         final String group = metaData.getPrimaryGroup();
         final String groupFormat = configManager.getConfig().getString("group-formats." + group) != null ? "group-formats." + group : "chat-format";
@@ -137,8 +109,6 @@ public class SlimePlayer extends Player {
     }
 
     public void setLobbyID(int lobbyID) { this.setTag(TagConstants.PLAYER_LOBBY_ID_TAG, lobbyID); }
-
-    public void removeLobbyID() { this.removeTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
 
     public boolean hasLobbyID() { return this.hasTag(TagConstants.PLAYER_LOBBY_ID_TAG); }
 
