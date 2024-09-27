@@ -5,6 +5,7 @@ import cc.davyy.slime.managers.LobbyManager;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.constants.TagConstants;
+import cc.davyy.slime.services.GUIService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
@@ -23,26 +24,24 @@ import static cc.davyy.slime.utils.ColorUtils.of;
 import static net.kyori.adventure.text.Component.text;
 
 @Singleton
-public class LobbyGUI extends Inventory {
+public class LobbyGUI extends Inventory implements GUIService {
 
-    private final ConfigManager configManager;
     private final LobbyManager lobbyManager;
-    private final String lobbyGuiTitle;
 
     @Inject
-    public LobbyGUI(ConfigManager configManager, LobbyManager lobbyManager, String lobbyGuiTitle) {
-        super(InventoryType.CHEST_1_ROW, of(lobbyGuiTitle).build());
-        this.configManager = configManager;
+    public LobbyGUI(ConfigManager configManager, LobbyManager lobbyManager) {
+        super(InventoryType.CHEST_1_ROW, of(configManager.getConfig().getString("lobby-gui-title")).build());
         this.lobbyManager = lobbyManager;
-        this.lobbyGuiTitle = configManager.getConfig().getString("lobby-gui-title");
 
-        listenEvents();
+        listen();
     }
 
+    @Override
     public void open(@NotNull SlimePlayer player) {
         player.openInventory(this);
     }
 
+    @Override
     public void updateGUI() {
         this.clear();
 
@@ -58,7 +57,8 @@ public class LobbyGUI extends Inventory {
         }
     }
 
-    private void listenEvents() {
+    @Override
+    public void listen() {
         final var lobbyNode = EventNode.type("lobby-node", EventFilter.INVENTORY, ((inventoryEvent, inventory) -> this == inventory))
                 .addListener(InventoryPreClickEvent.class, event -> {
                     final SlimePlayer player = (SlimePlayer) event.getPlayer();

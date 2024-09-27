@@ -2,6 +2,7 @@ package cc.davyy.slime.gui;
 
 import cc.davyy.slime.managers.general.ConfigManager;
 import cc.davyy.slime.model.SlimePlayer;
+import cc.davyy.slime.services.GUIService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
@@ -24,26 +25,50 @@ import static cc.davyy.slime.utils.GeneralUtils.createItem;
 import static cc.davyy.slime.utils.ColorUtils.of;
 
 @Singleton
-public class ServerGUI extends Inventory {
+public class ServerGUI extends Inventory implements GUIService {
 
     private static final int NAVIGATOR_SLOT = 13;
     private static final int SETTINGS_SLOT = 15;
     private static final int PLAYER_MANAGEMENT_SLOT = 11;
 
     private final ConfigManager configManager;
-    private final String guiTitle;
 
     @Inject
-    public ServerGUI(ConfigManager configManager, String guiTitle) {
-        super(InventoryType.CHEST_3_ROW, of(guiTitle).build());
+    public ServerGUI(ConfigManager configManager) {
+        super(InventoryType.CHEST_3_ROW, of(configManager.getConfig().getString("server-gui-title")).build());
         this.configManager = configManager;
-        this.guiTitle = configManager.getConfig().getString("server-gui-title");
+
         setupItems();
-        listenToEvents();
+        listen();
     }
 
+    @Override
+    public void updateGUI() {}
+
+    @Override
     public void open(@NotNull SlimePlayer player) {
         player.openInventory(this);
+    }
+
+    @Override
+    public void listen() {
+        var serverNode = EventNode.type("server-inv", EventFilter.INVENTORY, ((inventoryEvent, inventory) -> this == inventory))
+                .addListener(InventoryPreClickEvent.class, event -> {
+                    final SlimePlayer player = (SlimePlayer) event.getPlayer();
+                    final ItemStack item = event.getClickedItem();
+
+                    final String commandToExecute = configManager.getConfig().getString("item-commands." + item.material().name());
+
+                    if (commandToExecute != null && !commandToExecute.isEmpty()) {
+                        MinecraftServer.getCommandManager().execute(player, commandToExecute);
+
+                        player.sendMessage(Component.text("Command executed: " + commandToExecute)
+                                .color(NamedTextColor.GREEN));
+                    }
+
+                    event.setCancelled(true);
+                });
+        MinecraftServer.getGlobalEventHandler().addChild(serverNode);
     }
 
     private void setupItems() {
@@ -70,26 +95,6 @@ public class ServerGUI extends Inventory {
                 //.set(ItemComponent.PROFILE, new HeadProfile(PlayerSkin.fromUsername("davideenoo"))) // Uncomment if you have player skins
                 .build();
         this.setItemStack(PLAYER_MANAGEMENT_SLOT, playerManagement);
-    }
-
-    private void listenToEvents() {
-        var serverNode = EventNode.type("server-inv", EventFilter.INVENTORY, ((inventoryEvent, inventory) -> this == inventory))
-                .addListener(InventoryPreClickEvent.class, event -> {
-                    final SlimePlayer player = (SlimePlayer) event.getPlayer();
-                    final ItemStack item = event.getClickedItem();
-
-                    final String commandToExecute = configManager.getConfig().getString("item-commands." + item.material().name());
-
-                    if (commandToExecute != null && !commandToExecute.isEmpty()) {
-                        MinecraftServer.getCommandManager().execute(player, commandToExecute);
-
-                        player.sendMessage(Component.text("Command executed: " + commandToExecute)
-                                .color(NamedTextColor.GREEN));
-                    }
-
-                    event.setCancelled(true);
-                });
-        MinecraftServer.getGlobalEventHandler().addChild(serverNode);
     }
 
     private void fillBackground() {
