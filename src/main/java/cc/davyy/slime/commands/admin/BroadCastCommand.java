@@ -1,7 +1,7 @@
 package cc.davyy.slime.commands.admin;
 
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.services.BroadcastService;
+import cc.davyy.slime.services.gameplay.BroadcastService;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

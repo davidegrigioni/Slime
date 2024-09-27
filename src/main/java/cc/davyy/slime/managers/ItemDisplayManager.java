@@ -1,7 +1,7 @@
 package cc.davyy.slime.managers;
 
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.services.ItemDisplayService;
+import cc.davyy.slime.services.entities.ItemDisplayService;
 import com.google.inject.Singleton;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;

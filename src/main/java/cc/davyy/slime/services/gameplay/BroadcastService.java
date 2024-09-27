@@ -1,4 +1,4 @@
-package cc.davyy.slime.services;
+package cc.davyy.slime.services.gameplay;
 
 import net.minestom.server.command.CommandSender;
 import org.jetbrains.annotations.NotNull;

@@ -1,8 +1,7 @@
-package cc.davyy.slime.services;
+package cc.davyy.slime.services.entities;
 
 import cc.davyy.slime.entities.VehicleEntity;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.model.Vehicle;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityType;
 import org.jetbrains.annotations.NotNull;

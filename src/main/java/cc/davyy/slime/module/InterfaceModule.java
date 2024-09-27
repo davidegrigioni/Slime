@@ -7,7 +7,10 @@ import cc.davyy.slime.managers.entities.HologramManager;
 import cc.davyy.slime.services.*;
 import cc.davyy.slime.services.cosmetics.ArmorCosmeticService;
 import cc.davyy.slime.services.cosmetics.ParticleCosmeticService;
+import cc.davyy.slime.services.entities.BossBarService;
 import cc.davyy.slime.services.entities.HologramService;
+import cc.davyy.slime.services.entities.ItemDisplayService;
+import cc.davyy.slime.services.gameplay.*;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 

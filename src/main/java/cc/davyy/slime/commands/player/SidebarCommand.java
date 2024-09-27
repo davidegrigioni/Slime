@@ -1,7 +1,7 @@
 package cc.davyy.slime.commands.player;
 
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.services.SidebarService;
+import cc.davyy.slime.services.gameplay.SidebarService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.command.CommandSender;

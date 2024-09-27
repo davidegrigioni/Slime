@@ -1,4 +1,4 @@
-package cc.davyy.slime.services;
+package cc.davyy.slime.services.gameplay;
 
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;

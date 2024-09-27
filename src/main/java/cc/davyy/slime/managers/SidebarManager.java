@@ -1,7 +1,7 @@
 package cc.davyy.slime.managers;
 
 import cc.davyy.slime.managers.general.ConfigManager;
-import cc.davyy.slime.services.SidebarService;
+import cc.davyy.slime.services.gameplay.SidebarService;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
