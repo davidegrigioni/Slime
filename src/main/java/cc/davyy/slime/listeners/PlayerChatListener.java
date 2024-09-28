@@ -1,6 +1,6 @@
 package cc.davyy.slime.listeners;
 
-import cc.davyy.slime.managers.general.ConfigManager;
+import cc.davyy.slime.managers.ChatManager;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -13,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class PlayerChatListener implements EventListener<PlayerChatEvent> {
 
-    private final ConfigManager configManager;
+    private final ChatManager chatManager;
 
     @Inject
-    public PlayerChatListener(ConfigManager configManager) {
-        this.configManager = configManager;
+    public PlayerChatListener(ChatManager chatManager) {
+        this.chatManager = chatManager;
     }
 
     @Override
@@ -33,9 +33,9 @@ public class PlayerChatListener implements EventListener<PlayerChatEvent> {
 
         final Component formattedMessage;
         if (player.hasPermission("slime.colorchat")) {
-            formattedMessage = player.getChatFormat(message, configManager);
+            formattedMessage = chatManager.setChatFormat(player, message);
         } else {
-            formattedMessage = player.getDefaultChatFormat(message);
+            formattedMessage = chatManager.setDefaultChatFormat(player, message);
         }
 
         event.setCancelled(true);
