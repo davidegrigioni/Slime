@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.bossbar.BossBar;
 
-import java.util.Map;
-import java.util.UUID;
-
 /**
  * Service interface for managing and displaying boss bars to players.
  */
@@ -53,16 +50,5 @@ public interface BossBarService {
      * @param player the player to remove the boss bar from
      */
     void removeBossBar(@NotNull SlimePlayer player);
-
-    /**
-     * Retrieves a map of all current boss bars for players.
-     * <p>
-     * This method returns a map where the keys are player UUIDs and the values are the corresponding boss bars currently displayed to those players.
-     * </p>
-     *
-     * @return a map of player UUIDs to their corresponding boss bars
-     */
-    @NotNull
-    Map<UUID, BossBar> getPlayerBossBars();
 
 }

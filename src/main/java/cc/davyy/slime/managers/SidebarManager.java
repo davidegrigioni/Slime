@@ -8,13 +8,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.scoreboard.Sidebar;
+import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
@@ -22,11 +20,11 @@ import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 @Singleton
 public class SidebarManager implements SidebarService {
 
+    private static final Tag<Sidebar> SIDEBAR_TAG = Tag.Transient("player_sidebars");
     private static final String SIDEBAR_TITLE = "scoreboard.title";
 
     private final ConfigManager configManager;
     private final LobbyManager lobbyManager;
-    private final Map<UUID, Sidebar> sidebarMap = new ConcurrentHashMap<>();
 
     @Inject
     public SidebarManager(ConfigManager configManager, LobbyManager lobbyManager) {
@@ -40,35 +38,38 @@ public class SidebarManager implements SidebarService {
 
     @Override
     public void showSidebar(@NotNull SlimePlayer player) {
-        if (!sidebarMap.containsKey(player.getUuid())) {
+        if (!player.hasTag(SIDEBAR_TAG)) {
             final String sidebarTitle = configManager.getConfig().getString(SIDEBAR_TITLE);
             final Sidebar playerSidebar = new Sidebar(of(sidebarTitle)
                     .build());
             playerSidebar.addViewer(player);
-            sidebarMap.put(player.getUuid(), playerSidebar);
+            player.setTag(SIDEBAR_TAG, playerSidebar);
         }
     }
 
     @Override
     public void toggleSidebar(@NotNull SlimePlayer player) {
-        final Sidebar playerSidebar = sidebarMap.get(player.getUuid());
+        final Sidebar playerSidebar = player.getTag(SIDEBAR_TAG);
 
         if (playerSidebar != null) {
             if (!playerSidebar.getViewers().contains(player)) {
                 playerSidebar.addViewer(player);
+                player.setTag(SIDEBAR_TAG, playerSidebar);
                 return;
             }
 
             playerSidebar.removeViewer(player);
+            player.removeTag(SIDEBAR_TAG);
         }
     }
 
     @Override
     public void removeSidebar(@NotNull SlimePlayer player) {
-        final Sidebar playerSidebar = sidebarMap.remove(player.getUuid());
+        final Sidebar playerSidebar = player.getTag(SIDEBAR_TAG);
 
         if (playerSidebar != null) {
             playerSidebar.removeViewer(player);
+            player.removeTag(SIDEBAR_TAG);
         }
     }
 
@@ -79,7 +80,7 @@ public class SidebarManager implements SidebarService {
     }
 
     private void updatePlayerSidebar(@NotNull SlimePlayer player, @NotNull List<String> lines) {
-        final Sidebar playerSidebar = sidebarMap.get(player.getUuid());
+        final Sidebar playerSidebar = player.getTag(SIDEBAR_TAG);
 
         if (playerSidebar != null) {
             for (int i = 0; i < lines.size(); i++) {
@@ -92,7 +93,7 @@ public class SidebarManager implements SidebarService {
 
     private void updateOrAddLine(@NotNull String text, int score, @NotNull SlimePlayer player) {
         final String lineId = "line-" + score;
-        final Sidebar playerSidebar = sidebarMap.get(player.getUuid());
+        final Sidebar playerSidebar = player.getTag(SIDEBAR_TAG);
         final int onlinePlayersSize = getOnlineSlimePlayers().size();
 
         if (playerSidebar != null) {
