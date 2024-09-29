@@ -1,6 +1,5 @@
 package cc.davyy.slime.managers.general;
 
-import com.google.inject.Singleton;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
@@ -13,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 
-@Singleton
 public class ConfigManager {
 
     private final ComponentLogger LOGGER = ComponentLogger.logger("ConfigManager");
@@ -21,6 +19,7 @@ public class ConfigManager {
 
     private YamlDocument config;
     private YamlDocument messages;
+    private YamlDocument ui;
 
     public ConfigManager() {
         setup();
@@ -52,6 +51,18 @@ public class ConfigManager {
                             .setVersioning(
                                     new BasicVersioning("file-version"))
                             .build());
+            ui = YamlDocument.create(new File(CONFIG_FOLDER + "ui.yml"),
+                    getClass().getClassLoader()
+                            .getResourceAsStream(CONFIG_FOLDER + "ui.yml"),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder()
+                            .setAutoUpdate(true)
+                            .build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder()
+                            .setVersioning(
+                                    new BasicVersioning("file-version"))
+                            .build());
         } catch (IOException ex) {
             LOGGER.error("Error in creating configs", ex);
         }
@@ -70,10 +81,13 @@ public class ConfigManager {
         try {
             config.reload();
             messages.reload();
+            ui.reload();
         } catch (IOException ex) {
             LOGGER.error("Error in reloading config values", ex);
         }
     }
+
+    public YamlDocument getUi() { return ui; }
 
     public YamlDocument getConfig() { return config; }
 

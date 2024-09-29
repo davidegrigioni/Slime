@@ -48,8 +48,8 @@ public final class SlimeLoader {
 
         setupFiles();
         injectGuice();
-
         configManager.setup();
+
         Messages.setConfigManager(configManager);
 
         LOGGER.info("Registering listeners...");

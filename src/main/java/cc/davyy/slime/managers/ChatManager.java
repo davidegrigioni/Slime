@@ -5,16 +5,19 @@ import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.ColorUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class ChatManager {
 
+    private final String defaultChatFormat;
     private final ConfigManager configManager;
 
     @Inject
-    public ChatManager(ConfigManager configManager) {
+    public ChatManager(@Named("defaultChatFormat") String defaultChatFormat, ConfigManager configManager) {
+        this.defaultChatFormat = defaultChatFormat;
         this.configManager = configManager;
     }
 
@@ -34,9 +37,7 @@ public class ChatManager {
     }
 
     public @NotNull Component setDefaultChatFormat(@NotNull SlimePlayer player, @NotNull String message) {
-        final String format = configManager.getConfig().getString("chat-format");
-
-        return ColorUtils.of(format)
+        return ColorUtils.of(defaultChatFormat)
                 .addComponentPlaceholder("prefix", player.getPrefix())
                 .addPlainStringPlaceholder("lobbyid", String.valueOf(player.getLobbyID()))
                 .addPlainStringPlaceholder("message", message)

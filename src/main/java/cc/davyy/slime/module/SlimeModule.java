@@ -1,11 +1,15 @@
 package cc.davyy.slime.module;
 
+import cc.davyy.slime.managers.general.ConfigManager;
 import com.google.inject.AbstractModule;
 
 public class SlimeModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        bind(ConfigManager.class).toProvider(ConfigManagerProvider.class);
+
+        install(new ConfigurationModule(new ConfigManagerProvider()));
         install(new ListenerModule());
         install(new GUIModule());
         install(new FactoryModule());

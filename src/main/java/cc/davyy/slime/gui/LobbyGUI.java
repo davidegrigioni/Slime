@@ -8,6 +8,7 @@ import cc.davyy.slime.constants.TagConstants;
 import cc.davyy.slime.services.GUIService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
@@ -26,11 +27,13 @@ import static net.kyori.adventure.text.Component.text;
 @Singleton
 public class LobbyGUI extends Inventory implements GUIService {
 
+    private final String lobbyGuiTitle;
     private final LobbyManager lobbyManager;
 
     @Inject
-    public LobbyGUI(ConfigManager configManager, LobbyManager lobbyManager) {
-        super(InventoryType.CHEST_1_ROW, of(configManager.getConfig().getString("lobby-gui-title")).build());
+    public LobbyGUI(ConfigManager configManager, @Named("lobbyGuiTitle") String lobbyGuiTitle, LobbyManager lobbyManager) {
+        super(InventoryType.CHEST_1_ROW, of(lobbyGuiTitle).build());
+        this.lobbyGuiTitle = lobbyGuiTitle;
         this.lobbyManager = lobbyManager;
 
         listen();

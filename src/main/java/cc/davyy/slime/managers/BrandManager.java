@@ -28,10 +28,10 @@ public class BrandManager implements BrandService {
 
     @Inject
     public BrandManager(ConfigManager configManager) {
-        this.brandNameStyles = configManager.getConfig().getStringList("branding.animation-styles");
-        this.animationInterval = configManager.getConfig().getLong("branding.animation-interval");
-        this.defaultBrandName = configManager.getConfig().getString("branding.brand-name");
-        final boolean animateEnabled = configManager.getConfig().getBoolean("branding.animate");
+        this.brandNameStyles = configManager.getUi().getStringList("branding.animation-styles");
+        this.animationInterval = configManager.getUi().getLong("branding.animation-interval");
+        this.defaultBrandName = configManager.getUi().getString("branding.brand-name");
+        final boolean animateEnabled = configManager.getUi().getBoolean("branding.animate");
 
         if (!animateEnabled) {
             setDefaultBrandName();

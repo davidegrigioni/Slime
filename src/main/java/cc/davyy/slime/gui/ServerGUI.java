@@ -5,6 +5,7 @@ import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.services.GUIService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
@@ -31,11 +32,13 @@ public class ServerGUI extends Inventory implements GUIService {
     private static final int SETTINGS_SLOT = 15;
     private static final int PLAYER_MANAGEMENT_SLOT = 11;
 
+    private final String serverGUITitle;
     private final ConfigManager configManager;
 
     @Inject
-    public ServerGUI(ConfigManager configManager) {
-        super(InventoryType.CHEST_3_ROW, of(configManager.getConfig().getString("server-gui-title")).build());
+    public ServerGUI(@Named("serverGUITitle") String serverGUITitle, ConfigManager configManager) {
+        super(InventoryType.CHEST_3_ROW, of(serverGUITitle).build());
+        this.serverGUITitle = serverGUITitle;
         this.configManager = configManager;
 
         setupItems();
