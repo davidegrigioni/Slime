@@ -1,5 +1,8 @@
 package cc.davyy.slime.constants;
 
+import net.kyori.adventure.bossbar.BossBar;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.tag.Tag;
 
 public final class TagConstants {
@@ -10,14 +13,12 @@ public final class TagConstants {
     public static final Tag<Integer> DEATH_Y = Tag.Integer("deathY");
     public static final Tag<String> ACTION_TAG = Tag.String("action");
 
-    // NPC Related tags
-    public static final Tag<Integer> NPC_ID_TAG = Tag.Integer("npc-id");
+    public static final Tag<String> NICKNAME_TAG = Tag.Transient("nickname-disguises");
+    public static final Tag<EntityType> ENTITY_TYPE_TAG = Tag.Transient("entities-disguises");
 
-    // Cosmetic Related tags
-    public static final Tag<String> COSMETIC_NAME_TAG = Tag.String("cosmetic-name");
+    public static final Tag<BossBar> BOSS_BAR_TAG = Tag.Transient("bossbars");
 
-    // Vehicle Tags
-    public static final Tag<Integer> VEHICLE_ID_TAG = Tag.Integer("vehicle-id");
+    public static final Tag<Sidebar> SIDEBAR_TAG = Tag.Transient("player_sidebars");
 
     // Server GUI tags
     public static final Tag<String> SERVER_SWITCH_TAG = Tag.String("server-switch");

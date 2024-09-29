@@ -1,6 +1,7 @@
 package cc.davyy.slime.module;
 
 import cc.davyy.slime.managers.*;
+import cc.davyy.slime.managers.entities.DisguiseManager;
 import cc.davyy.slime.managers.entities.HologramManager;
 import cc.davyy.slime.services.*;
 import cc.davyy.slime.services.entities.BossBarService;
