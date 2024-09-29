@@ -15,7 +15,7 @@ public class InterfaceModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(HologramService.class).to(HologramManager.class).in(Singleton.class);
-
+        bind(DisguiseService.class).to(DisguiseManager.class).in(Singleton.class);
         bind(BossBarService.class).to(BossBarManager.class).in(Singleton.class);
         bind(BrandService.class).to(BrandManager.class).in(Singleton.class);
         bind(BroadcastService.class).to(BroadcastManager.class).in(Singleton.class);

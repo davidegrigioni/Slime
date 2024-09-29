@@ -1,5 +1,6 @@
 package cc.davyy.slime.managers.general;
 
+import cc.davyy.slime.commands.DisguiseCommand;
 import cc.davyy.slime.commands.ItemDisplayCommand;
 import cc.davyy.slime.commands.admin.*;
 import cc.davyy.slime.commands.entities.HologramCommand;
@@ -30,6 +31,7 @@ public class CommandManager {
     @Inject private SpawnCommand spawnCommand;
     @Inject private TeleportCommand teleportCommand;
     @Inject private ItemDisplayCommand itemDisplayCommand;
+    @Inject private DisguiseCommand disguiseCommand;
 
     public void init() {
         final var commandRegistry = MinecraftServer.getCommandManager();
@@ -48,6 +50,7 @@ public class CommandManager {
                 socialCommand,
                 spawnCommand,
                 teleportCommand,
+                disguiseCommand,
                 itemDisplayCommand);
     }
 
