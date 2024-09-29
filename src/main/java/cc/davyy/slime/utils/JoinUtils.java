@@ -25,17 +25,17 @@ public final class JoinUtils {
     }
 
     public static ItemStack createItemFromConfig(@NotNull String configPath, @NotNull ConfigManager configManager) {
-        final String materialName = configManager.getConfig().getString(configPath + ".material");
+        final String materialName = configManager.getUi().getString(configPath + ".material");
         final Material material = Material.fromNamespaceId(materialName);
 
         if (material == null) {
             throw new IllegalArgumentException("Invalid material: " + materialName);
         }
 
-        final String displayName = configManager.getConfig().getString(configPath + ".display-name");
-        final List<String> itemLore = configManager.getConfig().getStringList(configPath + ".lore");
+        final String displayName = configManager.getUi().getString(configPath + ".display-name");
+        final List<String> itemLore = configManager.getUi().getStringList(configPath + ".lore");
 
-        final String actionTag = configManager.getConfig().getString(configPath + ".action-tag");
+        final String actionTag = configManager.getUi().getString(configPath + ".action-tag");
 
         return ItemStack.builder(material)
                 .customName(ColorUtils.of(displayName)
@@ -48,7 +48,7 @@ public final class JoinUtils {
     private static void applyItemToSlot(@NotNull PlayerInventory inventory, @NotNull String configPath, int defaultSlot, @NotNull ConfigManager configManager) {
         final ItemStack item = createItemFromConfig(configPath, configManager);
 
-        int slot = configManager.getConfig().getInt(configPath + ".slot");
+        int slot = configManager.getUi().getInt(configPath + ".slot");
 
         if (slot < 0 || slot > 8) {
             LOGGER.info("Invalid slot {} for {}, using default slot {}", slot, configPath, defaultSlot);

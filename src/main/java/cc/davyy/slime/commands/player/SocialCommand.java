@@ -26,7 +26,7 @@ public class SocialCommand extends Command {
     }
 
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final List<String> socials = configManager.getConfig().getStringList("socials");
+        final List<String> socials = configManager.getUi().getStringList("socials");
         final String socialMessage = String.join("\n", socials);
 
         sender.sendMessage(of(socialMessage)

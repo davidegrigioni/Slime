@@ -54,7 +54,7 @@ public class PlayerItemUseListener implements EventListener<PlayerUseItemEvent> 
             case SERVER_SL -> serverGUIProvider.get().open(player);
             case SHOW -> {
                 final ItemStack hideItem = createItemFromConfig("items.hide-item", configManager);
-                final int hideSlot = configManager.getConfig().getInt("items.hide-item.slot");
+                final int hideSlot = configManager.getUi().getInt("items.hide-item.slot");
 
                 player.getInventory().setItemStack(hideSlot, hideItem);
                 player.updateViewerRule(playerVisible -> true);
@@ -63,7 +63,7 @@ public class PlayerItemUseListener implements EventListener<PlayerUseItemEvent> 
             }
             case HIDE -> {
                 final ItemStack showItem = createItemFromConfig("items.show-item", configManager);
-                final int showSlot = configManager.getConfig().getInt("items.show-item.slot");
+                final int showSlot = configManager.getUi().getInt("items.show-item.slot");
 
                 player.getInventory().setItemStack(showSlot, showItem);
                 player.updateViewerRule(playerVisible -> false);

@@ -78,20 +78,20 @@ public class ServerGUI extends Inventory implements GUIService {
         fillBackground();
 
         // Navigation
-        final String navigatorName = configManager.getConfig().getString("compass-item.name");
-        final List<String> navigatorLore = configManager.getConfig().getStringList("compass-item.lore");
+        final String navigatorName = configManager.getUi().getString("compass-item.name");
+        final List<String> navigatorLore = configManager.getUi().getStringList("compass-item.lore");
         final ItemStack compass = createItem(Material.COMPASS, navigatorName, navigatorLore);
         this.setItemStack(NAVIGATOR_SLOT, compass);
 
         // Server settings
-        final String settingsName = configManager.getConfig().getString("settings-item.name");
-        final List<String> settingsLore = configManager.getConfig().getStringList("settings-item.lore");
+        final String settingsName = configManager.getUi().getString("settings-item.name");
+        final List<String> settingsLore = configManager.getUi().getStringList("settings-item.lore");
         final ItemStack settings = createItem(Material.REDSTONE, settingsName, settingsLore);
         this.setItemStack(SETTINGS_SLOT, settings);
 
         // Player management
-        final String playersManagementName = configManager.getConfig().getString("player-item.name");
-        final List<String> playersManagementLore = configManager.getConfig().getStringList("player-item.lore");
+        final String playersManagementName = configManager.getUi().getString("player-item.name");
+        final List<String> playersManagementLore = configManager.getUi().getStringList("player-item.lore");
         final ItemStack playerManagement = ItemStack.builder(Material.PLAYER_HEAD)
                 .customName(of(playersManagementName).build())
                 .lore(stringListToComponentList(playersManagementLore))
