@@ -14,18 +14,32 @@ import net.minestom.server.event.trait.PlayerEvent;
 @Singleton
 public class EventsManager {
 
+    private final InventoryPreClickListener inventoryPreClickListener;
+    private final PlayerEntityInteractListener playerEntityInteractListener;
+    private final PlayerPacketListener playerPacketListener;
+    private final PlayerChatListener playerChatListener;
+    private final PlayerMoveListener playerMoveListener;
+    private final PlayerDisconnectListener playerDisconnectListener;
+    private final PlayerJoinListener playerJoinListener;
+    private final AsyncConfigListener asyncConfigListener;
+    private final PlayerItemUseListener playerItemUseListener;
+    private final PlayerBlockBreakListener playerBlockBreakListener;
+
     private EventNode<PlayerEvent> playerNode;
 
-    @Inject private InventoryPreClickListener inventoryPreClickListener;
-    @Inject private PlayerEntityInteractListener playerEntityInteractListener;
-    @Inject private PlayerPacketListener playerPacketListener;
-    @Inject private PlayerChatListener playerChatListener;
-    @Inject private PlayerMoveListener playerMoveListener;
-    @Inject private PlayerDisconnectListener playerDisconnectListener;
-    @Inject private PlayerJoinListener playerJoinListener;
-    @Inject private AsyncConfigListener asyncConfigListener;
-    @Inject private PlayerItemUseListener playerItemUseListener;
-    @Inject private PlayerBlockBreakListener playerBlockBreakListener;
+    @Inject
+    public EventsManager(InventoryPreClickListener inventoryPreClickListener, PlayerEntityInteractListener playerEntityInteractListener, PlayerPacketListener playerPacketListener, PlayerChatListener playerChatListener, PlayerMoveListener playerMoveListener, PlayerDisconnectListener playerDisconnectListener, PlayerJoinListener playerJoinListener, AsyncConfigListener asyncConfigListener, PlayerItemUseListener playerItemUseListener, PlayerBlockBreakListener playerBlockBreakListener) {
+        this.inventoryPreClickListener = inventoryPreClickListener;
+        this.playerEntityInteractListener = playerEntityInteractListener;
+        this.playerPacketListener = playerPacketListener;
+        this.playerChatListener = playerChatListener;
+        this.playerMoveListener = playerMoveListener;
+        this.playerDisconnectListener = playerDisconnectListener;
+        this.playerJoinListener = playerJoinListener;
+        this.asyncConfigListener = asyncConfigListener;
+        this.playerItemUseListener = playerItemUseListener;
+        this.playerBlockBreakListener = playerBlockBreakListener;
+    }
 
     public void init() {
         this.playerNode = createPlayerNode();
