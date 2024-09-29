@@ -6,6 +6,7 @@ import cc.davyy.slime.managers.entities.nametag.NameTag;
 import cc.davyy.slime.managers.entities.nametag.NameTagManager;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerSpawnEvent;
@@ -17,6 +18,7 @@ import java.util.List;
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.JoinUtils.applyJoinKit;
 
+@Singleton
 public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
 
     private final ConfigManager configManager;
@@ -68,8 +70,8 @@ public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
     }
 
     private void sendHeaderFooter(@NotNull SlimePlayer player) {
-        final List<String> headerList = configManager.getConfig().getStringList("header");
-        final List<String> footerList = configManager.getConfig().getStringList("footer");
+        final List<String> headerList = configManager.getUi().getStringList("header");
+        final List<String> footerList = configManager.getUi().getStringList("footer");
 
         final String header = String.join("\n", headerList);
         final String footer = String.join("\n", footerList);
