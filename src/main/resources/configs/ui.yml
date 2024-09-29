@@ -1,0 +1,118 @@
+# Everything UI related
+
+file-version: 1
+
+# Branding information
+branding:
+  brand-name: "§cPowered by SLIME§r"
+  animate: false
+  animation-interval: 13
+  animation-styles:
+    - "§c§lWelcome to §r§bSLIME§r"
+    - "§a§lEnjoy §r§bSLIME§r"
+    - "§e§lHave a great time with §r§bSLIME§r"
+    - "§d§lExplore §r§bSLIME§r"
+
+# GUI Items
+server-gui-title: "<gradient:#ff007f:#7f00ff>XenooCC Server</gradient>"
+lobby-gui-title: "<red>Lobbies</red>"
+cosmetic-gui-title: "<red>Cosmetic GUI</red>"
+
+compass-item:
+  name: "<gradient:#ff4500:#ff7f50>Compass</gradient>"
+  lore:
+    - "<gradient:#00ff00:#7fff00>Navigate the world</gradient>"
+    - "<gradient:#ffd700:#ff8c00>Explore and discover!</gradient>"
+
+settings-item:
+  name: "<gradient:#ff4500:#ff7f50>Settings</gradient>"
+  lore:
+    - "<gradient:#00bfff:#1e90ff>Customize your experience</gradient>"
+    - "<gradient:#ff007f:#7f00ff>Adjust preferences</gradient>"
+
+player-item:
+  name: "<gradient:#ff4500:#ff7f50>Player Settings</gradient>"
+  lore:
+    - "<gradient:#00ff00:#7fff00>Manage player options</gradient>"
+
+# Scoreboard
+scoreboard:
+  title: "<gradient:#ff007f:#7f00ff>XenooCC</gradient> <dark_gray>|</dark_gray> <gradient:#ff0000:#ff4500>DEV Version</gradient>"
+  lines:
+    - "<gray><strikethrough>                                                        </strikethrough></gray>"
+    - "<gradient:#ff7f50:#ff4500>» Welcome to the Lobby!</gradient>"
+    - "<dark_gray>──────────────</dark_gray>"
+    - "<gradient:#00ff00:#7fff00>» Online Players: <playercount></gradient>"
+    - "<gradient:#00bfff:#1e90ff>» Your Lobby: <lobby></gradient>"
+    - "<gradient:#ffdf00:#ff8c00>» Your Rank: <rank></gradient>"
+    - "<dark_gray>──────────────</dark_gray>"
+    - "<gradient:#ff6347:#ff4500>» THIS IS A DEV SERVER</gradient>"
+    - "<gradient:#ff6347:#ff4500>» Features may not be stable!</gradient>"
+    - "<dark_gray>──────────────</dark_gray>"
+    - "<gradient:#ffd700:#ff8c00>Enjoy your stay!</gradient>"
+    - "<gray><strikethrough>                                                        </strikethrough></gray>"
+
+# Header & Footer
+header:
+  - "<gray><strikethrough>                                                        </strikethrough></gray>"
+  - "<gradient:#ff007f:#7f00ff>» Welcome to <bold>XenooCC</bold>!</gradient>"
+  - "<dark_gray>──────────────</dark_gray>"
+  - "<gradient:#00ff7f:#00ffbf>» The Ultimate Minecraft Experience</gradient>"
+  - "<dark_gray>──────────────</dark_gray>"
+
+footer:
+  - "<gray><strikethrough>                                                        </strikethrough></gray>"
+  - "<gradient:#00bfff:#1e90ff>» <bold>Enjoy your stay!</bold></gradient>"
+  - "<gradient:#ffdf00:#ff8c00>» Join our community: <yellow>discord.gg/XenooCC</yellow></gradient>"
+  - "<dark_gray>──────────────</dark_gray>"
+  - "<gradient:#ff7f50:#ff4500>» <italic>Play fair, have fun!</italic></gradient>"
+  - "<gray><strikethrough>                                                        </strikethrough></gray>"
+
+# Chat Format
+chat-format: "<dark_aqua>[Lobby <lobbyid>]</dark_aqua> <prefix><white> <name></white>: <message>"
+
+group-formats:
+  default: "<dark_aqua>[Lobby <lobbyid>]</dark_aqua> <gray><name></gray>: <white><message></white>"
+  owner: "<dark_aqua>[Lobby <lobbyid>]</dark_aqua> <red><bold><name></bold></red> <gray>»</gray> <dark_red><message></dark_red>"
+
+# Social
+socials:
+  - "<gray><strikethrough>                                                        </strikethrough></gray>"
+  - "<gradient:#FF0000:#FF6347>» <bold>YouTube:</bold> <white>youtube.com/XenooCC</white></gradient>"
+  - "<gradient:#1DA1F2:#00ACEE>» <bold>Twitter:</bold> <white>@XenooCC</white></gradient>"
+  - "<gradient:#E1306C:#C13584>» <bold>Instagram:</bold> <white>@XenooCC_Official</white></gradient>"
+  - "<gradient:#FF5700:#FF8C00>» <bold>Reddit:</bold> <white>reddit.com/r/XenooCC</white></gradient>"
+  - "<gradient:#FFFC00:#FFD700>» <bold>TikTok:</bold> <white>@XenooTikTok</white></gradient>"
+  - "<gray><strikethrough>                                                        </strikethrough></gray>"
+
+# Join Items
+# !! DON'T CHANGE ACTION-TAG !!
+items:
+  hide-item:
+    material: "minecraft:gray_dye"
+    slot: 2
+    display-name: "Hide"
+    lore:
+      - "This is a hide item"
+    action-tag: "hide"
+  show-item:
+    material: "minecraft:green_dye"
+    slot: 2
+    display-name: "Show"
+    lore:
+      - "This is a show item"
+    action-tag: "show"
+  compass-item:
+    material: "minecraft:compass"
+    slot: 4
+    display-name: "<red>Compass"
+    lore:
+      - "select"
+    action-tag: "serversl"
+  lobby-item:
+    material: "minecraft:nether_star"
+    slot: 6
+    display-name: "<red>Lobbies"
+    lore:
+      - "ets"
+    action-tag: "lobbysl"
