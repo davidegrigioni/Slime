@@ -1,9 +1,7 @@
 package cc.davyy.slime.managers.general;
 
 import cc.davyy.slime.commands.ItemDisplayCommand;
-import cc.davyy.slime.commands.VehicleCommand;
 import cc.davyy.slime.commands.admin.*;
-import cc.davyy.slime.commands.cosmetic.CosmeticCommand;
 import cc.davyy.slime.commands.entities.HologramCommand;
 import cc.davyy.slime.commands.entities.NPCCommand;
 import cc.davyy.slime.commands.player.SidebarCommand;
@@ -24,8 +22,7 @@ public class CommandManager {
     @Inject private SayCommand sayCommand;
     @Inject private SetSpawnCommand setSpawnCommand;
     @Inject private SlimeCommand slimeCommand;
-    @Inject private StopCommand stopCommand; // fino a qui worka
-    //@Inject private CosmeticCommand cosmeticCommand;
+    @Inject private StopCommand stopCommand;
     @Inject private HologramCommand hologramCommand;
     @Inject private NPCCommand npcCommand;
     @Inject private SidebarCommand sidebarCommand;
@@ -33,7 +30,6 @@ public class CommandManager {
     @Inject private SpawnCommand spawnCommand;
     @Inject private TeleportCommand teleportCommand;
     @Inject private ItemDisplayCommand itemDisplayCommand;
-    @Inject private VehicleCommand vehicleCommand;
 
     public void init() {
         final var commandRegistry = MinecraftServer.getCommandManager();
@@ -46,15 +42,13 @@ public class CommandManager {
                 setSpawnCommand,
                 slimeCommand,
                 stopCommand,
-                //cosmeticCommand,
                 hologramCommand,
                 npcCommand,
                 sidebarCommand,
                 socialCommand,
                 spawnCommand,
                 teleportCommand,
-                itemDisplayCommand,
-                vehicleCommand);
+                itemDisplayCommand);
     }
 
 }

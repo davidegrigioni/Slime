@@ -1,12 +1,8 @@
 package cc.davyy.slime.module;
 
 import cc.davyy.slime.managers.*;
-import cc.davyy.slime.managers.cosmetics.ArmorCosmeticManager;
-import cc.davyy.slime.managers.cosmetics.ParticleCosmeticManager;
 import cc.davyy.slime.managers.entities.HologramManager;
 import cc.davyy.slime.services.*;
-import cc.davyy.slime.services.cosmetics.ArmorCosmeticService;
-import cc.davyy.slime.services.cosmetics.ParticleCosmeticService;
 import cc.davyy.slime.services.entities.BossBarService;
 import cc.davyy.slime.services.entities.HologramService;
 import cc.davyy.slime.services.entities.ItemDisplayService;
@@ -18,9 +14,6 @@ public class InterfaceModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(ArmorCosmeticService.class).to(ArmorCosmeticManager.class).in(Singleton.class);
-        bind(ParticleCosmeticService.class).to(ParticleCosmeticManager.class).in(Singleton.class);
-
         bind(HologramService.class).to(HologramManager.class).in(Singleton.class);
 
         bind(BossBarService.class).to(BossBarManager.class).in(Singleton.class);
