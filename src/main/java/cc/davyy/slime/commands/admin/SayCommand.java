@@ -1,6 +1,6 @@
 package cc.davyy.slime.commands.admin;
 
-import cc.davyy.slime.managers.general.ConfigManager;
+import cc.davyy.slime.managers.ChatManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
@@ -18,14 +18,14 @@ import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 @Singleton
 public class SayCommand extends Command {
 
-    private final ConfigManager configManager;
+    private final ChatManager chatManager;
     private final ArgumentStringArray messageArray = ArgumentType.StringArray("message");
     private final ArgumentEntity playerArg = ArgumentType.Entity("player").onlyPlayers(true);
 
     @Inject
-    public SayCommand(ConfigManager configManager) {
+    public SayCommand(ChatManager chatManager) {
         super("say");
-        this.configManager = configManager;
+        this.chatManager = chatManager;
 
         setCondition((sender, commandString) -> {
             if (!hasPlayerPermission(sender, "slime.say")) {
@@ -43,7 +43,7 @@ public class SayCommand extends Command {
         final SlimePlayer target = (SlimePlayer) context.get(playerArg).findFirstPlayer(player);
         final String finalMessage = String.join(" ", context.get(messageArray));
 
-        target.sendMessage(target.getChatFormat(finalMessage, configManager));
+        target.sendMessage(chatManager.setDefaultChatFormat(player, finalMessage));
     }
 
 }

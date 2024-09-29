@@ -46,6 +46,18 @@ public class SlimePlayer extends Player {
         return this.getPermissionValue(permissionName).asBoolean();
     }
 
+    public String getPrimaryGroup() {
+        return this.getLuckPermsMetaData().getPrimaryGroup();
+    }
+
+    public String getMetaValue(@NotNull String key) {
+        return this.getLuckPermsMetaData().getMetaValue(key);
+    }
+
+    public String getPlainPrefix() {
+        return this.getLuckPermsMetaData().getPrefix();
+    }
+
     /**
      * Gets the value of a permission. This passes a {@link Tristate} value
      * straight from LuckPerms, which may be a better option than using
