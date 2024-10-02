@@ -6,12 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface DisguiseService {
 
-    void setNicknamedDisguise(@NotNull SlimePlayer player, @NotNull String nickName);
+    void disguise(@NotNull SlimePlayer player, @NotNull EntityType entityType, @NotNull String nickName);
 
-    void setEntityDisguise(@NotNull SlimePlayer player, @NotNull EntityType entityType);
-
-    void removeNicknamedDisguise(@NotNull SlimePlayer player);
-
-    void removeEntityDisguise(@NotNull SlimePlayer player);
+    void undisguise(@NotNull SlimePlayer player);
 
 }

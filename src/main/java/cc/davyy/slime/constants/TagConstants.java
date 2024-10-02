@@ -13,6 +13,7 @@ public final class TagConstants {
     public static final Tag<Integer> DEATH_Y = Tag.Integer("deathY");
     public static final Tag<String> ACTION_TAG = Tag.String("action");
 
+    public static final Tag<String> DISGUISE_TAG = Tag.Transient("disguise");
     public static final Tag<String> NICKNAME_TAG = Tag.Transient("nickname-disguises");
     public static final Tag<EntityType> ENTITY_TYPE_TAG = Tag.Transient("entities-disguises");
 

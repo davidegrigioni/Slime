@@ -25,62 +25,75 @@ public class DisguiseManager implements DisguiseService {
     }
 
     @Override
-    public void setNicknamedDisguise(@NotNull SlimePlayer player, @NotNull String nickName) {
-        if (player.hasTag(TagConstants.NICKNAME_TAG)) {
-            player.sendMessage(Component.text("You are already disguised with a nickname!").color(NamedTextColor.RED));
+    public void disguise(@NotNull SlimePlayer player, @NotNull EntityType entityType, @NotNull String nickName) {
+        if (player.hasTag(TagConstants.DISGUISE_TAG)) {
+            player.sendMessage("You are already disguised.");
             return;
         }
 
-        CompletableFuture<PlayerSkin> skinFuture = skinManager.getSkinFromUsernameAsync(nickName);
+        // Use a better way to check if the player wants to disguise as nickname or entity
+        if (!nickName.isEmpty()) {
+            // Disguising as a nickname
+            final CompletableFuture<PlayerSkin> skinFuture = skinManager.getSkinFromUsernameAsync(nickName);
 
-        skinFuture.thenAccept(skin -> {
-            if (skin != null) {
-                player.setSkin(PlayerSkin.fromUsername(nickName));
-                player.setDisplayName(Component.text(nickName));
-                player.setTag(TagConstants.NICKNAME_TAG, nickName);
-                player.sendMessage(Component.text("You are now disguised as " + nickName + "!").color(NamedTextColor.GREEN));
+            skinFuture.thenAccept(skin -> {
+                if (skin != null) {
+                    player.setSkin(skin);
+                    player.setDisplayName(Component.text(nickName));
+                    player.setTag(TagConstants.NICKNAME_TAG, nickName);
+                    player.setTag(TagConstants.DISGUISE_TAG, "nickname"); // Set disguise type
+                    player.sendMessage(Component.text("You are now disguised as " + nickName + "!")
+                            .color(NamedTextColor.GREEN));
+                } else {
+                    player.sendMessage(Component.text("Failed to retrieve skin for " + nickName)
+                            .color(NamedTextColor.RED));
+                }
+            }).exceptionally(ex -> {
+                player.sendMessage(Component.text("An error occurred while retrieving skin for " + nickName)
+                        .color(NamedTextColor.RED));
+                return null;
+            });
+
+        } else {
+            // Disguising as an entity
+            player.switchEntityType(entityType);
+            player.setTag(TagConstants.ENTITY_TYPE_TAG, entityType);
+            player.setTag(TagConstants.DISGUISE_TAG, "entity"); // Set disguise type
+
+            player.sendMessage(Component.text("You are now disguised as a " + entityType.name() + "!")
+                    .color(NamedTextColor.GREEN));
+        }
+    }
+
+    @Override
+    public void undisguise(@NotNull SlimePlayer player) {
+        if (!player.hasTag(TagConstants.DISGUISE_TAG)) {
+            player.sendMessage("You are not disguised.");
+            return;
+        }
+
+        final String disguiseType = player.getTag(TagConstants.DISGUISE_TAG);
+        switch (disguiseType) {
+            case "nickname" -> {
+                player.setSkin(PlayerSkin.fromUuid(player.getUuid().toString())); // Restore original skin
+                player.setDisplayName(Component.text(player.getUsername()));
+                player.removeTag(TagConstants.NICKNAME_TAG);
+                player.removeTag(TagConstants.DISGUISE_TAG); // Remove disguise tag
+
+                player.sendMessage(Component.text("Your nickname disguise has been removed.")
+                        .color(NamedTextColor.YELLOW));
             }
-        });
-    }
+            case "entity" -> {
+                player.switchEntityType(EntityType.PLAYER); // Switch back to the player type
+                player.removeTag(TagConstants.ENTITY_TYPE_TAG);
+                player.removeTag(TagConstants.DISGUISE_TAG); // Remove disguise tag
 
-    @Override
-    public void setEntityDisguise(@NotNull SlimePlayer player, @NotNull EntityType entityType) {
-        if (player.hasTag(TagConstants.ENTITY_TYPE_TAG)) {
-            player.sendMessage(Component.text("You are already disguised as an entity!").color(NamedTextColor.RED));
-            return;
+                player.sendMessage(Component.text("Your entity disguise has been removed.")
+                        .color(NamedTextColor.YELLOW));
+            }
+            default -> player.sendMessage(Component.text("Unknown disguise type.")
+                    .color(NamedTextColor.RED));
         }
-
-        player.switchEntityType(entityType);
-        player.setTag(TagConstants.ENTITY_TYPE_TAG, entityType);
-
-        player.sendMessage(Component.text("You are now disguised as a " + entityType.name() + "!").color(NamedTextColor.GREEN));
-    }
-
-    @Override
-    public void removeNicknamedDisguise(@NotNull SlimePlayer player) {
-        if (!player.hasTag(TagConstants.NICKNAME_TAG)) {
-            player.sendMessage(Component.text("You don't have a nickname disguise applied.").color(NamedTextColor.RED));
-            return;
-        }
-
-        player.setSkin(PlayerSkin.fromUuid(player.getUuid().toString()));
-        player.setDisplayName(Component.text(player.getUsername()));
-        player.removeTag(TagConstants.NICKNAME_TAG);
-
-        player.sendMessage(Component.text("Your nickname disguise has been removed.").color(NamedTextColor.YELLOW));
-    }
-
-    @Override
-    public void removeEntityDisguise(@NotNull SlimePlayer player) {
-        if (!player.hasTag(TagConstants.ENTITY_TYPE_TAG)) {
-            player.sendMessage(Component.text("You don't have an entity disguise applied.").color(NamedTextColor.RED));
-            return;
-        }
-
-        player.switchEntityType(EntityType.PLAYER);
-        player.removeTag(TagConstants.ENTITY_TYPE_TAG);
-
-        player.sendMessage(Component.text("Your entity disguise has been removed.").color(NamedTextColor.YELLOW));
     }
 
 }

@@ -26,7 +26,7 @@ import static cc.davyy.slime.utils.GeneralUtils.getOnlineSlimePlayers;
 
 public final class SlimeLoader {
 
-    private static final ComponentLogger LOGGER = ComponentLogger.logger("SlimeLogger");
+    private static final ComponentLogger LOGGER = ComponentLogger.logger(SlimeLoader.class);
 
     private ServerMode serverMode;
 
@@ -36,9 +36,9 @@ public final class SlimeLoader {
     @Inject private BrandManager brandManager;
     @Inject private LobbyManager lobbyManager;
     @Inject private SidebarManager sidebarManager;
-    @Inject private HologramManager hologramManager;
     @Inject private SpawnManager spawnManager;
     @Inject private GameModeManager gameModeManager;
+    @Inject private HologramManager hologramManager;
 
     @Inject private EventsManager eventsManager;
 
