@@ -1,68 +1,43 @@
 package cc.davyy.slime.commands.entities;
 
+import cc.davyy.slime.database.HologramDatabase;
+import cc.davyy.slime.database.entities.Hologram;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.services.entities.HologramService;
-import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import dev.rollczi.litecommands.annotations.argument.Arg;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentLiteral;
-import net.minestom.server.command.builder.arguments.ArgumentString;
-import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
-import org.jetbrains.annotations.NotNull;
+
+import java.sql.SQLException;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
-import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
+import static net.minestom.server.MinecraftServer.LOGGER;
 
+@Command(name = "hologram", aliases = "holo")
+@Permission("slime.hologram")
 @Singleton
-public class HologramCommand extends Command {
+public class HologramCommand {
 
+    private final HologramDatabase hologramDatabase;
     private final HologramService hologramService;
 
-    private final ArgumentLiteral createArg = ArgumentType.Literal("create");
-    private final ArgumentLiteral moveArg = ArgumentType.Literal("move");
-    private final ArgumentLiteral deleteArg = ArgumentType.Literal("delete");
-    private final ArgumentLiteral addLineArg = ArgumentType.Literal("addline");
-    private final ArgumentLiteral insertLineArg = ArgumentType.Literal("insertline");
-    private final ArgumentLiteral removeLineArg = ArgumentType.Literal("removeline");
-    private final ArgumentLiteral updateLineArg = ArgumentType.Literal("updateline");
-
-    private final ArgumentString textArg = ArgumentType.String("text");
-    private final ArgumentInteger idArg = ArgumentType.Integer("id");
-    private final ArgumentInteger indexArg = ArgumentType.Integer("index");
-
     @Inject
-    public HologramCommand(HologramService hologramService) {
-        super("hologram", "holo");
+    public HologramCommand(HologramDatabase hologramDatabase, HologramService hologramService) {
+        this.hologramDatabase = hologramDatabase;
         this.hologramService = hologramService;
-
-        setCondition((sender, commandString) -> {
-            if (!hasPlayerPermission(sender, "slime.hologram")) {
-                sender.sendMessage(Messages.NO_PERMS.asComponent());
-                return false;
-            }
-            return true;
-        });
-
-        setDefaultExecutor(this::usage);
-
-        addSyntax(this::handleCreate, createArg, textArg);
-        addSyntax(this::handleMove, moveArg, idArg);
-        addSyntax(this::handleDelete, deleteArg, idArg);
-        addSyntax(this::handleAddLine, addLineArg, idArg, textArg);
-        addSyntax(this::handleInsertLine, insertLineArg, idArg, indexArg, textArg);
-        addSyntax(this::handleRemoveLine, removeLineArg, idArg, indexArg);
-        addSyntax(this::handleUpdateLine, updateLineArg, idArg, indexArg, textArg);
     }
 
-    private void usage(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    @Execute
+    void usage(@Context CommandSender sender) {
         final Component usageMessage = text("Usage Instructions:")
                 .color(NamedTextColor.RED)
                 .append(newline())
@@ -77,74 +52,62 @@ public class HologramCommand extends Command {
         sender.sendMessage(usageMessage);
     }
 
-    private void handleCreate(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final String text = context.get(textArg);
-
+    @Execute(name = "create")
+    void handleCreate(@Context SlimePlayer player, @Arg String text) {
         hologramService.createHologram(player, of(text).parseLegacy().build());
     }
 
-    private void handleMove(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final int id = context.get(idArg);
-
+    @Execute(name = "move")
+    void handleMove(@Context SlimePlayer player, @Arg int id) {
         hologramService.moveHologram(id, player);
     }
 
-    private void handleDelete(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final int id = context.get(idArg);
-
+    @Execute(name = "delete")
+    void handleDelete(@Context SlimePlayer player, @Arg int id) {
         hologramService.deleteHologram(id, player);
     }
 
-    private void handleAddLine(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final int id = context.get(idArg);
-        final String text = context.get(textArg);
-
-        hologramService.addHologramLine(id, of(text).parseLegacy().build());
-        player.sendMessage(Messages.HOLOGRAM_LINE_ADDED
-                .addPlaceholder("id", String.valueOf(id))
-                .asComponent());
+    @Execute(name = "addline", aliases = "al")
+    void handleAddLine(@Context SlimePlayer player, @Arg int id, @Arg String text) {
+        hologramService.addHologramLine(player, id, of(text).parseLegacy().build());
     }
 
-    private void handleInsertLine(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final int id = context.get(idArg);
-        final int index = context.get(indexArg);
-        final String text = context.get(textArg);
-
-        hologramService.insertHologramLine(id, index, of(text).parseLegacy().build());
-        player.sendMessage(Messages.HOLOGRAM_LINE_INSERTED
-                .addPlaceholder("id", String.valueOf(id))
-                .addPlaceholder("index", String.valueOf(index))
-                .asComponent());
+    @Execute(name = "insertline", aliases = "il")
+    void handleInsertLine(@Context SlimePlayer player, @Arg int id, @Arg int index, @Arg String text) {
+        hologramService.insertHologramLine(player, id, index, of(text).parseLegacy().build());
     }
 
-    private void handleRemoveLine(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final int id = context.get(idArg);
-        final int index = context.get(indexArg);
-
-        hologramService.removeHologramLine(id, index);
-        player.sendMessage(Messages.HOLOGRAM_LINE_REMOVED
-                .addPlaceholder("id", String.valueOf(id))
-                .addPlaceholder("index", String.valueOf(index))
-                .asComponent());
+    @Execute(name = "removeline", aliases = "rl")
+    void handleRemoveLine(@Context SlimePlayer player, @Arg int id, @Arg int index) {
+        hologramService.removeHologramLine(player, id, index);
     }
 
-    private void handleUpdateLine(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final int id = context.get(idArg);
-        final int index = context.get(indexArg);
-        final String newText = context.get(textArg);
+    @Execute(name = "updateline", aliases = "ul")
+    void handleUpdateLine(@Context SlimePlayer player, @Arg int id, @Arg int index, @Arg String newText) {
+        hologramService.updateHologramLine(player, id, index, of(newText).parseLegacy().build());
+    }
 
-        hologramService.updateHologramLine(id, index, of(newText).parseLegacy().build());
-        player.sendMessage(Messages.HOLOGRAM_LINE_UPDATED
-                .addPlaceholder("id", String.valueOf(id))
-                .addPlaceholder("index", String.valueOf(index))
-                .asComponent());
+    @Execute(name = "debug", aliases = "db")
+    void handleDebug(@Context SlimePlayer player, @Arg int id) {
+        try {
+            // Query the database for the hologram
+            Hologram hologram = hologramDatabase.getHologram(id);
+
+            // Check if the hologram exists
+            if (hologram != null) {
+                // Send details of the hologram to the player
+                player.sendMessage(Component.text("Hologram ID: " + hologram.getId())
+                        .append(Component.newline())
+                        .append(Component.text("Text: " + hologram.getText())));
+            } else {
+                // Inform the player that the hologram does not exist
+                player.sendMessage(Component.text("Hologram with ID " + id + " does not exist."));
+            }
+        } catch (SQLException e) {
+            // Log the exception and inform the player of the error
+            LOGGER.error("Error querying hologram from database", e);
+            player.sendMessage(Component.text("An error occurred while querying the hologram from the database."));
+        }
     }
 
 }

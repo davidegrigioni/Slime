@@ -95,7 +95,7 @@ public interface HologramService {
      * @param id the ID of the hologram to add a line to
      * @param text the text to add as a new line
      */
-    void addHologramLine(int id, @NotNull Component text);
+    void addHologramLine(@NotNull SlimePlayer player, int id, @NotNull Component text);
 
     /**
      * Inserts a line of text at a specific position in the hologram with the given ID.
@@ -108,7 +108,7 @@ public interface HologramService {
      * @param index the index where the new line will be inserted (0 for the top line)
      * @param text the text to insert as a line
      */
-    void insertHologramLine(int id, int index, @NotNull Component text);
+    void insertHologramLine(@NotNull SlimePlayer player, int id, int index, @NotNull Component text);
 
     /**
      * Removes a specific line of text from the hologram with the given ID.
@@ -120,7 +120,7 @@ public interface HologramService {
      * @param id the ID of the hologram to remove a line from
      * @param index the index of the line to remove (0 for the top line)
      */
-    void removeHologramLine(int id, int index);
+    void removeHologramLine(@NotNull SlimePlayer player, int id, int index);
 
     /**
      * Replaces a specific line of text in the hologram with the specified ID.
@@ -132,7 +132,7 @@ public interface HologramService {
      * @param index the index of the line to replace (0 for the top line)
      * @param newText the new text to display on the specified line
      */
-    void updateHologramLine(int id, int index, @NotNull Component newText);
+    void updateHologramLine(@NotNull SlimePlayer player, int id, int index, @NotNull Component newText);
 
     /**
      * Retrieves all lines of text from the hologram with the specified ID.

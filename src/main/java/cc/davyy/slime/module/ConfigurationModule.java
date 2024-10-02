@@ -1,11 +1,11 @@
 package cc.davyy.slime.module;
 
+import cc.davyy.slime.database.HologramDatabase;
 import cc.davyy.slime.managers.general.ConfigManager;
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.Provides;
+import com.google.inject.*;
 import com.google.inject.name.Named;
+
+import java.sql.SQLException;
 
 public class ConfigurationModule extends AbstractModule {
 
@@ -42,8 +42,13 @@ public class ConfigurationModule extends AbstractModule {
 
     @Provides
     @Named("groupFormat")
-    public String provideGroupFormat(@Named("group") String group) {
+    public String provideGroupFormat(String group) {
         return configManagerProvider.get().getUi().getString("group-formats." + group);
+    }
+
+    @Provides
+    static HologramDatabase provideHologramDatabase() throws SQLException {
+        return new HologramDatabase("configs/hologram.db");
     }
 
 }

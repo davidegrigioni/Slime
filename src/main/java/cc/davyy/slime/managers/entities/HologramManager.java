@@ -1,5 +1,6 @@
 package cc.davyy.slime.managers.entities;
 
+import cc.davyy.slime.database.HologramDatabase;
 import cc.davyy.slime.entities.HologramEntity;
 import cc.davyy.slime.services.entities.HologramService;
 import cc.davyy.slime.factories.HologramFactory;
@@ -10,10 +11,12 @@ import cc.davyy.slime.utils.PosUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,14 +26,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Singleton
 public class HologramManager implements HologramService {
 
+    private static final ComponentLogger LOGGER = ComponentLogger.logger(HologramManager.class);
     private static final AtomicInteger entityIdCounter = new AtomicInteger();
 
     private final HologramFactory hologramFactory;
+    private final HologramDatabase hologramDatabase;
     private final Map<Integer, HologramEntity> hologramEntityMap = new ConcurrentHashMap<>();
 
     @Inject
-    public HologramManager(HologramFactory hologramFactory) {
+    public HologramManager(HologramFactory hologramFactory, HologramDatabase hologramDatabase) {
         this.hologramFactory = hologramFactory;
+        this.hologramDatabase = hologramDatabase;
     }
 
     @Override
@@ -45,6 +51,12 @@ public class HologramManager implements HologramService {
 
         hologramEntity.setTag(TagConstants.HOLOGRAM_ID_TAG, entityID);
         hologramEntityMap.put(entityID, hologramEntity);
+        try {
+            hologramDatabase.createHologram(entityID, text);
+            player.sendMessage("Saved hologram into db");
+        } catch (SQLException ex) {
+            LOGGER.error("Error in saving hologram to db", ex);
+        }
 
         player.sendMessage(Messages.HOLOGRAM_CREATED
                 .addPlaceholder("id", String.valueOf(entityID))
@@ -63,11 +75,10 @@ public class HologramManager implements HologramService {
             return;
         }
 
-        hologram.teleport(pos);
-        player.sendMessage(Messages.HOLOGRAM_MOVED
+        hologram.teleport(pos).thenRun(() -> player.sendMessage(Messages.HOLOGRAM_MOVED
                 .addPlaceholder("pos", PosUtils.toString(pos))
                 .addPlaceholder("id", String.valueOf(id))
-                .asComponent());
+                .asComponent()));
     }
 
     @Override
@@ -83,6 +94,12 @@ public class HologramManager implements HologramService {
 
         hologram.remove();
         hologramEntityMap.remove(id);
+        try {
+            hologramDatabase.deleteHologram(id);
+            player.sendMessage("deleted from database");
+        } catch (SQLException ex) {
+            LOGGER.error("Error in deleting hologram to db", ex);
+        }
         player.sendMessage(Messages.HOLOGRAM_DELETED
                 .addPlaceholder("id", String.valueOf(id))
                 .asComponent());
@@ -105,7 +122,7 @@ public class HologramManager implements HologramService {
     }
 
     @Override
-    public void addHologramLine(int id, @NotNull Component text) {
+    public void addHologramLine(@NotNull SlimePlayer player, int id, @NotNull Component text) {
         final HologramEntity hologram = hologramEntityMap.get(id);
 
         if (hologram == null) {
@@ -119,10 +136,13 @@ public class HologramManager implements HologramService {
         }
 
         hologram.addLine(text);
+        player.sendMessage(Messages.HOLOGRAM_LINE_ADDED
+                .addPlaceholder("id", String.valueOf(id))
+                .asComponent());
     }
 
     @Override
-    public void insertHologramLine(int id, int index, @NotNull Component text) {
+    public void insertHologramLine(@NotNull SlimePlayer player, int id, int index, @NotNull Component text) {
         final HologramEntity hologram = hologramEntityMap.get(id);
 
         if (hologram == null) {
@@ -136,10 +156,14 @@ public class HologramManager implements HologramService {
         }
 
         hologram.insertLine(index, text);
+        player.sendMessage(Messages.HOLOGRAM_LINE_INSERTED
+                .addPlaceholder("id", String.valueOf(id))
+                .addPlaceholder("index", String.valueOf(index))
+                .asComponent());
     }
 
     @Override
-    public void removeHologramLine(int id, int index) {
+    public void removeHologramLine(@NotNull SlimePlayer player, int id, int index) {
         final HologramEntity hologram = hologramEntityMap.get(id);
 
         if (hologram == null) {
@@ -153,10 +177,14 @@ public class HologramManager implements HologramService {
         }
 
         hologram.removeLine(index);
+        player.sendMessage(Messages.HOLOGRAM_LINE_REMOVED
+                .addPlaceholder("id", String.valueOf(id))
+                .addPlaceholder("index", String.valueOf(index))
+                .asComponent());
     }
 
     @Override
-    public void updateHologramLine(int id, int index, @NotNull Component newText) {
+    public void updateHologramLine(@NotNull SlimePlayer player, int id, int index, @NotNull Component newText) {
         final HologramEntity hologram = hologramEntityMap.get(id);
 
         if (hologram == null) {
@@ -175,6 +203,10 @@ public class HologramManager implements HologramService {
         }
 
         hologram.updateLine(index, newText);
+        player.sendMessage(Messages.HOLOGRAM_LINE_UPDATED
+                .addPlaceholder("id", String.valueOf(id))
+                .addPlaceholder("index", String.valueOf(index))
+                .asComponent());
     }
 
     @Override

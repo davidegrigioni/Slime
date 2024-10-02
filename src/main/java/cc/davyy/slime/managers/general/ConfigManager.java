@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ConfigManager {
 
-    private final ComponentLogger LOGGER = ComponentLogger.logger("ConfigManager");
+    private static final ComponentLogger LOGGER = ComponentLogger.logger(ConfigManager.class);
     private static final String CONFIG_FOLDER = "configs/";
 
     private YamlDocument config;

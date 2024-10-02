@@ -2,6 +2,7 @@ package cc.davyy.slime.managers.general;
 
 import cc.davyy.slime.commands.DisguiseCommand;
 import cc.davyy.slime.commands.admin.*;
+import cc.davyy.slime.commands.entities.HologramCommand;
 import cc.davyy.slime.commands.entities.NPCCommand;
 import cc.davyy.slime.commands.player.SidebarCommand;
 import cc.davyy.slime.commands.player.SocialCommand;
@@ -14,7 +15,6 @@ import com.google.inject.Singleton;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.minestom.LiteMinestomFactory;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 
 @Singleton
@@ -33,11 +33,12 @@ public class CommandManager {
     private final SocialCommand socialCommand;
     private final TeleportCommand teleportCommand;
     private final DisguiseCommand disguiseCommand;
+    private final HologramCommand hologramCommand;
 
     private LiteCommands<CommandSender> liteCommands;
 
     @Inject
-    public CommandManager(StopCommand stopCommand, SlimeCommand slimeCommand, SpawnCommand spawnCommand, SayCommand sayCommand, GameModeCommand gameModeCommand, ExecuteCommand executeCommand, BroadCastCommand broadCastCommand, LobbyCommand lobbyCommand, NPCCommand npcCommand, SidebarCommand sidebarCommand, SocialCommand socialCommand, TeleportCommand teleportCommand, DisguiseCommand disguiseCommand) {
+    public CommandManager(StopCommand stopCommand, SlimeCommand slimeCommand, SpawnCommand spawnCommand, SayCommand sayCommand, GameModeCommand gameModeCommand, ExecuteCommand executeCommand, BroadCastCommand broadCastCommand, LobbyCommand lobbyCommand, NPCCommand npcCommand, SidebarCommand sidebarCommand, SocialCommand socialCommand, TeleportCommand teleportCommand, DisguiseCommand disguiseCommand, HologramCommand hologramCommand) {
         this.stopCommand = stopCommand;
         this.slimeCommand = slimeCommand;
         this.spawnCommand = spawnCommand;
@@ -51,6 +52,7 @@ public class CommandManager {
         this.socialCommand = socialCommand;
         this.teleportCommand = teleportCommand;
         this.disguiseCommand = disguiseCommand;
+        this.hologramCommand = hologramCommand;
     }
 
     public void init() {
@@ -66,6 +68,7 @@ public class CommandManager {
                         stopCommand,
                         slimeCommand,
                         sayCommand,
+                        hologramCommand,
                         spawnCommand,
                         gameModeCommand,
                         lobbyCommand,

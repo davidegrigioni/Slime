@@ -24,6 +24,7 @@ public final class HologramEntity extends Entity {
         super(EntityType.TEXT_DISPLAY);
 
         final TextDisplayMeta meta = (TextDisplayMeta) getEntityMeta();
+        meta.setNotifyAboutChanges(false);
         meta.setLineWidth(LINE_WIDTH);
         meta.setHasNoGravity(true);
         meta.setBillboardRenderConstraints(AbstractDisplayMeta.BillboardConstraints.CENTER);
@@ -33,6 +34,7 @@ public final class HologramEntity extends Entity {
         meta.setUseDefaultBackground(false);
         meta.setSeeThrough(false);
         meta.setAlignLeft(true);
+        meta.setNotifyAboutChanges(true);
 
         hologramLines.add(text);
 
