@@ -6,68 +6,33 @@ import cc.davyy.slime.services.gameplay.LobbyService;
 import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import dev.rollczi.litecommands.annotations.argument.Arg;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentLiteral;
-import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import org.jetbrains.annotations.NotNull;
 
-import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
 
+@Command(name = "lobby")
+@Permission("slime.lobby")
 @Singleton
-public class LobbyCommand extends Command {
+public class LobbyCommand {
 
     private final LobbyService lobbyService;
 
-    private final ArgumentNumber<Integer> lobbyIDArg = ArgumentType.Integer("id").between(0, 50);
-
-    private final ArgumentLiteral createArg = ArgumentType.Literal("create");
-    private final ArgumentLiteral teleportArg = ArgumentType.Literal("teleport");
-
     @Inject
     public LobbyCommand(LobbyService lobbyService) {
-        super("lobby");
         this.lobbyService = lobbyService;
-
-        setCondition((sender, commandString) -> {
-            if (!hasPlayerPermission(sender, "slime.lobby")) {
-                sender.sendMessage(Messages.NO_PERMS.asComponent());
-                return false;
-            }
-            return true;
-        });
-
-        setDefaultExecutor(this::showUsage);
-
-        setArgumentCallback(this::onSyntaxError, lobbyIDArg);
-
-        addSyntax(this::create, createArg);
-        addSyntax(this::handleTeleport, teleportArg, lobbyIDArg);
     }
 
-    private void onSyntaxError(@NotNull CommandSender sender, @NotNull ArgumentSyntaxException exception) {
-        final int error = exception.getErrorCode();
-        final String input = exception.getInput();
-        switch (error) {
-            case ArgumentNumber.NOT_NUMBER_ERROR:
-                sender.sendMessage(Component.text("SYNTAX ERROR: '" + input + "' isn't a number!"));
-                break;
-            case ArgumentNumber.TOO_LOW_ERROR:
-            case ArgumentNumber.TOO_HIGH_ERROR:
-                sender.sendMessage(Component.text("SYNTAX ERROR: " + input + " is not between 0 and 100"));
-                break;
-        }
-    }
-
-    private void showUsage(@NotNull CommandSender commandSender, @NotNull CommandContext context) {
+    @Execute
+    void showUsage(@Context CommandSender sender) {
         final Component usageMessage = text("Usage Instructions:")
                 .color(color(255, 0, 0))
                 .append(newline())
@@ -83,22 +48,20 @@ public class LobbyCommand extends Command {
                         .color(color(100, 200, 100))
                         .decorate(TextDecoration.ITALIC));
 
-        commandSender.sendMessage(usageMessage);
+        sender.sendMessage(usageMessage);
     }
 
-    private void create(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
+    @Execute(name = "create")
+    void create(@Context CommandSender sender) {
         final Lobby lobby = lobbyService.createNewLobby();
 
-        player.sendMessage(Messages.LOBBY_CREATED
+        sender.sendMessage(Messages.LOBBY_CREATED
                 .addPlaceholder("lobbyname", lobby.name())
                 .asComponent());
     }
 
-    private void handleTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final int lobbyID = context.get(lobbyIDArg);
-
+    @Execute(name = "teleport")
+    void handleTeleport(@Context SlimePlayer player, @Arg int lobbyID) {
         lobbyService.teleportPlayerToLobby(player, lobbyID);
     }
 

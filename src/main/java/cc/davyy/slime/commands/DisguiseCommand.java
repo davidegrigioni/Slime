@@ -4,60 +4,33 @@ import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.services.DisguiseService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentLiteral;
-import net.minestom.server.command.builder.arguments.ArgumentString;
-import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
+import dev.rollczi.litecommands.annotations.command.RootCommand;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.optional.OptionalArg;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import net.minestom.server.entity.EntityType;
-import org.jetbrains.annotations.NotNull;
 
+@RootCommand
+@Permission("slime.disguise")
 @Singleton
-public class DisguiseCommand extends Command {
+public class DisguiseCommand {
 
     private final DisguiseService disguiseService;
-    private final ArgumentLiteral undisguiseNickArg = ArgumentType.Literal("udn");
-    private final ArgumentLiteral undisguiseEntityArg = ArgumentType.Literal("ude");
-    private final ArgumentEntityType entityTypeArg = ArgumentType.EntityType("entity");
-    private final ArgumentString nickNameArg = ArgumentType.String("nickname");
 
     @Inject
     public DisguiseCommand(DisguiseService disguiseService) {
-        super("disguise");
         this.disguiseService = disguiseService;
-
-        addSyntax(this::undisguiseNick, undisguiseNickArg);
-        addSyntax(this::undisguiseEntity, undisguiseEntityArg);
-        addSyntax(this::disguiseEntity, entityTypeArg);
-        addSyntax(this::disguiseNick, nickNameArg);
     }
 
-    private void undisguiseNick(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-
-        disguiseService.removeNicknamedDisguise(player);
+    @Execute(name = "undisguise")
+    void undisguise(@Context SlimePlayer player) {
+        disguiseService.undisguise(player);
     }
 
-    private void undisguiseEntity(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-
-        disguiseService.removeEntityDisguise(player);
-    }
-
-    private void disguiseNick(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final String nickName = context.get(nickNameArg);
-
-        disguiseService.setNicknamedDisguise(player, nickName);
-    }
-
-    private void disguiseEntity(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final EntityType entityType = context.get(entityTypeArg);
-
-        disguiseService.setEntityDisguise(player, entityType);
+    @Execute(name = "disguise")
+    void disguise(@Context SlimePlayer player, @OptionalArg EntityType entityType, @OptionalArg String nickName) {
+        disguiseService.disguise(player, entityType, nickName);
     }
 
 }

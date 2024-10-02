@@ -1,92 +1,76 @@
 package cc.davyy.slime.managers.general;
 
 import cc.davyy.slime.commands.DisguiseCommand;
-import cc.davyy.slime.commands.ItemDisplayCommand;
 import cc.davyy.slime.commands.admin.*;
-import cc.davyy.slime.commands.entities.HologramCommand;
 import cc.davyy.slime.commands.entities.NPCCommand;
 import cc.davyy.slime.commands.player.SidebarCommand;
 import cc.davyy.slime.commands.player.SocialCommand;
-import cc.davyy.slime.commands.player.SpawnCommand;
 import cc.davyy.slime.commands.player.TeleportCommand;
+import cc.davyy.slime.litecommands.EntityTypeArgument;
+import cc.davyy.slime.litecommands.SlimePlayerProvider;
+import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.minestom.server.MinecraftServer;
+import dev.rollczi.litecommands.LiteCommands;
+import dev.rollczi.litecommands.minestom.LiteMinestomFactory;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 
 @Singleton
 public class CommandManager {
 
-    private final BroadCastCommand broadcastCommand;
-    private final ExecuteCommand executeCommand;
-    private final GameModeCommand gameModeCommand;
-    private final LobbyCommand lobbyCommand;
-    private final SayCommand sayCommand;
-    private final SetSpawnCommand setSpawnCommand;
-    private final SlimeCommand slimeCommand;
     private final StopCommand stopCommand;
-    private final HologramCommand hologramCommand;
+    private final SlimeCommand slimeCommand;
+    private final SpawnCommand spawnCommand;
+    private final SayCommand sayCommand;
+    private final GameModeCommand gameModeCommand;
+    private final ExecuteCommand executeCommand;
+    private final BroadCastCommand broadCastCommand;
+    private final LobbyCommand lobbyCommand;
     private final NPCCommand npcCommand;
     private final SidebarCommand sidebarCommand;
     private final SocialCommand socialCommand;
-    private final SpawnCommand spawnCommand;
     private final TeleportCommand teleportCommand;
-    private final ItemDisplayCommand itemDisplayCommand;
     private final DisguiseCommand disguiseCommand;
 
+    private LiteCommands<CommandSender> liteCommands;
+
     @Inject
-    public CommandManager(BroadCastCommand broadcastCommand,
-                          ExecuteCommand executeCommand,
-                          GameModeCommand gameModeCommand,
-                          LobbyCommand lobbyCommand,
-                          SayCommand sayCommand,
-                          SetSpawnCommand setSpawnCommand,
-                          SlimeCommand slimeCommand,
-                          StopCommand stopCommand,
-                          HologramCommand hologramCommand,
-                          NPCCommand npcCommand,
-                          SidebarCommand sidebarCommand,
-                          SocialCommand socialCommand,
-                          SpawnCommand spawnCommand,
-                          TeleportCommand teleportCommand,
-                          ItemDisplayCommand itemDisplayCommand,
-                          DisguiseCommand disguiseCommand) {
-        this.broadcastCommand = broadcastCommand;
-        this.executeCommand = executeCommand;
-        this.gameModeCommand = gameModeCommand;
-        this.lobbyCommand = lobbyCommand;
-        this.sayCommand = sayCommand;
-        this.setSpawnCommand = setSpawnCommand;
-        this.slimeCommand = slimeCommand;
+    public CommandManager(StopCommand stopCommand, SlimeCommand slimeCommand, SpawnCommand spawnCommand, SayCommand sayCommand, GameModeCommand gameModeCommand, ExecuteCommand executeCommand, BroadCastCommand broadCastCommand, LobbyCommand lobbyCommand, NPCCommand npcCommand, SidebarCommand sidebarCommand, SocialCommand socialCommand, TeleportCommand teleportCommand, DisguiseCommand disguiseCommand) {
         this.stopCommand = stopCommand;
-        this.hologramCommand = hologramCommand;
+        this.slimeCommand = slimeCommand;
+        this.spawnCommand = spawnCommand;
+        this.sayCommand = sayCommand;
+        this.gameModeCommand = gameModeCommand;
+        this.executeCommand = executeCommand;
+        this.broadCastCommand = broadCastCommand;
+        this.lobbyCommand = lobbyCommand;
         this.npcCommand = npcCommand;
         this.sidebarCommand = sidebarCommand;
         this.socialCommand = socialCommand;
-        this.spawnCommand = spawnCommand;
         this.teleportCommand = teleportCommand;
-        this.itemDisplayCommand = itemDisplayCommand;
         this.disguiseCommand = disguiseCommand;
     }
 
     public void init() {
-        final var commandRegistry = MinecraftServer.getCommandManager();
-
-        commandRegistry.register(broadcastCommand,
-                executeCommand,
-                gameModeCommand,
-                lobbyCommand,
-                sayCommand,
-                setSpawnCommand,
-                slimeCommand,
-                stopCommand,
-                hologramCommand,
-                npcCommand,
-                sidebarCommand,
-                socialCommand,
-                spawnCommand,
-                teleportCommand,
-                disguiseCommand,
-                itemDisplayCommand);
+        this.liteCommands = LiteMinestomFactory.builder()
+                .context(SlimePlayer.class, new SlimePlayerProvider())
+                .argument(EntityType.class, new EntityTypeArgument())
+                .commands(broadCastCommand,
+                        disguiseCommand,
+                        teleportCommand,
+                        socialCommand,
+                        sidebarCommand,
+                        npcCommand,
+                        stopCommand,
+                        slimeCommand,
+                        sayCommand,
+                        spawnCommand,
+                        gameModeCommand,
+                        lobbyCommand,
+                        executeCommand)
+                .build();
     }
 
 }

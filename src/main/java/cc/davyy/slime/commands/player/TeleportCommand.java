@@ -2,77 +2,43 @@ package cc.davyy.slime.commands.player;
 
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.services.gameplay.TeleportService;
-import cc.davyy.slime.utils.Messages;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentLiteral;
-import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
-import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
+import dev.rollczi.litecommands.annotations.argument.Arg;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.cooldown.Cooldown;
+import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.utils.location.RelativeVec;
-import org.jetbrains.annotations.NotNull;
 
-import static cc.davyy.slime.utils.GeneralUtils.hasPlayerPermission;
+import java.time.temporal.ChronoUnit;
 
+@Command(name = "teleport", aliases = "tp")
+@Permission("slime.teleport")
+@Cooldown(key = "teleport-cooldown", count = 10, unit = ChronoUnit.SECONDS, bypass = "slime.admin")
 @Singleton
-public class TeleportCommand extends Command {
+public class TeleportCommand {
 
     private final TeleportService teleportService;
 
-    private final ArgumentLiteral toArg = ArgumentType.Literal("to");
-    private final ArgumentLiteral toCoordsArg = ArgumentType.Literal("to-coords");
-
-    private final ArgumentEntity targetEntityArg = ArgumentType.Entity("target").onlyPlayers(true);
-    private final ArgumentRelativeVec3 posArg = ArgumentType.RelativeVec3("pos");
-    private final ArgumentEntity playerEntityArg = ArgumentType.Entity("player").onlyPlayers(true);
-
     @Inject
     public TeleportCommand(TeleportService teleportService) {
-        super("teleport","tp");
         this.teleportService = teleportService;
-
-        setCondition((sender, commandString) -> {
-            if (!hasPlayerPermission(sender, "slime.teleport")) {
-                sender.sendMessage(Messages.NO_PERMS.asComponent());
-                return false;
-            }
-            return true;
-        });
-
-        //addConditionalSyntax()
-        addSyntax(this::onTeleport, toArg, playerEntityArg);
-        addSyntax(this::onPosTeleport, toCoordsArg, posArg);
-        addSyntax(this::onTargetToPlayerTeleport, targetEntityArg, playerEntityArg);
     }
 
-    private void onPosTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final RelativeVec relativeVec = context.get(posArg);
-        final Pos position = player.getPosition().withCoord(relativeVec.from(player));
-
+    @Execute
+    void onPosTeleport(@Context SlimePlayer player, @Arg Pos position) {
         teleportService.teleportPlayerToCoordinates(player, position);
     }
 
-    private void onTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer player = (SlimePlayer) sender;
-        final SlimePlayer slimePlayerTarget = (SlimePlayer) context.get(playerEntityArg)
-                .findFirstPlayer(player);
-
-        if (slimePlayerTarget != null) {
-            teleportService.teleportPlayerToTarget(player, slimePlayerTarget);
-        }
-
+    @Execute
+    void onTeleport(@Context SlimePlayer player, @Arg SlimePlayer target) {
+        teleportService.teleportPlayerToTarget(player, target);
     }
 
-    private void onTargetToPlayerTeleport(@NotNull CommandSender sender, @NotNull CommandContext context) {
-        final SlimePlayer executor = (SlimePlayer) sender;
-        final SlimePlayer target = (SlimePlayer) context.get(playerEntityArg)
-                .findFirstPlayer(executor);
-
+    @Execute
+    void onTargetToPlayerTeleport(@Context SlimePlayer executor, @Arg SlimePlayer target) {
         teleportService.teleportTargetToExecutor(executor, target);
     }
 

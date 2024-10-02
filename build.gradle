@@ -8,14 +8,13 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://repo.hypera.dev/snapshots' }
-    maven { url 'https://repo.expx.dev/releases' }
-    maven { url 'https://maven.serble.net/snapshots/' }
+    maven { url = "https://jitpack.io" }
+    maven { url = "https://repo.hypera.dev/snapshots" }
+    maven { url = "https://repo.panda-lang.org/releases" }
 }
 
 dependencies {
-    implementation('net.minestom:minestom-snapshots:d0754f2a15')
+    implementation('net.minestom:minestom-snapshots:e8f34c317a')
     implementation('net.kyori:adventure-text-minimessage:4.17.0')
     implementation('me.lucko.luckperms:minestom:5.4-SNAPSHOT')
     implementation('org.slf4j:slf4j-simple:2.0.16')
@@ -23,11 +22,8 @@ dependencies {
     implementation('ninja.leaping.configurate:configurate-hocon:3.7.1')
     implementation("dev.dejvokep:boosted-yaml:1.3.7")
     implementation("org.reflections:reflections:0.10.2")
-    //implementation('commons-io:commons-io:2.17.0')
-    // https://github.com/expxx/Minestom-Payments
-    //implementation('dev.expx.minestom:Payments:1.2.3')
-    // https://github.com/Mangolise/mango-anti-cheat
-    //implementation('net.mangolise:mango-anti-cheat:latest')
+    implementation("dev.rollczi:litecommands-minestom:3.6.0")
+    implementation('com.j256.ormlite:ormlite-jdbc:6.1')
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation('org.junit.jupiter:junit-jupiter')
@@ -44,6 +40,10 @@ java {
     }
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << "-parameters"
+}
+
 tasks {
     jar {
         manifest {
@@ -56,6 +56,7 @@ tasks {
     }
 
     shadowJar {
+        relocate 'me.lucko.luckperms', 'cc.davyy.libs.luckperms'
         mergeServiceFiles()
         archiveClassifier.set("")
     }

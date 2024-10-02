@@ -14,7 +14,7 @@ public interface BroadcastService {
      * This method sends a message to all players on the server. The message is broadcasted from the given sender.
      * </p>
      *
-     * @param sender the sender of the message, typically used for context or logging
+     * @param sender the source of the message, typically used for context or logging
      * @param message the message to be broadcasted
      */
     void broadcastMessage(@NotNull CommandSender sender, @NotNull String message);
