@@ -21,6 +21,7 @@ public class InterfaceModule extends AbstractModule {
         bind(SidebarService.class).to(SidebarManager.class).in(Singleton.class);
         bind(SpawnService.class).to(SpawnManager.class).in(Singleton.class);
         bind(TeleportService.class).to(TeleportManager.class).in(Singleton.class);
+        bind(VanishService.class).to(VanishManager.class).in(Singleton.class);
 
         bind(BrandService.class).to(BrandManager.class).in(Singleton.class);
         bind(DisguiseService.class).to(DisguiseManager.class).in(Singleton.class);

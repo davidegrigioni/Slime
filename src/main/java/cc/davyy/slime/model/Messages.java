@@ -26,6 +26,11 @@ public enum Messages implements ComponentLike {
     HIDE("messages.hide"),
     SHOW("messages.show"),
 
+    VANISH("messages.vanish"),
+    ALREADY_VANISHED("messages.already-vanished"),
+    ALREADY_UNVANISHED("messages.already-unvanished"),
+    UNVANISH("messages.unvanish"),
+
     DISGUISE_REMOVED("messages.disguise-removed"),
     NOT_DISGUISED("messages.not-disguised"),
     ALREADY_DISGUISED("messages.already-disguised"),

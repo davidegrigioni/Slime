@@ -24,6 +24,11 @@ messages:
   disguise-nickname: "<gradient:#32CD32:#228B22>You are now disguised as <nickname>!</gradient>"
   disguise-entity: "<gradient:#32CD32:#228B22>You are now disguised as a <entity>!</gradient>"
 
+  already-unvanished: "<gradient:#FF00FF:#00FFFF>You are already visible!</gradient>"
+  already-vanished: "<gradient:#FFA500:#FF4500>You are already vanished!</gradient>"
+  vanish: "<gradient:#00FF00:#32CD32>You are now vanished</gradient>"
+  unvanish: "<gradient:#00FFFF:#1E90FF>You are now unvanished</gradient>"
+
   show: "<gradient:#32CD32:#00FF00>You have shown all players on the server</gradient>"
   hide: "<gradient:#FF6347:#FF4500>You have hidden all players on the server</gradient>"
 
