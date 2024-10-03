@@ -4,10 +4,10 @@ import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.services.DisguiseService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.RootCommand;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
-import dev.rollczi.litecommands.annotations.optional.OptionalArg;
 import dev.rollczi.litecommands.annotations.permission.Permission;
 import net.minestom.server.entity.EntityType;
 
@@ -29,8 +29,13 @@ public class DisguiseCommand {
     }
 
     @Execute(name = "disguise")
-    void disguise(@Context SlimePlayer player, @OptionalArg EntityType entityType, @OptionalArg String nickName) {
-        disguiseService.disguise(player, entityType, nickName);
+    void disguise(@Context SlimePlayer player, @Arg String nickName) {
+        disguiseService.disguise(player, EntityType.PLAYER, nickName);
+    }
+
+    @Execute(name = "disguise")
+    void disguise(@Context SlimePlayer player, @Arg EntityType entityType) {
+        disguiseService.disguise(player, entityType, "");
     }
 
 }

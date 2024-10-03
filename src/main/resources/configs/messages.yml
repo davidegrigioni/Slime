@@ -18,6 +18,12 @@ messages:
   execute-command-message: "<gradient:#32CD32:#00FF00>Player <target> executed <command></gradient>"
   lobby-created: "<gradient:#32CD32:#00FF00>Created lobby with name <lobbyname></gradient>"
 
+  disguise-removed: "<gradient:#32CD32:#228B22>Your disguise has been removed.</gradient>"
+  not-disguised: "<gradient:#FF0000:#AA0000>You are not disguised.</gradient>"
+  already-disguised: "<gradient:#FF6347:#FF4500>You are already disguised!</gradient>"
+  disguise-nickname: "<gradient:#32CD32:#228B22>You are now disguised as <nickname>!</gradient>"
+  disguise-entity: "<gradient:#32CD32:#228B22>You are now disguised as a <entity>!</gradient>"
+
   show: "<gradient:#32CD32:#00FF00>You have shown all players on the server</gradient>"
   hide: "<gradient:#FF6347:#FF4500>You have hidden all players on the server</gradient>"
 
