@@ -23,8 +23,8 @@ public class ChatManager {
 
     public @NotNull Component setChatFormat(@NotNull SlimePlayer player, @NotNull String message) {
         final String group = player.getPrimaryGroup();
-        final String groupFormat = configManager.getConfig().getString("group-formats." + group) != null ? "group-formats." + group : "chat-format";
-        final String format = configManager.getConfig().getString(groupFormat);
+        final String groupFormat = configManager.getUi().getString("group-formats." + group) != null ? "group-formats." + group : "chat-format";
+        final String format = configManager.getUi().getString(groupFormat);
 
         return ColorUtils.of(format)
                 .addPlainStringPlaceholder("lobbyid", String.valueOf(player.getLobbyID()))
