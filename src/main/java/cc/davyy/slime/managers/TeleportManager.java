@@ -2,7 +2,7 @@ package cc.davyy.slime.managers;
 
 import cc.davyy.slime.services.gameplay.TeleportService;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.Messages;
+import cc.davyy.slime.model.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import com.google.inject.Singleton;
 import net.minestom.server.coordinate.Pos;

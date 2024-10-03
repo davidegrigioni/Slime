@@ -1,7 +1,7 @@
 package cc.davyy.slime.gui;
 
 import cc.davyy.slime.managers.general.ConfigManager;
-import cc.davyy.slime.managers.LobbyManager;
+import cc.davyy.slime.managers.gameplay.LobbyManager;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.constants.TagConstants;

@@ -1,7 +1,7 @@
 package cc.davyy.slime.listeners;
 
 import cc.davyy.slime.managers.general.ConfigManager;
-import cc.davyy.slime.managers.LobbyManager;
+import cc.davyy.slime.managers.gameplay.LobbyManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.PosUtils;
 import com.google.inject.Inject;
@@ -32,7 +32,7 @@ public class AsyncConfigListener implements EventListener<AsyncPlayerConfigurati
 
     @Override
     public @NotNull Result run(@NotNull AsyncPlayerConfigurationEvent event) {
-        final SlimePlayer player = (cc.davyy.slime.model.SlimePlayer) event.getPlayer();
+        final SlimePlayer player = (SlimePlayer) event.getPlayer();
         final String posString = configManager.getConfig().getString("spawn.position");
         final Pos pos = PosUtils.fromString(posString);
         final Instance instance = lobbyManager.getMainLobbyContainer();

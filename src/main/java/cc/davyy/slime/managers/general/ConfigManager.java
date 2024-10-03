@@ -1,5 +1,6 @@
 package cc.davyy.slime.managers.general;
 
+import com.google.inject.Singleton;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 
+@Singleton
 public class ConfigManager {
 
     private static final ComponentLogger LOGGER = ComponentLogger.logger(ConfigManager.class);

@@ -1,11 +1,11 @@
-package cc.davyy.slime.managers;
+package cc.davyy.slime.managers.gameplay;
 
 import cc.davyy.slime.gui.LobbyGUI;
 import cc.davyy.slime.managers.general.ConfigManager;
 import cc.davyy.slime.services.gameplay.LobbyService;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.Messages;
+import cc.davyy.slime.model.Messages;
 import cc.davyy.slime.constants.TagConstants;
 import com.google.inject.Inject;
 import com.google.inject.Provider;

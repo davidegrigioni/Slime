@@ -1,6 +1,7 @@
 package cc.davyy.slime.managers;
 
 import cc.davyy.slime.constants.TagConstants;
+import cc.davyy.slime.managers.gameplay.LobbyManager;
 import cc.davyy.slime.managers.general.ConfigManager;
 import cc.davyy.slime.services.gameplay.SidebarService;
 import cc.davyy.slime.model.Lobby;

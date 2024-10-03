@@ -6,7 +6,7 @@ import cc.davyy.slime.services.entities.HologramService;
 import cc.davyy.slime.factories.HologramFactory;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.constants.TagConstants;
-import cc.davyy.slime.utils.Messages;
+import cc.davyy.slime.model.Messages;
 import cc.davyy.slime.utils.PosUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

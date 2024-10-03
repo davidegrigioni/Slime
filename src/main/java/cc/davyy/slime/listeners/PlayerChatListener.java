@@ -1,6 +1,6 @@
 package cc.davyy.slime.listeners;
 
-import cc.davyy.slime.managers.ChatManager;
+import cc.davyy.slime.managers.gameplay.ChatManager;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

@@ -1,8 +1,8 @@
-package cc.davyy.slime.managers;
+package cc.davyy.slime.managers.gameplay;
 
 import cc.davyy.slime.services.gameplay.GameModeService;
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.utils.Messages;
+import cc.davyy.slime.model.Messages;
 import com.google.inject.Singleton;
 import net.minestom.server.entity.GameMode;
 import org.jetbrains.annotations.NotNull;

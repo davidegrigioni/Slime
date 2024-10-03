@@ -1,6 +1,7 @@
 package cc.davyy.slime.managers.general;
 
 import cc.davyy.slime.commands.DisguiseCommand;
+import cc.davyy.slime.commands.VanishCommand;
 import cc.davyy.slime.commands.admin.*;
 import cc.davyy.slime.commands.entities.HologramCommand;
 import cc.davyy.slime.commands.entities.NPCCommand;
@@ -34,11 +35,12 @@ public class CommandManager {
     private final TeleportCommand teleportCommand;
     private final DisguiseCommand disguiseCommand;
     private final HologramCommand hologramCommand;
+    private final VanishCommand vanishCommand;
 
     private LiteCommands<CommandSender> liteCommands;
 
     @Inject
-    public CommandManager(StopCommand stopCommand, SlimeCommand slimeCommand, SpawnCommand spawnCommand, SayCommand sayCommand, GameModeCommand gameModeCommand, ExecuteCommand executeCommand, BroadCastCommand broadCastCommand, LobbyCommand lobbyCommand, NPCCommand npcCommand, SidebarCommand sidebarCommand, SocialCommand socialCommand, TeleportCommand teleportCommand, DisguiseCommand disguiseCommand, HologramCommand hologramCommand) {
+    public CommandManager(StopCommand stopCommand, SlimeCommand slimeCommand, SpawnCommand spawnCommand, SayCommand sayCommand, GameModeCommand gameModeCommand, ExecuteCommand executeCommand, BroadCastCommand broadCastCommand, LobbyCommand lobbyCommand, NPCCommand npcCommand, SidebarCommand sidebarCommand, SocialCommand socialCommand, TeleportCommand teleportCommand, DisguiseCommand disguiseCommand, HologramCommand hologramCommand, VanishCommand vanishCommand) {
         this.stopCommand = stopCommand;
         this.slimeCommand = slimeCommand;
         this.spawnCommand = spawnCommand;
@@ -53,6 +55,7 @@ public class CommandManager {
         this.teleportCommand = teleportCommand;
         this.disguiseCommand = disguiseCommand;
         this.hologramCommand = hologramCommand;
+        this.vanishCommand = vanishCommand;
     }
 
     public void init() {
@@ -67,6 +70,7 @@ public class CommandManager {
                         npcCommand,
                         stopCommand,
                         slimeCommand,
+                        vanishCommand,
                         sayCommand,
                         hologramCommand,
                         spawnCommand,

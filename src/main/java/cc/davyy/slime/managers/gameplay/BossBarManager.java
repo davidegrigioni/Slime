@@ -1,4 +1,4 @@
-package cc.davyy.slime.managers;
+package cc.davyy.slime.managers.gameplay;
 
 import cc.davyy.slime.constants.TagConstants;
 import cc.davyy.slime.services.entities.BossBarService;

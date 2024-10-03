@@ -1,6 +1,7 @@
-package cc.davyy.slime.utils;
+package cc.davyy.slime.model;
 
 import cc.davyy.slime.managers.general.ConfigManager;
+import cc.davyy.slime.utils.ColorUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -24,6 +25,12 @@ public enum Messages implements ComponentLike {
 
     HIDE("messages.hide"),
     SHOW("messages.show"),
+
+    DISGUISE_REMOVED("messages.disguise-removed"),
+    NOT_DISGUISED("messages.not-disguised"),
+    ALREADY_DISGUISED("messages.already-disguised"),
+    DISGUISE_NICKNAME("messages.disguise-nickname"),
+    DISGUISE_ENTITY("messages.disguise-entity"),
 
     TELEPORT_EXECUTOR_MESSAGE("messages.teleport-executor-message"),
     TELEPORT_TARGET_MESSAGE("messages.teleport-target-message"),
