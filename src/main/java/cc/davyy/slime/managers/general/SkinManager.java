@@ -1,4 +1,4 @@
-package cc.davyy.slime.managers;
+package cc.davyy.slime.managers.general;
 
 import com.google.inject.Singleton;
 import net.minestom.server.entity.PlayerSkin;

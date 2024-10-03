@@ -1,7 +1,7 @@
 package cc.davyy.slime.listeners;
 
 import cc.davyy.slime.constants.TagConstants;
-import cc.davyy.slime.managers.SpawnManager;
+import cc.davyy.slime.managers.gameplay.SpawnManager;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

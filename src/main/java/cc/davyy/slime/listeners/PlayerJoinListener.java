@@ -1,7 +1,7 @@
 package cc.davyy.slime.listeners;
 
-import cc.davyy.slime.managers.general.ConfigManager;
-import cc.davyy.slime.managers.SidebarManager;
+import cc.davyy.slime.config.ConfigManager;
+import cc.davyy.slime.managers.entities.SidebarManager;
 import cc.davyy.slime.managers.entities.nametag.NameTag;
 import cc.davyy.slime.managers.entities.nametag.NameTagManager;
 import cc.davyy.slime.model.SlimePlayer;

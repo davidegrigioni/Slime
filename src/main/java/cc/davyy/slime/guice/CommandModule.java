@@ -1,12 +1,12 @@
 package cc.davyy.slime.guice;
 
-import cc.davyy.slime.commands.DisguiseCommand;
-import cc.davyy.slime.commands.ItemDisplayCommand;
+import cc.davyy.slime.commands.entities.DisguiseCommand;
+import cc.davyy.slime.commands.entities.ItemDisplayCommand;
 import cc.davyy.slime.commands.VanishCommand;
 import cc.davyy.slime.commands.admin.*;
 import cc.davyy.slime.commands.entities.HologramCommand;
 import cc.davyy.slime.commands.entities.NPCCommand;
-import cc.davyy.slime.commands.player.SidebarCommand;
+import cc.davyy.slime.commands.entities.SidebarCommand;
 import cc.davyy.slime.commands.player.SocialCommand;
 import cc.davyy.slime.commands.player.TeleportCommand;
 import com.google.inject.AbstractModule;

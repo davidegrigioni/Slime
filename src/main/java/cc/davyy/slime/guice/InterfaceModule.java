@@ -1,13 +1,8 @@
 package cc.davyy.slime.guice;
 
-import cc.davyy.slime.managers.*;
-import cc.davyy.slime.managers.entities.DisguiseManager;
-import cc.davyy.slime.managers.entities.HologramManager;
+import cc.davyy.slime.managers.entities.*;
 import cc.davyy.slime.managers.gameplay.*;
-import cc.davyy.slime.services.*;
-import cc.davyy.slime.services.entities.BossBarService;
-import cc.davyy.slime.services.entities.HologramService;
-import cc.davyy.slime.services.entities.ItemDisplayService;
+import cc.davyy.slime.services.entities.*;
 import cc.davyy.slime.services.gameplay.*;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;

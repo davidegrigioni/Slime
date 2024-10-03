@@ -1,7 +1,7 @@
-package cc.davyy.slime.commands;
+package cc.davyy.slime.commands.entities;
 
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.services.DisguiseService;
+import cc.davyy.slime.services.entities.DisguiseService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import dev.rollczi.litecommands.annotations.argument.Arg;

@@ -1,4 +1,4 @@
-package cc.davyy.slime.services;
+package cc.davyy.slime.services.gameplay;
 
 public interface BrandService {
 

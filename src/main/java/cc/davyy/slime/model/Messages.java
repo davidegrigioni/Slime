@@ -1,6 +1,6 @@
 package cc.davyy.slime.model;
 
-import cc.davyy.slime.managers.general.ConfigManager;
+import cc.davyy.slime.config.ConfigManager;
 import cc.davyy.slime.utils.ColorUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;

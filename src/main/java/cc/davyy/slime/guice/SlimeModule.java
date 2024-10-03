@@ -1,7 +1,7 @@
 package cc.davyy.slime.guice;
 
 import cc.davyy.slime.guice.provider.ConfigManagerProvider;
-import cc.davyy.slime.managers.general.ConfigManager;
+import cc.davyy.slime.config.ConfigManager;
 import com.google.inject.AbstractModule;
 
 public class SlimeModule extends AbstractModule {

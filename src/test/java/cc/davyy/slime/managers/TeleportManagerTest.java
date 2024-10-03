@@ -1,5 +1,6 @@
 package cc.davyy.slime.managers;
 
+import cc.davyy.slime.managers.gameplay.TeleportManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.testing.Env;
 import cc.davyy.slime.testing.EnvTest;

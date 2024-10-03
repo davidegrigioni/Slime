@@ -1,4 +1,4 @@
-package cc.davyy.slime.services.gameplay;
+package cc.davyy.slime.services.entities;
 
 import cc.davyy.slime.model.SlimePlayer;
 import org.jetbrains.annotations.NotNull;

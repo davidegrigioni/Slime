@@ -1,6 +1,6 @@
 package cc.davyy.slime.commands.entities;
 
-import cc.davyy.slime.managers.SkinManager;
+import cc.davyy.slime.managers.general.SkinManager;
 import cc.davyy.slime.managers.entities.npc.NPC;
 import cc.davyy.slime.managers.entities.npc.NPCManager;
 import cc.davyy.slime.model.SlimePlayer;

@@ -1,4 +1,4 @@
-package cc.davyy.slime.managers;
+package cc.davyy.slime.managers.entities;
 
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.services.entities.ItemDisplayService;

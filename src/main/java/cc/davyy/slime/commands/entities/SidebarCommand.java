@@ -1,7 +1,7 @@
-package cc.davyy.slime.commands.player;
+package cc.davyy.slime.commands.entities;
 
 import cc.davyy.slime.model.SlimePlayer;
-import cc.davyy.slime.services.gameplay.SidebarService;
+import cc.davyy.slime.services.entities.SidebarService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import dev.rollczi.litecommands.annotations.command.Command;

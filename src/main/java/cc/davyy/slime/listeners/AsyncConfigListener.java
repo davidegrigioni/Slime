@@ -1,6 +1,6 @@
 package cc.davyy.slime.listeners;
 
-import cc.davyy.slime.managers.general.ConfigManager;
+import cc.davyy.slime.config.ConfigManager;
 import cc.davyy.slime.managers.gameplay.LobbyManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.utils.PosUtils;

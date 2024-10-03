@@ -1,6 +1,6 @@
 package cc.davyy.slime.guice.provider;
 
-import cc.davyy.slime.managers.general.ConfigManager;
+import cc.davyy.slime.config.ConfigManager;
 import com.google.inject.Provider;
 
 public class ConfigManagerProvider implements Provider<ConfigManager> {

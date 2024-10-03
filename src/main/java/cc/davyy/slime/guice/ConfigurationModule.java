@@ -2,7 +2,7 @@ package cc.davyy.slime.guice;
 
 import cc.davyy.slime.database.DisguiseDatabase;
 import cc.davyy.slime.database.HologramDatabase;
-import cc.davyy.slime.managers.general.ConfigManager;
+import cc.davyy.slime.config.ConfigManager;
 import com.google.inject.*;
 import com.google.inject.name.Named;
 

@@ -1,9 +1,9 @@
-package cc.davyy.slime.managers;
+package cc.davyy.slime.managers.entities;
 
 import cc.davyy.slime.constants.TagConstants;
 import cc.davyy.slime.managers.gameplay.LobbyManager;
-import cc.davyy.slime.managers.general.ConfigManager;
-import cc.davyy.slime.services.gameplay.SidebarService;
+import cc.davyy.slime.config.ConfigManager;
+import cc.davyy.slime.services.entities.SidebarService;
 import cc.davyy.slime.model.Lobby;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;

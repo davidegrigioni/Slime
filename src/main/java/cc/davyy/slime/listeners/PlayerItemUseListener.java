@@ -3,7 +3,7 @@ package cc.davyy.slime.listeners;
 import cc.davyy.slime.constants.TagConstants;
 import cc.davyy.slime.gui.LobbyGUI;
 import cc.davyy.slime.gui.ServerGUI;
-import cc.davyy.slime.managers.general.ConfigManager;
+import cc.davyy.slime.config.ConfigManager;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.model.Messages;
 import com.google.inject.Inject;

@@ -1,13 +1,10 @@
 package cc.davyy.slime;
 
-import cc.davyy.slime.managers.*;
 import cc.davyy.slime.managers.entities.HologramManager;
-import cc.davyy.slime.managers.gameplay.BrandManager;
-import cc.davyy.slime.managers.gameplay.BroadcastManager;
-import cc.davyy.slime.managers.gameplay.GameModeManager;
-import cc.davyy.slime.managers.gameplay.LobbyManager;
+import cc.davyy.slime.managers.entities.SidebarManager;
+import cc.davyy.slime.managers.gameplay.*;
 import cc.davyy.slime.managers.general.CommandManager;
-import cc.davyy.slime.managers.general.ConfigManager;
+import cc.davyy.slime.config.ConfigManager;
 import cc.davyy.slime.managers.general.EventsManager;
 import cc.davyy.slime.model.ServerMode;
 import cc.davyy.slime.guice.SlimeModule;

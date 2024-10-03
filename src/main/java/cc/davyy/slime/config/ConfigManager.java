@@ -1,4 +1,4 @@
-package cc.davyy.slime.managers.general;
+package cc.davyy.slime.config;
 
 import com.google.inject.Singleton;
 import dev.dejvokep.boostedyaml.YamlDocument;

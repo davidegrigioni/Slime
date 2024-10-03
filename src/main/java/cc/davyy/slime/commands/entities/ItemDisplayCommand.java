@@ -1,6 +1,6 @@
-package cc.davyy.slime.commands;
+package cc.davyy.slime.commands.entities;
 
-import cc.davyy.slime.managers.ItemDisplayManager;
+import cc.davyy.slime.managers.entities.ItemDisplayManager;
 import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
