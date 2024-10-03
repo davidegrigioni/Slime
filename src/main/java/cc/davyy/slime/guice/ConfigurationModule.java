@@ -10,6 +10,8 @@ import java.sql.SQLException;
 
 public class ConfigurationModule extends AbstractModule {
 
+    private static final String DB_FOLDER = "configs/databases/";
+
     private final Provider<ConfigManager> configManagerProvider;
 
     @Inject
@@ -49,12 +51,12 @@ public class ConfigurationModule extends AbstractModule {
 
     @Provides
     static HologramDatabase provideHologramDatabase() throws SQLException {
-        return new HologramDatabase("configs/hologram.db");
+        return new HologramDatabase(DB_FOLDER + "hologram.db");
     }
 
     @Provides
     static DisguiseDatabase provideDisguiseDatabase() throws SQLException {
-        return new DisguiseDatabase("configs/disguise.db");
+        return new DisguiseDatabase(DB_FOLDER + "disguise.db");
     }
 
 }
