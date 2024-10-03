@@ -1,5 +1,6 @@
-package cc.davyy.slime.module;
+package cc.davyy.slime.guice;
 
+import cc.davyy.slime.guice.provider.ConfigManagerProvider;
 import cc.davyy.slime.managers.general.ConfigManager;
 import com.google.inject.AbstractModule;
 

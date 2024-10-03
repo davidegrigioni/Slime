@@ -1,5 +1,6 @@
-package cc.davyy.slime.module;
+package cc.davyy.slime.guice;
 
+import cc.davyy.slime.database.DisguiseDatabase;
 import cc.davyy.slime.database.HologramDatabase;
 import cc.davyy.slime.managers.general.ConfigManager;
 import com.google.inject.*;
@@ -49,6 +50,11 @@ public class ConfigurationModule extends AbstractModule {
     @Provides
     static HologramDatabase provideHologramDatabase() throws SQLException {
         return new HologramDatabase("configs/hologram.db");
+    }
+
+    @Provides
+    static DisguiseDatabase provideDisguiseDatabase() throws SQLException {
+        return new DisguiseDatabase("configs/disguise.db");
     }
 
 }

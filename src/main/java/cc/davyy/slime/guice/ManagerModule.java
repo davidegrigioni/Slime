@@ -1,5 +1,11 @@
-package cc.davyy.slime.module;
+package cc.davyy.slime.guice;
 
+import cc.davyy.slime.managers.SkinManager;
+import cc.davyy.slime.managers.entities.nametag.NameTagManager;
+import cc.davyy.slime.managers.entities.npc.NPCManager;
+import cc.davyy.slime.managers.gameplay.ChatManager;
+import cc.davyy.slime.managers.general.CommandManager;
+import cc.davyy.slime.managers.general.EventsManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -11,26 +17,31 @@ import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.scoreboard.TeamBuilder;
 import net.minestom.server.scoreboard.TeamManager;
-import org.reflections.Reflections;
 
-import java.util.Set;
 import java.util.function.Function;
 
 public class ManagerModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        registerManagersBindings();
+        bind(NameTagManager.class).in(Singleton.class);
+        bind(NPCManager.class).in(Singleton.class);
+
+        bind(ChatManager.class).in(Singleton.class);
+
+        bind(CommandManager.class).in(Singleton.class);
+        bind(EventsManager.class).in(Singleton.class);
+
+        bind(SkinManager.class).in(Singleton.class);
     }
 
     @Provides
-    @Singleton
-    public EventNode<Event> provideEventNode() {
+    static EventNode<Event> provideEventNode() {
         return EventNode.all("npc-events");
     }
 
     @Provides
-    public Function<Entity, Team> provideEntityToTeamFunction(TeamManager teamManager) {
+    static Function<Entity, Team> provideEntityToTeamFunction(TeamManager teamManager) {
         final Team nameTagTeam = new TeamBuilder("name-tags", teamManager)
                 .collisionRule(TeamsPacket.CollisionRule.NEVER)
                 .build();
@@ -38,17 +49,8 @@ public class ManagerModule extends AbstractModule {
     }
 
     @Provides
-    public TeamManager provideTeamManager() {
+    static TeamManager provideTeamManager() {
         return MinecraftServer.getTeamManager();
-    }
-
-    private void registerManagersBindings() {
-        Reflections reflections = new Reflections("cc.davyy.slime.managers");
-        Set<Class<?>> singletonClasses = reflections.getTypesAnnotatedWith(Singleton.class);
-
-        for (Class<?> clazz : singletonClasses) {
-            bind(clazz).in(Singleton.class);
-        }
     }
 
 }
