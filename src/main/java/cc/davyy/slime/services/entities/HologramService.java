@@ -146,6 +146,8 @@ public interface HologramService {
     @Nullable
     List<Component> getHologramLines(int id);
 
+    void debug(@NotNull SlimePlayer player, int id);
+
     /**
      * Clears all lines of text from the hologram with the specified ID.
      * <p>

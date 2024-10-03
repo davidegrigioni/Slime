@@ -1,7 +1,5 @@
 package cc.davyy.slime.commands.entities;
 
-import cc.davyy.slime.database.HologramDatabase;
-import cc.davyy.slime.database.entities.Hologram;
 import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.services.entities.HologramService;
 import com.google.inject.Inject;
@@ -15,24 +13,19 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
 
-import java.sql.SQLException;
-
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
-import static net.minestom.server.MinecraftServer.LOGGER;
 
 @Command(name = "hologram", aliases = "holo")
 @Permission("slime.hologram")
 @Singleton
 public class HologramCommand {
 
-    private final HologramDatabase hologramDatabase;
     private final HologramService hologramService;
 
     @Inject
-    public HologramCommand(HologramDatabase hologramDatabase, HologramService hologramService) {
-        this.hologramDatabase = hologramDatabase;
+    public HologramCommand(HologramService hologramService) {
         this.hologramService = hologramService;
     }
 
@@ -89,25 +82,7 @@ public class HologramCommand {
 
     @Execute(name = "debug", aliases = "db")
     void handleDebug(@Context SlimePlayer player, @Arg int id) {
-        try {
-            // Query the database for the hologram
-            Hologram hologram = hologramDatabase.getHologram(id);
-
-            // Check if the hologram exists
-            if (hologram != null) {
-                // Send details of the hologram to the player
-                player.sendMessage(Component.text("Hologram ID: " + hologram.getId())
-                        .append(Component.newline())
-                        .append(Component.text("Text: " + hologram.getText())));
-            } else {
-                // Inform the player that the hologram does not exist
-                player.sendMessage(Component.text("Hologram with ID " + id + " does not exist."));
-            }
-        } catch (SQLException e) {
-            // Log the exception and inform the player of the error
-            LOGGER.error("Error querying hologram from database", e);
-            player.sendMessage(Component.text("An error occurred while querying the hologram from the database."));
-        }
+        hologramService.debug(player, id);
     }
 
 }

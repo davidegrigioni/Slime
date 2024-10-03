@@ -1,6 +1,7 @@
 package cc.davyy.slime.managers.entities;
 
 import cc.davyy.slime.database.HologramDatabase;
+import cc.davyy.slime.database.entities.Hologram;
 import cc.davyy.slime.entities.HologramEntity;
 import cc.davyy.slime.services.entities.HologramService;
 import cc.davyy.slime.factories.HologramFactory;
@@ -22,6 +23,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static net.minestom.server.MinecraftServer.LOGGER;
 
 @Singleton
 public class HologramManager implements HologramService {
@@ -213,6 +216,29 @@ public class HologramManager implements HologramService {
     public @Nullable List<Component> getHologramLines(int id) {
         final HologramEntity hologram = hologramEntityMap.get(id);
         return hologram != null ? hologram.getLines() : null;
+    }
+
+    @Override
+    public void debug(@NotNull SlimePlayer player, int id) {
+        try {
+            // Query the database for the hologram
+            Hologram hologram = hologramDatabase.getHologram(id);
+
+            // Check if the hologram exists
+            if (hologram != null) {
+                // Send details of the hologram to the player
+                player.sendMessage(Component.text("Hologram ID: " + hologram.getId())
+                        .append(Component.newline())
+                        .append(Component.text("Text: " + hologram.getText())));
+            } else {
+                // Inform the player that the hologram does not exist
+                player.sendMessage(Component.text("Hologram with ID " + id + " does not exist."));
+            }
+        } catch (SQLException e) {
+            // Log the exception and inform the player of the error
+            LOGGER.error("Error querying hologram from database", e);
+            player.sendMessage(Component.text("An error occurred while querying the hologram from the database."));
+        }
     }
 
     @Override
