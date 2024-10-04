@@ -8,6 +8,7 @@ import cc.davyy.slime.model.SlimePlayer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
@@ -40,6 +41,8 @@ public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
     @Override
     public @NotNull Result run(@NotNull PlayerSpawnEvent event) {
         final SlimePlayer player = (SlimePlayer) event.getPlayer();
+
+        player.setGameMode(GameMode.ADVENTURE);
 
         sendHeaderFooter(player);
 
