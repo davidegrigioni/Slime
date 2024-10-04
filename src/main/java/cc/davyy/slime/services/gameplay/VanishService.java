@@ -9,6 +9,4 @@ public interface VanishService {
 
     void unvanish(@NotNull SlimePlayer player);
 
-    boolean isPlayerVanished(@NotNull SlimePlayer player);
-
 }

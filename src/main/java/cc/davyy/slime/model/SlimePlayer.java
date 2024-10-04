@@ -84,6 +84,14 @@ public class SlimePlayer extends Player {
         return of(prefix).parseLegacy().build();
     }
 
+    public void setVanish() { this.setTag(TagConstants.VANISH_TAG, "vanished"); }
+
+    public void unsetVanish() { this.removeTag(TagConstants.VANISH_TAG); }
+
+    public boolean hasVanish() { return this.hasTag(TagConstants.VANISH_TAG); }
+
+    public String getVanish() { return this.getTag(TagConstants.VANISH_TAG); }
+
     public void setLobbyID(int lobbyID) { this.setTag(TagConstants.PLAYER_LOBBY_ID_TAG, lobbyID); }
 
     public boolean hasLobbyID() { return this.hasTag(TagConstants.PLAYER_LOBBY_ID_TAG); }

@@ -1,7 +1,7 @@
 package cc.davyy.slime.managers.general;
 
 import cc.davyy.slime.commands.entities.DisguiseCommand;
-import cc.davyy.slime.commands.VanishCommand;
+import cc.davyy.slime.commands.admin.VanishCommand;
 import cc.davyy.slime.commands.admin.*;
 import cc.davyy.slime.commands.entities.HologramCommand;
 import cc.davyy.slime.commands.entities.NPCCommand;
