@@ -10,16 +10,12 @@ import cc.davyy.slime.model.ServerMode;
 import cc.davyy.slime.guice.SlimeModule;
 import cc.davyy.slime.utils.ConsoleUtils;
 import cc.davyy.slime.model.Messages;
+import cc.davyy.slime.utils.ServerConfigUtils;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.FileUtils.*;
@@ -65,8 +61,8 @@ public final class SlimeLoader {
         LOGGER.info("Setting up shutdown tasks...");
         setupShutdownTask();
 
-        serverMode = getServerModeFromConfig();
-        final String velocitySecret = (serverMode == ServerMode.VELOCITY) ? loadVelocitySecret() : "";
+        serverMode = ServerConfigUtils.getServerModeFromConfig(configManager);
+        final String velocitySecret = (serverMode == ServerMode.VELOCITY) ? ServerConfigUtils.loadVelocitySecret() : "";
         serverMode.initEncryption(velocitySecret);
 
         startServer(minecraftServer);
@@ -91,26 +87,6 @@ public final class SlimeLoader {
         final int port = configManager.getConfig().getInt("network.port");
         minecraftServer.start(ip, port);
         LOGGER.info("Server started on IP: {}, Port: {}", ip, port);
-    }
-
-    private ServerMode getServerModeFromConfig() {
-        final String modeString = configManager.getConfig().getString("network.type").toUpperCase();
-        try {
-            return ServerMode.valueOf(modeString);
-        } catch (IllegalArgumentException e) {
-            LOGGER.warn("Invalid server mode in config ({}), defaulting to ONLINE mode.", modeString);
-            return ServerMode.ONLINE;
-        }
-    }
-
-    private String loadVelocitySecret() {
-        final Path path = Paths.get("./configs/forwarding.secret");
-        try {
-            return Files.readString(path).trim();
-        } catch (IOException ex) {
-            LOGGER.error("Failed to read velocity secret from \"{}\". Velocity is enabled in config, aborting start.", path);
-            throw new RuntimeException("Could not load Velocity secret", ex);
-        }
     }
 
 }
