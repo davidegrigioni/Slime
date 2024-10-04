@@ -57,13 +57,17 @@ public class DisguiseManager implements DisguiseService {
             return;
         }
 
-        try {
-            disguiseDatabase.removeDisguise(player.getUuid().toString());
-        } catch (SQLException e) {
-            player.sendMessage("Failed to remove disguise from the database.");
+        removeDisguise(player);
+
+        final String disguiseType = player.getTag(TagConstants.DISGUISE_TAG);
+
+        switch (disguiseType) {
+            case ENTITY -> resetToOriginalEntityType(player);
+            case NICKNAME -> resetToOriginalNickname(player);
         }
 
         player.removeTag(TagConstants.DISGUISE_TAG);
+
         player.sendMessage(Messages.DISGUISE_REMOVED
                 .asComponent());
     }
@@ -96,7 +100,7 @@ public class DisguiseManager implements DisguiseService {
         });
     }
 
-    private void disguiseAsEntity(@NotNull SlimePlayer player, @NotNull EntityType entityType, Disguise disguise) {
+    private void disguiseAsEntity(@NotNull SlimePlayer player, @NotNull EntityType entityType, @NotNull Disguise disguise) {
         player.switchEntityType(entityType);
         player.setTag(TagConstants.DISGUISE_TAG, ENTITY);
 
@@ -109,12 +113,34 @@ public class DisguiseManager implements DisguiseService {
                 .asComponent());
     }
 
-    private void saveDisguise(@NotNull SlimePlayer player, Disguise disguise) {
+    private void saveDisguise(@NotNull SlimePlayer player, @NotNull Disguise disguise) {
         try {
             disguiseDatabase.saveDisguise(disguise);
         } catch (SQLException e) {
             player.sendMessage("Failed to save disguise to the database.");
         }
+    }
+
+    private void removeDisguise(@NotNull SlimePlayer player) {
+        try {
+            disguiseDatabase.removeDisguise(player.getUuid().toString());
+        } catch (SQLException e) {
+            player.sendMessage("Failed to remove disguise from the database.");
+        }
+    }
+
+    private void resetToOriginalNickname(@NotNull SlimePlayer player) {
+        final CompletableFuture<PlayerSkin> originalSkin = skinManager.getSkinFromUsernameAsync(player.getUsername());
+
+        originalSkin.thenAccept(skin -> {
+            player.setSkin(skin);
+            player.setDisplayName(Component.text(player.getUsername()));
+        });
+
+    }
+
+    private void resetToOriginalEntityType(@NotNull SlimePlayer player) {
+        player.switchEntityType(EntityType.PLAYER);
     }
 
 }
