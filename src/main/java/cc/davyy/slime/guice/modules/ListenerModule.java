@@ -1,4 +1,4 @@
-package cc.davyy.slime.guice;
+package cc.davyy.slime.guice.modules;
 
 import cc.davyy.slime.listeners.*;
 import com.google.inject.AbstractModule;

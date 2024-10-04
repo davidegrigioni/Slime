@@ -1,4 +1,4 @@
-package cc.davyy.slime.guice;
+package cc.davyy.slime.guice.modules;
 
 import cc.davyy.slime.managers.general.SkinManager;
 import cc.davyy.slime.managers.entities.nametag.NameTagManager;
