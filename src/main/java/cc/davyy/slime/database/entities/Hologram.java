@@ -14,7 +14,8 @@ public class Hologram {
     @DatabaseField(canBeNull = false)
     private String serializedText;
 
-    public Hologram() {}
+    public Hologram() {
+    }
 
     public int getId() {
         return id;

@@ -18,7 +18,8 @@ public class Disguise {
     @DatabaseField
     private String entityType;
 
-    public Disguise() {}
+    public Disguise() {
+    }
 
     public String getPlayerId() {
         return playerId;
