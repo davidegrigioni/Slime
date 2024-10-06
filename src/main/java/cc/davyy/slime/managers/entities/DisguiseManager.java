@@ -72,6 +72,38 @@ public class DisguiseManager implements DisguiseService {
                 .asComponent());
     }
 
+    @Override
+    public Disguise getPlayerDisguise(@NotNull SlimePlayer player) throws SQLException {
+        return disguiseDatabase.getDisguise(player.getUuid().toString());
+    }
+
+    @Override
+    public boolean isPlayerDisguised(@NotNull SlimePlayer player) {
+        return player.hasVanish();
+    }
+
+    @Override
+    public void reapplyDisguise(@NotNull SlimePlayer player, @NotNull Disguise disguise) {
+        if (disguise.getDisguiseType().equals(NICKNAME)) {
+            disguiseAsNickname(player, disguise.getNickname(), disguise);
+        } else if (disguise.getDisguiseType().equals(ENTITY)) {
+            EntityType entityType = EntityType.fromNamespaceId(disguise.getEntityType());
+            disguiseAsEntity(player, entityType, disguise);
+        }
+    }
+
+    @Override
+    public void saveDisguiseOnLeave(@NotNull SlimePlayer player) {
+        try {
+            final Disguise disguise = disguiseDatabase.getDisguise(player.getUuid().toString());
+            if (disguise != null) {
+                saveDisguise(player, disguise);
+            }
+        } catch (SQLException e) {
+            player.sendMessage("Failed to save disguise.");
+        }
+    }
+
     private String disguiseType(@NotNull String nickName, @NotNull EntityType entityType) {
         if (!nickName.isEmpty()) {
             return NICKNAME;

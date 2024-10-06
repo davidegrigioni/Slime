@@ -1,6 +1,8 @@
 package cc.davyy.slime.listeners;
 
 import cc.davyy.slime.config.ConfigManager;
+import cc.davyy.slime.database.entities.Disguise;
+import cc.davyy.slime.managers.entities.DisguiseManager;
 import cc.davyy.slime.managers.entities.SidebarManager;
 import cc.davyy.slime.managers.entities.nametag.NameTag;
 import cc.davyy.slime.managers.entities.nametag.NameTagManager;
@@ -11,23 +13,26 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerSpawnEvent;
-import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
 import static cc.davyy.slime.utils.JoinUtils.applyJoinKit;
+import static net.minestom.server.MinecraftServer.LOGGER;
 
 @Singleton
 public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
 
+    private final DisguiseManager disguiseManager;
     private final ConfigManager configManager;
     private final NameTagManager nameTagManager;
     private final SidebarManager sidebarManager;
 
     @Inject
-    public PlayerJoinListener(ConfigManager configManager, NameTagManager nameTagManager, SidebarManager sidebarManager) {
+    public PlayerJoinListener(DisguiseManager disguiseManager, ConfigManager configManager, NameTagManager nameTagManager, SidebarManager sidebarManager) {
+        this.disguiseManager = disguiseManager;
         this.configManager = configManager;
         this.nameTagManager = nameTagManager;
         this.sidebarManager = sidebarManager;
@@ -52,24 +57,17 @@ public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
 
         sidebarManager.showSidebar(player);
 
+        try {
+            Disguise disguise = disguiseManager.getPlayerDisguise(player);
+            disguiseManager.reapplyDisguise(player, disguise);
+            player.sendMessage("Successfully reapplied disguise " + disguise.getDisguiseType());
+        } catch (SQLException ex) {
+            LOGGER.error("Error in applying disguise", ex);
+        }
+
         applyJoinKit(player, configManager);
 
-        createServerLinks(player);
-
         return Result.SUCCESS;
-    }
-
-    @SuppressWarnings("all")
-    private void createServerLinks(@NotNull SlimePlayer player) {
-        final String newsLink = configManager.getConfig().getString("news-link");
-        final String bugsReportLink = configManager.getConfig().getString("bugs-report-link");
-        final String announcementLink = configManager.getConfig().getString("announcement-link");
-
-        player.sendPacket(new ServerLinksPacket(
-                new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.NEWS, newsLink),
-                new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.ANNOUNCEMENTS, announcementLink),
-                new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.BUG_REPORT, bugsReportLink)
-        ));
     }
 
     private void sendHeaderFooter(@NotNull SlimePlayer player) {
