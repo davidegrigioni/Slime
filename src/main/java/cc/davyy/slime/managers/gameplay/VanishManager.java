@@ -5,6 +5,9 @@ import cc.davyy.slime.model.SlimePlayer;
 import cc.davyy.slime.services.gameplay.VanishService;
 import cc.davyy.slime.utils.GeneralUtils;
 import com.google.inject.Singleton;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.PlayerInfoRemovePacket;
@@ -36,6 +39,40 @@ public class VanishManager implements VanishService {
                 }
             }
 
+            Component vanishTag = Component.text("[VANISH] ")
+                    .color(NamedTextColor.RED) // Red color for the tag
+                    .decorate(TextDecoration.BOLD); // Bold styling for the tag
+            Component displayName = player.getDisplayName() != null ? player.getDisplayName() : Component.text(player.getUsername());
+            Component displayNameWithVanishTag = vanishTag.append(displayName);
+
+            //var properties = new ArrayList<PlayerInfoUpdatePacket.Property>();
+
+            final String textures = player.getSkin().textures();
+            final String signature = player.getSkin().signature();
+
+//            if (textures != null && signature != null) {
+//                properties.add(new PlayerInfoUpdatePacket.Property("textures", textures, signature));
+//            }
+
+            var actions = EnumSet.of(PlayerInfoUpdatePacket.Action.ADD_PLAYER,
+                    PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME);
+            var entry = new PlayerInfoUpdatePacket.Entry(
+                    player.getUuid(),
+                    player.getUsername(),
+                    new ArrayList<>(),
+                    true,
+                    0,
+                    GameMode.SURVIVAL,
+                    displayNameWithVanishTag,
+                    null);
+
+            final PlayerInfoUpdatePacket updatePacket = new PlayerInfoUpdatePacket(
+                    actions,
+                    Collections.singletonList(entry)
+            );
+
+            player.sendPacket(updatePacket);
+
             player.sendMessage(Messages.VANISH);
             return;
         }
@@ -54,7 +91,18 @@ public class VanishManager implements VanishService {
                 players.addViewer(player);
             }
 
-            var actions = EnumSet.of(PlayerInfoUpdatePacket.Action.ADD_PLAYER, PlayerInfoUpdatePacket.Action.UPDATE_LISTED);
+            //var properties = new ArrayList<PlayerInfoUpdatePacket.Property>();
+
+            final String textures = player.getSkin().textures();
+            final String signature = player.getSkin().signature();
+
+//            if (textures != null && signature != null) {
+//                properties.add(new PlayerInfoUpdatePacket.Property("textures", textures, signature));
+//            }
+
+            var actions = EnumSet.of(PlayerInfoUpdatePacket.Action.ADD_PLAYER,
+                    PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME,
+                    PlayerInfoUpdatePacket.Action.UPDATE_LISTED);
             var entry = new PlayerInfoUpdatePacket.Entry(
                     player.getUuid(),
                     player.getUsername(),
@@ -65,7 +113,8 @@ public class VanishManager implements VanishService {
                     player.getDisplayName(),
                     null);
 
-            final PlayerInfoUpdatePacket updatePacket = new PlayerInfoUpdatePacket(actions,
+            final PlayerInfoUpdatePacket updatePacket = new PlayerInfoUpdatePacket(
+                    actions,
                     Collections.singletonList(entry)
             );
 
