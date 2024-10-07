@@ -27,6 +27,8 @@ import static net.kyori.adventure.text.Component.text;
 @Command(name = "npc")
 @Permission("slime.npc")
 @Singleton
+
+//TODO: Add Attribute Scale
 public class NPCCommand {
 
     private final SkinManager skinManager;
