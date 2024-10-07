@@ -1,6 +1,6 @@
 package cc.davyy.slime.guice.modules;
 
-import cc.davyy.slime.database.DisguiseDatabase;
+import cc.davyy.slime.database.DatabaseManager;
 import cc.davyy.slime.database.HologramDatabase;
 import cc.davyy.slime.config.ConfigManager;
 import com.google.inject.*;
@@ -58,6 +58,19 @@ public class ConfigurationModule extends AbstractModule {
     }
 
     @Provides
+    static DatabaseManager provideDatabase() throws SQLException {
+        try {
+            ensureDbFolderExists();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        dbPath = Paths.get(dbFolder.getAbsolutePath(), "database.db");
+
+        return new DatabaseManager(dbPath.toString());
+    }
+
+    @Provides
     static HologramDatabase provideHologramDatabase() throws SQLException {
         try {
             ensureDbFolderExists();
@@ -68,19 +81,6 @@ public class ConfigurationModule extends AbstractModule {
         dbPath = Paths.get(dbFolder.getAbsolutePath(), "hologram.db");
 
         return new HologramDatabase(dbPath.toString());
-    }
-
-    @Provides
-    static DisguiseDatabase provideDisguiseDatabase() throws SQLException {
-        try {
-            ensureDbFolderExists();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        dbPath = Paths.get(dbFolder.getAbsolutePath(), "disguise.db");
-
-        return new DisguiseDatabase(dbPath.toString());
     }
 
     private static void ensureDbFolderExists() throws IOException {

@@ -1,8 +1,9 @@
 package cc.davyy.slime.listeners;
 
 import cc.davyy.slime.config.ConfigManager;
-import cc.davyy.slime.database.entities.Disguise;
-import cc.davyy.slime.managers.entities.DisguiseManager;
+import cc.davyy.slime.database.DatabaseManager;
+import cc.davyy.slime.database.entities.PlayerProfile;
+import cc.davyy.slime.factories.PlayerFactory;
 import cc.davyy.slime.managers.entities.SidebarManager;
 import cc.davyy.slime.managers.entities.nametag.NameTag;
 import cc.davyy.slime.managers.entities.nametag.NameTagManager;
@@ -15,7 +16,6 @@ import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import static cc.davyy.slime.utils.ColorUtils.of;
@@ -25,14 +25,17 @@ import static net.minestom.server.MinecraftServer.LOGGER;
 @Singleton
 public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
 
-    private final DisguiseManager disguiseManager;
+    private final PlayerFactory playerFactory;
+
+    private final DatabaseManager databaseManager;
     private final ConfigManager configManager;
     private final NameTagManager nameTagManager;
     private final SidebarManager sidebarManager;
 
     @Inject
-    public PlayerJoinListener(DisguiseManager disguiseManager, ConfigManager configManager, NameTagManager nameTagManager, SidebarManager sidebarManager) {
-        this.disguiseManager = disguiseManager;
+    public PlayerJoinListener(PlayerFactory playerFactory, DatabaseManager databaseManager, ConfigManager configManager, NameTagManager nameTagManager, SidebarManager sidebarManager) {
+        this.playerFactory = playerFactory;
+        this.databaseManager = databaseManager;
         this.configManager = configManager;
         this.nameTagManager = nameTagManager;
         this.sidebarManager = sidebarManager;
@@ -47,6 +50,8 @@ public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
     public @NotNull Result run(@NotNull PlayerSpawnEvent event) {
         final SlimePlayer player = (SlimePlayer) event.getPlayer();
 
+        createProfile(player);
+
         player.setGameMode(GameMode.ADVENTURE);
 
         sendHeaderFooter(player);
@@ -56,14 +61,6 @@ public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
                 .append(player.getName()));
 
         sidebarManager.showSidebar(player);
-
-        try {
-            Disguise disguise = disguiseManager.getPlayerDisguise(player);
-            disguiseManager.reapplyDisguise(player, disguise);
-            player.sendMessage("Successfully reapplied disguise " + disguise.getDisguiseType());
-        } catch (SQLException ex) {
-            LOGGER.error("Error in applying disguise", ex);
-        }
 
         applyJoinKit(player, configManager);
 
@@ -89,6 +86,17 @@ public class PlayerJoinListener implements EventListener<PlayerSpawnEvent> {
         nameTag.setText(text);
         nameTag.addViewer(player);
         nameTag.mount();
+    }
+
+    private void createProfile(@NotNull SlimePlayer player) {
+        databaseManager.hasPlayerProfile(player.getUuid()).thenAcceptAsync(hasProfile -> {
+            if (!hasProfile) {
+                PlayerProfile playerProfile = playerFactory.createNewProfile();
+                databaseManager.saveOrUpdatePlayerProfile(playerProfile).thenRun(() -> LOGGER.info("Created new PlayerProfile for player: {}", player.getUsername()));
+            } else {
+                LOGGER.info("PlayerProfile already exists for player: {}", player.getUsername());
+            }
+        });
     }
 
 }
