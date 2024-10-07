@@ -1,4 +1,4 @@
-package cc.davyy.slime.litecommands;
+package cc.davyy.slime.litecommands.argument;
 
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
