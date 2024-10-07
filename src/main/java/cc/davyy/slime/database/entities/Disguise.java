@@ -3,11 +3,13 @@ package cc.davyy.slime.database.entities;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.UUID;
+
 @DatabaseTable(tableName = "disguises")
 public class Disguise {
 
     @DatabaseField(id = true)
-    private String playerId;
+    private UUID playerId;
 
     @DatabaseField(canBeNull = false)
     private String disguiseType;
@@ -21,11 +23,11 @@ public class Disguise {
     public Disguise() {
     }
 
-    public String getPlayerId() {
+    public UUID getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(String playerId) {
+    public void setPlayerId(UUID playerId) {
         this.playerId = playerId;
     }
 

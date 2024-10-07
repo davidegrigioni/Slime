@@ -32,7 +32,7 @@ public class CommandModule extends AbstractModule {
         bind(SocialCommand.class).in(Singleton.class);
         bind(TeleportCommand.class).in(Singleton.class);
 
-        bind(DisguiseCommand.class).in(Singleton.class);
+//        bind(DisguiseCommand.class).in(Singleton.class);
         bind(ItemDisplayCommand.class).in(Singleton.class);
         bind(VanishCommand.class).in(Singleton.class);
     }

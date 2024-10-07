@@ -6,6 +6,8 @@ import net.minestom.server.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public interface DisguiseService {
 
@@ -13,12 +15,12 @@ public interface DisguiseService {
 
     void undisguise(@NotNull SlimePlayer player);
 
-    Disguise getPlayerDisguise(@NotNull SlimePlayer player) throws SQLException;
+    CompletableFuture<Optional<Disguise>> getPlayerDisguise(@NotNull SlimePlayer player) throws SQLException;
 
-    void saveDisguiseOnLeave(@NotNull SlimePlayer player);
+    CompletableFuture<Void> saveDisguiseOnLeave(@NotNull SlimePlayer player);
 
     void reapplyDisguise(@NotNull SlimePlayer player, @NotNull Disguise disguise);
 
-    boolean isPlayerDisguised(@NotNull SlimePlayer player);
+    CompletableFuture<Boolean> isPlayerDisguised(@NotNull SlimePlayer player);
 
 }

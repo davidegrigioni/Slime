@@ -24,7 +24,6 @@ public class InterfaceModule extends AbstractModule {
         bind(VanishService.class).to(VanishManager.class).in(Singleton.class);
 
         bind(BrandService.class).to(BrandManager.class).in(Singleton.class);
-        bind(DisguiseService.class).to(DisguiseManager.class).in(Singleton.class);
     }
 
 }

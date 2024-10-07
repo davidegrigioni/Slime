@@ -1,5 +1,6 @@
 package cc.davyy.slime.guice.modules;
 
+import cc.davyy.slime.database.DatabaseManager;
 import cc.davyy.slime.managers.general.SkinManager;
 import cc.davyy.slime.managers.entities.nametag.NameTagManager;
 import cc.davyy.slime.managers.entities.npc.NPCManager;
@@ -26,6 +27,8 @@ public class ManagerModule extends AbstractModule {
     protected void configure() {
         bind(NameTagManager.class).in(Singleton.class);
         bind(NPCManager.class).in(Singleton.class);
+
+//        bind(DatabaseManager.class).in(Singleton.class);
 
         bind(ChatManager.class).in(Singleton.class);
 

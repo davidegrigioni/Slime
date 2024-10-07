@@ -16,26 +16,26 @@ import net.minestom.server.entity.EntityType;
 @Singleton
 public class DisguiseCommand {
 
-    private final DisguiseService disguiseService;
-
-    @Inject
-    public DisguiseCommand(DisguiseService disguiseService) {
-        this.disguiseService = disguiseService;
-    }
-
-    @Execute(name = "undisguise")
-    void undisguise(@Context SlimePlayer player) {
-        disguiseService.undisguise(player);
-    }
-
-    @Execute(name = "disguise")
-    void disguise(@Context SlimePlayer player, @Arg String nickName) {
-        disguiseService.disguise(player, EntityType.PLAYER, nickName);
-    }
-
-    @Execute(name = "disguise")
-    void disguise(@Context SlimePlayer player, @Arg EntityType entityType) {
-        disguiseService.disguise(player, entityType, "");
-    }
+//    private final DisguiseService disguiseService;
+//
+//    @Inject
+//    public DisguiseCommand(DisguiseService disguiseService) {
+//        this.disguiseService = disguiseService;
+//    }
+//
+//    @Execute(name = "undisguise")
+//    void undisguise(@Context SlimePlayer player) {
+//        disguiseService.undisguise(player);
+//    }
+//
+//    @Execute(name = "disguise")
+//    void disguise(@Context SlimePlayer player, @Arg String nickName) {
+//        disguiseService.disguise(player, EntityType.PLAYER, nickName);
+//    }
+//
+//    @Execute(name = "disguise")
+//    void disguise(@Context SlimePlayer player, @Arg EntityType entityType) {
+//        disguiseService.disguise(player, entityType, "");
+//    }
 
 }
