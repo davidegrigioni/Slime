@@ -3,6 +3,7 @@ plugins {
     id("com.gradleup.shadow") version "8.3.3"
 }
 
+//test
 group = "cc.davyy"
 version = "1.0-SNAPSHOT"
 
