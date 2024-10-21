@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.minestom:minestom-snapshots:81ecb0fd5f")
+    implementation("net.minestom:minestom-snapshots:7320437640")
 
     // MiniMessage Library
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
