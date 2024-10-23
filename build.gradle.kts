@@ -37,7 +37,7 @@ dependencies {
 
     // SQL Lite Implementation + ORM
     implementation("com.j256.ormlite:ormlite-jdbc:6.1")
-    implementation("org.xerial:sqlite-jdbc:3.46.1.3")
+    implementation("org.xerial:sqlite-jdbc:3.47.0.0")
 }
 
 java {
