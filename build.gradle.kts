@@ -33,11 +33,11 @@ dependencies {
     implementation("dev.dejvokep:boosted-yaml:1.3.7")
 
     // Command Framework
-    implementation("dev.rollczi:litecommands-minestom:3.7.1")
+    implementation("dev.rollczi:litecommands-minestom:3.8.0")
 
     // SQL Lite Implementation + ORM
     implementation("com.j256.ormlite:ormlite-jdbc:6.1")
-    implementation("org.xerial:sqlite-jdbc:3.46.1.3")
+    implementation("org.xerial:sqlite-jdbc:3.47.0.0")
 }
 
 java {
