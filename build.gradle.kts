@@ -23,7 +23,7 @@ dependencies {
     implementation("me.lucko.luckperms:minestom:5.4-SNAPSHOT")
 
     // Logging Library
-    implementation("org.slf4j:slf4j-simple:2.0.16")
+    implementation("org.slf4j:slf4j-simple:2.0.17")
 
     // DI Library
     implementation("com.google.inject:guice:7.0.0")
