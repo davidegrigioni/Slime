@@ -17,7 +17,7 @@ dependencies {
     implementation("net.minestom:minestom-snapshots:bcb0301fb1")
 
     // MiniMessage Library
-    implementation("net.kyori:adventure-text-minimessage:4.17.0")
+    implementation("net.kyori:adventure-text-minimessage:4.21.0")
 
     // Permission Library
     implementation("me.lucko.luckperms:minestom:5.4-SNAPSHOT")
